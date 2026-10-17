@@ -26,25 +26,25 @@ With a visually rich interface, custom system panels, and media-focused features
 
 ## 🧩 Features
 
-- 🖥️ Desktop Experience
+- 🖥️ Desktop Experience  
   A dynamic, operating system-inspired interface with an interactive desktop layout.
 
-- 🎮 Gaming Hub
+- 🎮 Gaming Hub  
   Discover and launch supported browser-based games from a centralized game area.
 
-- 🎬 Video Player
+- 🎬 Video Player  
   Import and enjoy your own local video files in a sleek media player.
 
-- 🎵 Music Player
+- 🎵 Music Player  
   Play your own music library through a music-focused interface inspired by modern streaming apps.
 
-- ⚙️ System Settings
+- ⚙️ System Settings  
   Personalize your environment with configurable settings and system controls.
 
-- 📁 Unified Workspace
+- 📁 Unified Workspace  
   Keep everything in a single HTML-based desktop environment instead of switching between separate tools.
 
-- 📱 Modern Design
+- 📱 Modern Design  
   A visually appealing interface inspired by contemporary desktop operating systems and digital entertainment platforms.
 
 ---
@@ -85,6 +85,14 @@ If you are editing the project, start with the main HTML and related styling or 
 
 ---
 
+## 🔗 Connect
+
+Follow and explore LUMIO-OS updates and short demos on TikTok:
+
+- 🎵 TikTok: [@moon.d.flower](https://www.tiktok.com/@moon.d.flower) — opens the TikTok profile for quick viewing and follows.
+
+---
+
 ## 🔮 Future Ideas
 
 LUMIO-OS is built with room to grow. Potential enhancements may include:
@@ -110,10 +118,3 @@ LUMIO-OS is meant to feel like a digital world where entertainment, media, and e
 Your digital world, all in one desktop.
 
 ---
-
-If you want, I can also make this:
-- more polished and “premium”
-- more developer-friendly
-- more concise and modern
-- include badges, screenshots, and a proper feature table
-- turn it into a GitHub-ready README with sections like “Tech Stack”, “Roadmap”, and “Contributing”
