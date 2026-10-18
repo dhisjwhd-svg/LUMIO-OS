@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#12141c"/>
+      <stop offset="100%" stop-color="#0a0b12"/>
+    </linearGradient>
+    <linearGradient id="l" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f4f6ff"/>
+      <stop offset="55%" stop-color="#c4b5fd"/>
+      <stop offset="100%" stop-color="#8b7cf0"/>
+    </linearGradient>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- rounded tile -->
+  <rect width="32" height="32" rx="8" fill="url(#g)"/>
+
+  <!-- subtle purple border (breathes) -->
+  <rect x="0.6" y="0.6" width="30.8" height="30.8" rx="7.4"
+        fill="none" stroke="rgba(196,181,253,0.28)" stroke-width="1.15">
+    <animate attributeName="stroke-opacity" values="0.22;0.42;0.22" dur="2.8s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- L letter -->
+  <text x="7.2" y="23.5"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="18.5" font-weight="700" fill="url(#l)">L</text>
+
+  <!-- outer crescent ring — soft pulse -->
+  <circle cx="22.8" cy="10.2" r="5.1" fill="none" stroke="#c4b5fd" stroke-width="1.5" opacity="0.95">
+    <animate attributeName="r" values="4.9;5.35;4.9" dur="2.8s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-opacity" values="0.7;1;0.7" dur="2.8s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- inner cutout for crescent -->
+  <circle cx="24.6" cy="10.2" r="3.4" fill="#0a0b12"/>
+
+  <!-- glowing highlight dot -->
+  <circle cx="20.4" cy="8.6" r="1.15" fill="#e9e0ff" filter="url(#softGlow)">
+    <animate attributeName="opacity" values="0.55;1;0.55" dur="2.8s" repeatCount="indefinite"/>
+    <animate attributeName="r" values="1.0;1.35;1.0" dur="2.8s" repeatCount="indefinite"/>
+  </circle>
+</svg>
