@@ -1,79 +1,85 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <defs>
-    <!-- Background gradient -->
+    <!-- Deep background -->
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#161822"/>
-      <stop offset="100%" stop-color="#0b0c12"/>
+      <stop offset="0%" stop-color="#1a1c27"/>
+      <stop offset="100%" stop-color="#0c0d14"/>
     </linearGradient>
 
-    <!-- Letter gradient -->
-    <linearGradient id="letter" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#f8f7ff"/>
-      <stop offset="45%" stop-color="#d4c4ff"/>
-      <stop offset="100%" stop-color="#9b8af0"/>
+    <!-- Premium letter gradient -->
+    <linearGradient id="letter" x1="0%" y1="0%" x2="15%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#e8e0ff"/>
+      <stop offset="70%" stop-color="#c4b5fd"/>
+      <stop offset="100%" stop-color="#9b87f5"/>
     </linearGradient>
 
-    <!-- Crescent glow -->
-    <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#e8deff" stop-opacity="0.9"/>
-      <stop offset="70%" stop-color="#c4b5fd" stop-opacity="0.35"/>
+    <!-- Soft moon atmosphere -->
+    <radialGradient id="atmosphere" cx="48%" cy="48%" r="55%">
+      <stop offset="0%" stop-color="#e9e0ff" stop-opacity="0.55"/>
+      <stop offset="55%" stop-color="#c4b5fd" stop-opacity="0.18"/>
       <stop offset="100%" stop-color="#c4b5fd" stop-opacity="0"/>
     </radialGradient>
 
-    <!-- Soft outer glow filter -->
-    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="1.1" result="blur"/>
+    <!-- High-quality glow -->
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.25" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
 
-    <!-- Subtle ambient glow -->
-    <filter id="ambient" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="0.6"/>
+    <!-- Subtle inner shadow for depth -->
+    <filter id="innerDepth" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.2" result="blur"/>
+      <feOffset dx="0" dy="0.8" result="offsetBlur"/>
+      <feComposite in="offsetBlur" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowDiff"/>
+      <feFlood flood-color="#000000" flood-opacity="0.45"/>
+      <feComposite in2="shadowDiff" operator="in"/>
+      <feComposite in2="SourceGraphic" operator="over"/>
     </filter>
   </defs>
 
-  <!-- Main tile -->
-  <rect width="32" height="32" rx="8.5" fill="url(#bg)"/>
+  <!-- Base tile -->
+  <rect width="32" height="32" rx="9" fill="url(#bg)"/>
 
-  <!-- Soft inner border -->
-  <rect x="0.75" y="0.75" width="30.5" height="30.5" rx="7.75"
-        fill="none" stroke="#c4b5fd" stroke-opacity="0.18" stroke-width="1">
-    <animate attributeName="stroke-opacity" values="0.14;0.28;0.14" dur="3.2s" repeatCount="indefinite"/>
+  <!-- Extremely subtle outer rim -->
+  <rect x="0.6" y="0.6" width="30.8" height="30.8" rx="8.4"
+        fill="none" stroke="#c4b5fd" stroke-opacity="0.12" stroke-width="0.9">
+    <animate attributeName="stroke-opacity" values="0.09;0.19;0.09" dur="4s" repeatCount="indefinite"/>
   </rect>
 
-  <!-- Elegant L -->
-  <text x="6.8" y="24.2"
-        font-family="Georgia, 'Times New Roman', serif"
-        font-size="19.5"
+  <!-- Refined L -->
+  <text x="6.9" y="24.4"
+        font-family="Georgia, 'Times New Roman', Times, serif"
+        font-size="19.8"
         font-weight="700"
         fill="url(#letter)"
-        letter-spacing="-0.5">L</text>
+        filter="url(#innerDepth)">L</text>
 
-  <!-- Soft ambient glow behind crescent -->
-  <circle cx="22.6" cy="10.1" r="6.8" fill="url(#moonGlow)" opacity="0.55" filter="url(#ambient)">
-    <animate attributeName="opacity" values="0.4;0.65;0.4" dur="3.2s" repeatCount="indefinite"/>
+  <!-- Soft atmospheric glow behind the moon -->
+  <circle cx="22.7" cy="10.0" r="7.2" fill="url(#atmosphere)">
+    <animate attributeName="opacity" values="0.7;1;0.7" dur="4s" repeatCount="indefinite"/>
   </circle>
 
-  <!-- Outer crescent ring -->
-  <circle cx="22.6" cy="10.1" r="5.15"
+  <!-- Main crescent ring -->
+  <circle cx="22.7" cy="10.0" r="5.25"
           fill="none"
-          stroke="#d4c4ff"
-          stroke-width="1.65"
+          stroke="#e2d9ff"
+          stroke-width="1.55"
           stroke-opacity="0.95"
           filter="url(#glow)">
-    <animate attributeName="r" values="5.0;5.35;5.0" dur="3.2s" repeatCount="indefinite"/>
-    <animate attributeName="stroke-opacity" values="0.75;1;0.75" dur="3.2s" repeatCount="indefinite"/>
+    <animate attributeName="r" values="5.15;5.4;5.15" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-opacity" values="0.8;1;0.8" dur="4s" repeatCount="indefinite"/>
   </circle>
 
-  <!-- Crescent cutout (darker than background for depth) -->
-  <circle cx="24.85" cy="10.1" r="3.55" fill="#08090e"/>
+  <!-- Precise crescent cut -->
+  <circle cx="25.05" cy="10.0" r="3.65" fill="#090a10"/>
 
-  <!-- Bright highlight on the crescent -->
-  <circle cx="20.15" cy="8.35" r="1.25" fill="#f0eaff" filter="url(#glow)">
-    <animate attributeName="opacity" values="0.6;1;0.6" dur="3.2s" repeatCount="indefinite"/>
-    <animate attributeName="r" values="1.1;1.4;1.1" dur="3.2s" repeatCount="indefinite"/>
+  <!-- Sharp luminous highlight -->
+  <circle cx="20.05" cy="8.15" r="1.15" fill="#f5f1ff" filter="url(#glow)">
+    <animate attributeName="opacity" values="0.65;1;0.65" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="r" values="1.05;1.3;1.05" dur="4s" repeatCount="indefinite"/>
   </circle>
 </svg>
