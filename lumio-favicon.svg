@@ -1,49 +1,79 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#12141c"/>
-      <stop offset="100%" stop-color="#0a0b12"/>
+    <!-- Background gradient -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#161822"/>
+      <stop offset="100%" stop-color="#0b0c12"/>
     </linearGradient>
-    <linearGradient id="l" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#f4f6ff"/>
-      <stop offset="55%" stop-color="#c4b5fd"/>
-      <stop offset="100%" stop-color="#8b7cf0"/>
+
+    <!-- Letter gradient -->
+    <linearGradient id="letter" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f8f7ff"/>
+      <stop offset="45%" stop-color="#d4c4ff"/>
+      <stop offset="100%" stop-color="#9b8af0"/>
     </linearGradient>
-    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="blur"/>
+
+    <!-- Crescent glow -->
+    <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e8deff" stop-opacity="0.9"/>
+      <stop offset="70%" stop-color="#c4b5fd" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#c4b5fd" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Soft outer glow filter -->
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.1" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
+
+    <!-- Subtle ambient glow -->
+    <filter id="ambient" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.6"/>
+    </filter>
   </defs>
 
-  <!-- rounded tile -->
-  <rect width="32" height="32" rx="8" fill="url(#g)"/>
+  <!-- Main tile -->
+  <rect width="32" height="32" rx="8.5" fill="url(#bg)"/>
 
-  <!-- subtle purple border (breathes) -->
-  <rect x="0.6" y="0.6" width="30.8" height="30.8" rx="7.4"
-        fill="none" stroke="rgba(196,181,253,0.28)" stroke-width="1.15">
-    <animate attributeName="stroke-opacity" values="0.22;0.42;0.22" dur="2.8s" repeatCount="indefinite"/>
+  <!-- Soft inner border -->
+  <rect x="0.75" y="0.75" width="30.5" height="30.5" rx="7.75"
+        fill="none" stroke="#c4b5fd" stroke-opacity="0.18" stroke-width="1">
+    <animate attributeName="stroke-opacity" values="0.14;0.28;0.14" dur="3.2s" repeatCount="indefinite"/>
   </rect>
 
-  <!-- L letter -->
-  <text x="7.2" y="23.5"
+  <!-- Elegant L -->
+  <text x="6.8" y="24.2"
         font-family="Georgia, 'Times New Roman', serif"
-        font-size="18.5" font-weight="700" fill="url(#l)">L</text>
+        font-size="19.5"
+        font-weight="700"
+        fill="url(#letter)"
+        letter-spacing="-0.5">L</text>
 
-  <!-- outer crescent ring — soft pulse -->
-  <circle cx="22.8" cy="10.2" r="5.1" fill="none" stroke="#c4b5fd" stroke-width="1.5" opacity="0.95">
-    <animate attributeName="r" values="4.9;5.35;4.9" dur="2.8s" repeatCount="indefinite"/>
-    <animate attributeName="stroke-opacity" values="0.7;1;0.7" dur="2.8s" repeatCount="indefinite"/>
+  <!-- Soft ambient glow behind crescent -->
+  <circle cx="22.6" cy="10.1" r="6.8" fill="url(#moonGlow)" opacity="0.55" filter="url(#ambient)">
+    <animate attributeName="opacity" values="0.4;0.65;0.4" dur="3.2s" repeatCount="indefinite"/>
   </circle>
 
-  <!-- inner cutout for crescent -->
-  <circle cx="24.6" cy="10.2" r="3.4" fill="#0a0b12"/>
+  <!-- Outer crescent ring -->
+  <circle cx="22.6" cy="10.1" r="5.15"
+          fill="none"
+          stroke="#d4c4ff"
+          stroke-width="1.65"
+          stroke-opacity="0.95"
+          filter="url(#glow)">
+    <animate attributeName="r" values="5.0;5.35;5.0" dur="3.2s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-opacity" values="0.75;1;0.75" dur="3.2s" repeatCount="indefinite"/>
+  </circle>
 
-  <!-- glowing highlight dot -->
-  <circle cx="20.4" cy="8.6" r="1.15" fill="#e9e0ff" filter="url(#softGlow)">
-    <animate attributeName="opacity" values="0.55;1;0.55" dur="2.8s" repeatCount="indefinite"/>
-    <animate attributeName="r" values="1.0;1.35;1.0" dur="2.8s" repeatCount="indefinite"/>
+  <!-- Crescent cutout (darker than background for depth) -->
+  <circle cx="24.85" cy="10.1" r="3.55" fill="#08090e"/>
+
+  <!-- Bright highlight on the crescent -->
+  <circle cx="20.15" cy="8.35" r="1.25" fill="#f0eaff" filter="url(#glow)">
+    <animate attributeName="opacity" values="0.6;1;0.6" dur="3.2s" repeatCount="indefinite"/>
+    <animate attributeName="r" values="1.1;1.4;1.1" dur="3.2s" repeatCount="indefinite"/>
   </circle>
 </svg>
