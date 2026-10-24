@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LUMIO Desktop Loader</title>
+  <title>LUMIO Desktop</title>
+  <!-- Keep the same favicon as the real app so the tab icon never disappears -->
+  <link rel="icon" href="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/kon-favicon.jpg">
   <style>
     body {
       margin: 0;
@@ -46,11 +48,19 @@
         const res = await fetch(RAW_URL);
         if (!res.ok) throw new Error("HTTP " + res.status);
         const html = await res.text();
+
+        // Replace the whole document with the real app
         document.open();
         document.write(html);
         document.close();
+
+        // Force favicon refresh (helps some browsers)
+        const link = document.querySelector('link[rel="icon"]') || document.createElement("link");
+        link.rel = "icon";
+        link.href = "https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/kon-favicon.jpg?" + Date.now();
+        document.head.appendChild(link);
       } catch (err) {
-        status.innerHTML = `<div class="error">Failed to load raw content.<br>${err.message}<br><br>Open the raw URL directly or check your connection.</div>`;
+        status.innerHTML = `<div class="error">Failed to load raw content.<br>${err.message}</div>`;
       }
     })();
   </script>
