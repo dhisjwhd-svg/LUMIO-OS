@@ -1091,11 +1091,17 @@
       return fetchApp(fallbackUrl);
     })
       .then(function (appHtml) {
-        /* Make relative images, scripts, stylesheets and media resolve from the app's own GitHub folder. */
-        if (!/<base\\b/i.test(appHtml)) {
-          appHtml = appHtml.replace(/<head(\\s[^>]*)?>/i, function (headTag) {
-            return headTag + '<base href="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/">';
-          });
+        /* Make relative app assets resolve from the app repository folder. */
+        if (appHtml.toLowerCase().indexOf('<base ') === -1) {
+          var headIndex = appHtml.toLowerCase().indexOf('<head');
+          if (headIndex !== -1) {
+            var headEnd = appHtml.indexOf('>', headIndex);
+            if (headEnd !== -1) {
+              appHtml = appHtml.slice(0, headEnd + 1) +
+                '<base href="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/">' +
+                appHtml.slice(headEnd + 1);
+            }
+          }
         }
         appHtml = injectCursorIntoHTML(appHtml);
         if (key === 'spotify') {
