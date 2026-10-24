@@ -1310,7 +1310,18 @@
   function injectCursorIntoHTML(appHtml) {
     const cursorCSS = getCursorInjectCSS();
     if (!cursorCSS) return appHtml;
-    const styleTag = '<style id="lumio-cursor">' + cursorCSS + '</style>';
+    const styleTag = '<style id="lumio-cursor">' + cursorCSS + '
+  /* Expanded settings layout sizing */
+  .settings-panel { width: min(620px, 94vw); max-height: min(680px, 88vh); }
+  @media (max-width:520px) {
+    .settings-panel { width:94vw; max-height:90vh; }
+    .settings-layout { grid-template-columns:112px minmax(0,1fr); }
+    .settings-nav { padding:10px 6px; }
+    .settings-nav-button { padding:9px 7px; gap:6px; font-size:10px; }
+    .settings-page { padding:14px 12px; }
+  }
+
+</style>';
     if (/<\/head>/i.test(appHtml)) {
       return appHtml.replace(/<\/head>/i, styleTag + '</head>');
     }
