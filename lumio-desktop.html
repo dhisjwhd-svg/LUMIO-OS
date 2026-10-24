@@ -1394,7 +1394,7 @@
         if (copiedCloseButton) copiedCloseButton.style.display = 'none';
 
         blankWindow.document.open();
-        blankWindow.document.write('<!DOCTYPE html>\\n' + desktopCopy.outerHTML);
+        blankWindow.document.write('<!DOCTYPE html>\n' + desktopCopy.outerHTML);
         blankWindow.document.close();
         blankWindow.focus();
       } catch (error) {
