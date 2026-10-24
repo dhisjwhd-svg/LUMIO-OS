@@ -873,6 +873,34 @@
     transform: rotate(90deg);
   }
 
+
+/* NOVA startup sequence — adapted from the supplied NOVA PC file */
+#lumioBoot{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#000;color:#fff;opacity:0;visibility:hidden;pointer-events:none}
+#lumioBoot.active{opacity:1;visibility:visible;pointer-events:auto}
+#lumioBoot .boot-stage{position:relative;width:min(150px,26vw);aspect-ratio:1;display:grid;place-items:center;filter:drop-shadow(0 0 28px rgba(255,255,255,.12))}
+#lumioBoot .windows-logo{width:100%;height:100%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:7px;will-change:transform,opacity,filter}
+#lumioBoot .windows-pane{background:#fff}
+#lumioBoot .boot-stage.dark .windows-pane{background:#000}
+#lumioBoot .boot-stage.flash{animation:lumioBootFlash .16s cubic-bezier(.2,.8,.2,1)}
+@keyframes lumioBootFlash{0%{transform:scale(.94);filter:brightness(1.8) drop-shadow(0 0 38px rgba(255,255,255,.45))}100%{transform:scale(1);filter:brightness(1) drop-shadow(0 0 28px rgba(255,255,255,.12))}}
+#lumioBoot.boot-screen-light{background:#fff}
+#lumioBoot.boot-screen-light .windows-pane{background:#000}
+#lumioBoot .boot-shards{position:absolute;inset:-18%;pointer-events:none;opacity:0}
+#lumioBoot .boot-shard{position:absolute;background:#fff;transform-origin:center;box-shadow:0 0 12px rgba(255,255,255,.12);animation:lumioShard .95s cubic-bezier(.12,.72,.22,1) forwards}
+#lumioBoot.boot-screen-light .boot-shard{background:#000}
+@keyframes lumioShard{0%{opacity:1;transform:translate(0,0) rotate(0) scale(1)}70%{opacity:1}100%{opacity:0;transform:translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(.15)}}
+#lumioBoot .boot-inner{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);text-align:center;min-width:260px;opacity:.7}
+#lumioBoot .boot-sub{font-size:9px;letter-spacing:3px;margin:0 0 10px}
+#lumioBoot .boot-status{font:10px monospace;letter-spacing:1px}
+#lumioBoot .boot-title{position:absolute;inset:0;pointer-events:none;opacity:0;overflow:hidden;font-family:Arial,sans-serif;font-weight:700;letter-spacing:-.045em;color:#fff}
+#lumioBoot .boot-title-main{position:absolute;left:50%;top:50%;font-size:clamp(54px,10vw,150px);line-height:1;white-space:nowrap;transform:translate(-50%,calc(-50% + 110vh));will-change:transform,opacity}
+#lumioBoot .boot-title-main::after{content:"";position:absolute;left:-9%;right:-9%;top:50%;height:4px;background:currentColor;transform:translateY(0);transform-origin:center;box-shadow:0 0 18px currentColor;opacity:0}
+#lumioBoot .boot-title-anti{position:absolute;left:50%;top:50%;font-size:clamp(28px,5vw,72px);line-height:1;font-weight:600;letter-spacing:.08em;opacity:0;transform:translate(-160vw,-50%);white-space:nowrap}
+#lumioBoot .boot-shockwave{position:absolute;width:22px;height:22px;left:0;top:0;border:3px solid #fff;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.2);box-shadow:0 0 20px rgba(255,255,255,.75),inset 0 0 12px rgba(255,255,255,.35);pointer-events:none}
+#lumioBoot .boot-title.line-final .boot-title-main::after{opacity:1;transform:translateY(clamp(38px,6vw,90px));transition:transform .42s cubic-bezier(.2,.8,.2,1),opacity .16s ease}
+#lumioBoot.leaving{transition:opacity .42s ease,visibility .42s ease;opacity:0;visibility:hidden}
+@media(prefers-reduced-motion:reduce){#lumioBoot *{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
 </style>
 </head>
 <body>
@@ -892,6 +920,12 @@
     </div>
   </div>
 
+  
+<div id="lumioBoot" aria-hidden="true">
+  <div class="boot-stage" id="lumioBootStage"><div class="windows-logo" id="lumioWindowsLogo"><i class="windows-pane"></i><i class="windows-pane"></i><i class="windows-pane"></i><i class="windows-pane"></i></div><div class="boot-shards" id="lumioBootShards"></div></div>
+  <div class="boot-inner"><div class="boot-sub">LUMIO SYSTEM</div><div class="boot-status" id="lumioBootStatus">STARTING...</div></div>
+  <div class="boot-title" id="lumioBootTitle"><div class="boot-title-main">LIGHTSPEED</div><div class="boot-title-anti">ANTI</div><div class="boot-shockwave" id="lumioBootShockwave" aria-hidden="true"></div></div>
+</div>
   <div class="wallpaper"></div>
 
   <div class="desktop">
@@ -1057,6 +1091,81 @@
 
   const liveApps = {};
 
+  
+  // NOVA boot animation, replayed only after a successful sign-in.
+  const lumioBoot = document.getElementById('lumioBoot');
+  async function playLumioBoot(){
+    if(!lumioBoot) return;
+    const stage=document.getElementById('lumioBootStage');
+    const shards=document.getElementById('lumioBootShards');
+    const status=document.getElementById('lumioBootStatus');
+    const logo=document.getElementById('lumioWindowsLogo');
+    const title=document.getElementById('lumioBootTitle');
+    const main=title.querySelector('.boot-title-main');
+    const anti=title.querySelector('.boot-title-anti');
+    const shockwave=document.getElementById('lumioBootShockwave');
+    const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+    const animate=(el,keyframes,duration,easing='cubic-bezier(.18,.82,.22,1)')=>el.animate(keyframes,{duration,easing,fill:'forwards'});
+    lumioBoot.classList.remove('leaving','boot-screen-light');
+    lumioBoot.classList.add('active');
+    lumioBoot.setAttribute('aria-hidden','false');
+    stage.classList.remove('dark','flash');
+    shards.innerHTML='';shards.style.opacity='0';
+    logo.style.opacity='1';logo.style.transform='';logo.style.filter='';logo.style.transition='';
+    title.classList.remove('line-final');title.style.opacity='0';
+    main.style.opacity='0';anti.style.opacity='0';
+    main.style.transform='translate(-50%,calc(-50% + 110vh))';
+    anti.style.transform='translate(-160vw,-50%)';
+    if(shockwave){shockwave.style.opacity='0';shockwave.style.transform='translate(-50%,-50%) scale(.2)';}
+    const flash=light=>{
+      lumioBoot.classList.toggle('boot-screen-light',light);
+      status.style.color=light?'#000':'#fff';
+      stage.classList.toggle('dark',light);
+      stage.classList.remove('flash');void stage.offsetWidth;stage.classList.add('flash');
+    };
+    status.textContent='STARTING...';
+    for(let i=0;i<5;i++){flash(i%2===1);status.textContent='BOOT '+(i+1)+'/5';await wait(48);}
+    status.textContent='';await wait(25);
+    const cols=8,rows=6,w=100/cols,h=100/rows;
+    for(let index=0;index<cols*rows;index++){
+      const x=index%cols,y=Math.floor(index/cols),shard=document.createElement('i');
+      shard.className='boot-shard';shard.style.left=(x*w)+'%';shard.style.top=(y*h)+'%';
+      shard.style.width=(w-.7)+'%';shard.style.height=(h-.7)+'%';
+      shard.style.setProperty('--tx',((x-(cols-1)/2)/(cols/2)*120+(Math.random()*30-15)).toFixed(1)+'px');
+      shard.style.setProperty('--ty',((y-(rows-1)/2)/(rows/2)*100+(Math.random()*30-15)).toFixed(1)+'px');
+      shard.style.setProperty('--rot',(Math.random()*150-75).toFixed(1)+'deg');
+      shard.style.animationDelay=(Math.random()*.08).toFixed(3)+'s';shards.appendChild(shard);
+      if(index%12===11) await wait(0);
+    }
+    logo.style.transition='transform .12s ease,opacity .12s ease,filter .12s ease';
+    logo.style.transform='scale(1.035)';logo.style.filter='brightness(1.55)';await wait(110);
+    logo.style.opacity='0';shards.style.opacity='1';await wait(620);
+    title.style.opacity='1';
+    await animate(main,[{opacity:0,transform:'translate(-50%,calc(-50% + 110vh))'},{opacity:1,transform:'translate(-50%,-50%)'}],520).finished;
+    const mr=main.getBoundingClientRect(),ar=anti.getBoundingClientRect();
+    const gap=Math.max(24,Math.min(36,innerWidth*.018));
+    const leftX=mr.left-ar.width-gap;
+    const leftTransform='translate('+(leftX+ar.width/2-innerWidth/2)+'px,-50%)';
+    const antiStart=animate(anti,[{opacity:0,transform:'translate(-160vw,-50%)'},{opacity:1,transform:leftTransform}],620,'cubic-bezier(.12,.9,.18,1)');
+    await antiStart.finished;
+    if(shockwave){
+      shockwave.style.left=(mr.left-gap/2)+'px';shockwave.style.top=(mr.top+mr.height*.5)+'px';
+      animate(shockwave,[{opacity:0,transform:'translate(-50%,-50%) scale(.2)'},{opacity:.95,transform:'translate(-50%,-50%) scale(.7)'},{opacity:0,transform:'translate(-50%,-50%) scale(1.8)'}],260,'cubic-bezier(.16,.8,.2,1)');
+    }
+    await Promise.all([
+      animate(anti,[{transform:leftTransform},{transform:'translate(calc(-50% - 3vw),-50%)',offset:.45},{transform:'translate(-50%,-50%)'}],520,'cubic-bezier(.12,.88,.16,1)').finished,
+      animate(main,[{transform:'translate(-50%,-50%)'},{transform:'translate(calc(-50% - 10vw),-50%)',offset:.08},{transform:'translate(calc(-50% - 72vw),-50%)',offset:.38},{transform:'translate(-170vw,-50%)'}],520,'cubic-bezier(.04,.92,.1,1)').finished
+    ]);
+    main.style.opacity='1';
+    await animate(main,[{transform:'translate(165vw,42px)'},{transform:'translate(95vw,42px)',offset:.18},{transform:'translate(-20vw,42px)',offset:.72},{transform:'translate(-50%,42px)'}],780,'cubic-bezier(.16,.82,.18,1)').finished;
+    title.classList.add('line-final');await wait(520);await wait(650);
+    lumioBoot.classList.add('leaving');
+    await wait(450);
+    lumioBoot.classList.remove('active','leaving');
+    lumioBoot.setAttribute('aria-hidden','true');
+  }
+
+
   // ----- Login -----
   if (loginForm) {
     loginForm.addEventListener('submit', function (e) {
@@ -1068,6 +1177,7 @@
         loginScreen.classList.add('hide');
         document.body.classList.add('unlocked');
         setTimeout(function () { loginScreen.style.display = 'none'; }, 520);
+        playLumioBoot().catch(function (err) { console.error('Lumio startup animation failed:', err); if (lumioBoot) { lumioBoot.classList.remove('active'); lumioBoot.setAttribute('aria-hidden','true'); } });
       } else {
         loginPass.classList.add('error');
         loginError.classList.add('show');
