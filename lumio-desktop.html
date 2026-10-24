@@ -1240,19 +1240,33 @@
 
 
   // ----- Login -----
+  let loginInProgress = false;
   if (loginForm) {
     loginForm.addEventListener('submit', function (e) {
       e.preventDefault();
+      if (loginInProgress) return;
       const val = loginPass.value;
       if (val === PASSWORD) {
+        loginInProgress = true;
         loginError.classList.remove('show');
         loginPass.classList.remove('error');
+
+        // Finish the login transition first. The boot overlay is optional and
+        // must never be able to reveal the login screen again if its animation fails.
         loginScreen.classList.add('hide');
         document.body.classList.add('unlocked');
-        setTimeout(function () { loginScreen.style.display = 'none'; }, 520);
-        if (getSetting('lumio_skip_boot') !== 'true') {
-          playLumioBoot().catch(function (err) { console.error('Lumio startup animation failed:', err); if (lumioBoot) { lumioBoot.classList.remove('active'); lumioBoot.setAttribute('aria-hidden','true'); } });
-        }
+        window.setTimeout(function () {
+          if (loginScreen) loginScreen.style.display = 'none';
+          if (getSetting('lumio_skip_boot') !== 'true') {
+            playLumioBoot().catch(function (err) {
+              console.error('LUMIO startup animation failed:', err);
+              if (lumioBoot) {
+                lumioBoot.classList.remove('active', 'leaving');
+                lumioBoot.setAttribute('aria-hidden', 'true');
+              }
+            });
+          }
+        }, 520);
       } else {
         loginPass.classList.add('error');
         loginError.classList.add('show');
