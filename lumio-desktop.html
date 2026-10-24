@@ -351,8 +351,10 @@
     align-items: center;
     justify-content: center;
     background:
-      radial-gradient(ellipse 70% 50% at 50% 30%, rgba(40,40,45,0.45) 0%, transparent 55%),
-      linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
+      linear-gradient(180deg, rgba(5,5,10,0.28) 0%, rgba(5,5,10,0.58) 58%, rgba(5,5,10,0.82) 100%),
+      radial-gradient(ellipse 52% 48% at 50% 42%, rgba(248,150,220,0.15) 0%, transparent 72%),
+      url("https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/kirby%20log%20in%20page.jpg") center 42% / cover no-repeat,
+      #08070c;
     transition: opacity 0.5s var(--ease), visibility 0.5s;
   }
   .login-screen::after {
@@ -374,6 +376,13 @@
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    padding: 30px 34px 32px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 28px;
+    background: linear-gradient(145deg, rgba(22,18,30,0.58), rgba(8,8,14,0.68));
+    box-shadow: 0 24px 80px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.10);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     opacity: 0;
     transform: translateY(12px);
     animation: fadeUp 0.7s var(--ease) 0.15s forwards;
@@ -383,9 +392,9 @@
     height: 96px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid rgba(255,255,255,0.12);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    background: #111;
+    border: 2px solid rgba(255,255,255,0.72);
+    box-shadow: 0 0 0 6px rgba(248,150,220,0.12), 0 12px 36px rgba(0,0,0,0.48);
+    background: #17101d;
   }
   .login-avatar img {
     width: 100%;
