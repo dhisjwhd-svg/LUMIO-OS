@@ -577,6 +577,38 @@
   }
 
 
+  
+  /* Settings navigation and functional startup preferences */
+  .settings-panel { width: min(620px, 94vw); max-height: min(680px, 88vh); }
+  .settings-layout { display:grid; grid-template-columns:155px minmax(0,1fr); min-height:0; flex:1; }
+  .settings-nav { padding:14px 10px; border-right:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.025); display:flex; flex-direction:column; gap:5px; }
+  .settings-nav-button { display:flex; align-items:center; gap:9px; width:100%; padding:10px 11px; border:1px solid transparent; border-radius:9px; color:rgba(255,255,255,.65); background:transparent; text-align:left; font:inherit; font-size:12px; cursor:pointer; transition:background .18s,color .18s,border-color .18s; }
+  .settings-nav-button:hover { background:rgba(255,255,255,.06); color:#fff; }
+  .settings-nav-button.active { background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.09); color:#fff; }
+  .settings-nav-button svg { width:16px; height:16px; flex-shrink:0; opacity:.85; }
+  .settings-page { display:none; padding:18px; min-width:0; overflow-y:auto; }
+  .settings-page.active { display:block; }
+  .settings-page-heading { margin:0 0 5px; color:#fff; font-size:17px; font-weight:650; letter-spacing:-.35px; }
+  .settings-page-subtitle { margin:0 0 18px; color:rgba(255,255,255,.48); font-size:11px; line-height:1.5; }
+  .settings-toggle-card { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,.075); }
+  .settings-toggle-card:last-of-type { border-bottom:0; }
+  .settings-toggle-copy { min-width:0; }
+  .settings-toggle-title { color:rgba(255,255,255,.94); font-size:12px; font-weight:600; margin-bottom:5px; }
+  .settings-toggle-description { color:rgba(255,255,255,.48); font-size:10.5px; line-height:1.55; }
+  .settings-checkbox { appearance:none; -webkit-appearance:none; position:relative; flex:0 0 36px; width:36px; height:21px; border-radius:999px; border:1px solid rgba(255,255,255,.17); background:rgba(255,255,255,.1); cursor:pointer; transition:background .18s,border-color .18s; }
+  .settings-checkbox::after { content:""; position:absolute; width:15px; height:15px; top:2px; left:2px; border-radius:50%; background:#eee; box-shadow:0 1px 3px #0005; transition:transform .18s; }
+  .settings-checkbox:checked { background:#e9e9e9; border-color:#e9e9e9; }
+  .settings-checkbox:checked::after { transform:translateX(15px); background:#191919; }
+  .settings-checkbox:focus-visible,.settings-nav-button:focus-visible { outline:2px solid #fff; outline-offset:3px; }
+  .settings-page .settings-action-card { margin-top:18px; }
+  @media (max-width:520px) {
+    .settings-panel { width:94vw; max-height:90vh; }
+    .settings-layout { grid-template-columns:112px minmax(0,1fr); }
+    .settings-nav { padding:10px 6px; }
+    .settings-nav-button { padding:9px 7px; gap:6px; font-size:10px; }
+    .settings-page { padding:14px 12px; }
+  }
+
   /* Settings panel */
   .settings-layer {
     position: fixed;
@@ -1019,25 +1051,56 @@
           <svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10"/></svg>
         </button>
       </div>
-      <div class="settings-body">
-        <div class="settings-section-title">Wallpaper</div>
-        <div class="wp-grid" id="wpGrid">
-          <div class="wp-item none selected" data-wp="none">
-            <span>None</span>
-            <div class="wp-check">✓</div>
+      <div class="settings-layout">
+        <nav class="settings-nav" aria-label="Settings sections">
+          <button type="button" class="settings-nav-button active" data-settings-page="personalization" aria-current="page">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18h1.2a2 2 0 0 0 1.4-3.4 1.8 1.8 0 0 1 1.3-3.1H18a3 3 0 0 0 3-3c0-4.7-4-8.5-9-8.5Z"/><path d="M7.5 10h.01M10 6.5h.01M15 7.5h.01"/></svg>
+            Personalization
+          </button>
+          <button type="button" class="settings-nav-button" data-settings-page="startup">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"/><path d="M5.5 5.5a9 9 0 1 0 13 0"/></svg>
+            Startup &amp; Login
+          </button>
+        </nav>
+        <div class="settings-page active" data-settings-panel="personalization">
+          <h3 class="settings-page-heading">Personalization</h3>
+          <p class="settings-page-subtitle">Make the desktop feel like yours.</p>
+          <div class="settings-section-title">Wallpaper</div>
+          <div class="wp-grid" id="wpGrid">
+            <div class="wp-item none selected" data-wp="none">
+              <span>None</span>
+              <div class="wp-check">✓</div>
+            </div>
           </div>
         </div>
-
-        <div class="settings-action-card">
-          <div class="settings-section-title" style="margin-bottom:0">Launch options</div>
-          <div class="settings-action-title">Open Lumio in a blank tab</div>
-          <div class="settings-action-description">Launch a separate copy of the Lumio desktop in an about:blank tab. Useful when you want the desktop opened separately from its current page.</div>
-          <button type="button" class="settings-action-button" id="launchBlankTab">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14 3h7v7"/><path d="M10 14 21 3"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/>
-            </svg>
-            Launch in about:blank
-          </button>
+        <div class="settings-page" data-settings-panel="startup">
+          <h3 class="settings-page-heading">Startup &amp; Login</h3>
+          <p class="settings-page-subtitle">Choose what happens when LUMIO opens and you sign in.</p>
+          <div class="settings-toggle-card">
+            <div class="settings-toggle-copy">
+              <div class="settings-toggle-title">Skip startup animation</div>
+              <div class="settings-toggle-description">When enabled, the LIGHTSPEED startup screen will not appear after you log in. This setting is saved on this browser.</div>
+            </div>
+            <input class="settings-checkbox" type="checkbox" id="settingSkipBoot" aria-label="Skip startup animation">
+          </div>
+          <div class="settings-toggle-card">
+            <div class="settings-toggle-copy">
+              <div class="settings-toggle-title">Automatic password</div>
+              <div class="settings-toggle-description">Automatically enter the built-in LUMIO password when this page opens. This skips the manual password step on future visits on this browser.</div>
+            </div>
+            <input class="settings-checkbox" type="checkbox" id="settingAutoPassword" aria-label="Automatic password">
+          </div>
+          <div class="settings-action-card">
+            <div class="settings-section-title" style="margin-bottom:0">Launch options</div>
+            <div class="settings-action-title">Open LUMIO in a blank tab</div>
+            <div class="settings-action-description">Open a separate copy of the desktop inside an about:blank tab.</div>
+            <button type="button" class="settings-action-button" id="launchBlankTab">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 3h7v7"/><path d="M10 14 21 3"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/>
+              </svg>
+              Launch in about:blank
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -1177,7 +1240,9 @@
         loginScreen.classList.add('hide');
         document.body.classList.add('unlocked');
         setTimeout(function () { loginScreen.style.display = 'none'; }, 520);
-        playLumioBoot().catch(function (err) { console.error('Lumio startup animation failed:', err); if (lumioBoot) { lumioBoot.classList.remove('active'); lumioBoot.setAttribute('aria-hidden','true'); } });
+        if (getSetting('lumio_skip_boot') !== 'true') {
+          playLumioBoot().catch(function (err) { console.error('Lumio startup animation failed:', err); if (lumioBoot) { lumioBoot.classList.remove('active'); lumioBoot.setAttribute('aria-hidden','true'); } });
+        }
       } else {
         loginPass.classList.add('error');
         loginError.classList.add('show');
@@ -1186,6 +1251,18 @@
         setTimeout(function () { loginPass.classList.remove('error'); }, 400);
       }
     });
+  }
+
+  // If enabled, automatically submit the built-in password on initial page load only.
+  // This intentionally does not auto-login immediately after the user signs out.
+  if (getSetting('lumio_auto_password') === 'true' && loginForm && loginPass && loginScreen && !loginScreen.classList.contains('hide')) {
+    loginPass.value = PASSWORD;
+    setTimeout(function () {
+      if (getSetting('lumio_auto_password') === 'true' && loginForm && loginScreen && !loginScreen.classList.contains('hide')) {
+        if (typeof loginForm.requestSubmit === 'function') loginForm.requestSubmit();
+        else loginForm.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      }
+    }, 250);
   }
 
   // ----- Clock -----
@@ -1476,6 +1553,45 @@
   }
   function closeSettings() {
     if (settingsLayer) settingsLayer.classList.remove('open');
+  }
+
+  // Settings section navigation and saved startup preferences.
+  const settingSkipBoot = document.getElementById('settingSkipBoot');
+  const settingAutoPassword = document.getElementById('settingAutoPassword');
+  const settingsNavButtons = document.querySelectorAll('[data-settings-page]');
+  const settingsPages = document.querySelectorAll('[data-settings-panel]');
+
+  function getSetting(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function saveSetting(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) {}
+  }
+  function showSettingsPage(name) {
+    settingsNavButtons.forEach(function (button) {
+      const active = button.dataset.settingsPage === name;
+      button.classList.toggle('active', active);
+      if (active) button.setAttribute('aria-current', 'page');
+      else button.removeAttribute('aria-current');
+    });
+    settingsPages.forEach(function (page) {
+      page.classList.toggle('active', page.dataset.settingsPanel === name);
+    });
+  }
+  settingsNavButtons.forEach(function (button) {
+    button.addEventListener('click', function () { showSettingsPage(button.dataset.settingsPage); });
+  });
+  if (settingSkipBoot) {
+    settingSkipBoot.checked = getSetting('lumio_skip_boot') === 'true';
+    settingSkipBoot.addEventListener('change', function () {
+      saveSetting('lumio_skip_boot', settingSkipBoot.checked ? 'true' : 'false');
+    });
+  }
+  if (settingAutoPassword) {
+    settingAutoPassword.checked = getSetting('lumio_auto_password') === 'true';
+    settingAutoPassword.addEventListener('change', function () {
+      saveSetting('lumio_auto_password', settingAutoPassword.checked ? 'true' : 'false');
+    });
   }
 
   // Open a working copy of the current desktop inside an about:blank tab.
