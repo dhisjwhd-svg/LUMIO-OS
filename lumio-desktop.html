@@ -29,10 +29,10 @@
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(40,40,45,0.5) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(25,25,30,0.4) 0%, transparent 50%),
-      radial-gradient(ellipse 50% 30% at 20% 70%, rgba(30,30,35,0.3) 0%, transparent 50%),
-      linear-gradient(180deg, #080808 0%, #050505 40%, #030303 100%);
+      linear-gradient(180deg, rgba(3,3,6,0.16) 0%, rgba(3,3,6,0.08) 38%, rgba(3,3,6,0.58) 100%),
+      radial-gradient(ellipse 58% 55% at 50% 40%, rgba(210,160,255,0.12) 0%, transparent 72%),
+      url("https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/kirby%20log%20in%20page.jpg") center 48% / cover no-repeat,
+      #050505;
     z-index: 0;
     transition: opacity 0.5s var(--ease);
   }
@@ -836,8 +836,13 @@
   <!-- LOGIN -->
   <div class="login-screen" id="loginScreen">
     <div class="login-card">
-      <div class="login-avatar">
-        <img src="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/Kirby-Dvd.jpg" alt="User" draggable="false">
+      <div class="login-avatar" aria-label="User profile">
+        <svg viewBox="0 0 96 96" role="img" aria-label="User" width="96" height="96" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="lumioUserAvatar" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d6b5ff"/><stop offset="1" stop-color="#8a7dff"/></linearGradient></defs>
+          <rect width="96" height="96" rx="48" fill="#17101d"/>
+          <circle cx="48" cy="35" r="17" fill="url(#lumioUserAvatar)"/>
+          <path d="M17 88c2-20 14-31 31-31s29 11 31 31" fill="url(#lumioUserAvatar)"/>
+        </svg>
       </div>
       <div class="login-name">User</div>
       <form class="login-form" id="loginForm" autocomplete="off">
