@@ -28,9 +28,13 @@
   .wallpaper {
     position: fixed;
     inset: 0;
-    background:
+    background-color: #050505;
+    background-image:
       radial-gradient(ellipse 70% 50% at 50% 30%, rgba(40,40,45,0.45) 0%, transparent 55%),
-      linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
+      linear-gradient(180deg, #0a0a0a 0%, #050505 100%) !important;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
     z-index: 0;
     transition: opacity 0.5s var(--ease);
   }
