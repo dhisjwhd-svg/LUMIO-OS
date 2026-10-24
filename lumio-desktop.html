@@ -350,25 +350,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: #050505;
-    isolation: isolate;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 30%, rgba(40,40,45,0.45) 0%, transparent 55%),
+      linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
     transition: opacity 0.5s var(--ease), visibility 0.5s;
-  }
-  /* Kirby artwork sits inside the black login wallpaper, with a controlled crop. */
-  .login-screen::before {
-    content: "";
-    position: absolute;
-    z-index: 0;
-    inset: 6vh 6vw;
-    border-radius: 24px;
-    background-image:
-      linear-gradient(180deg, rgba(0,0,0,0.04) 35%, rgba(0,0,0,0.58) 100%),
-      url("https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/kirby%20log%20in%20page.jpg");
-    background-size: cover;
-    background-position: center 44%;
-    background-repeat: no-repeat;
-    box-shadow: 0 22px 80px rgba(0,0,0,0.45);
-    pointer-events: none;
   }
   .login-screen::after {
     content: "";
