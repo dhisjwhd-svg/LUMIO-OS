@@ -1075,8 +1075,21 @@
       frame.removeAttribute('srcdoc');
     }
 
-    fetch(url)
-      .then(function (r) { return r.text(); })
+    function fetchApp(sourceUrl) {
+      return fetch(sourceUrl).then(function (response) {
+        if (!response.ok) throw new Error('Asset request failed: ' + response.status);
+        return response.text();
+      });
+    }
+    function rawFallbackUrl(sourceUrl) {
+      return sourceUrl.replace(/^https:\/\/cdn\.jsdelivr\.net\/gh\/([^/]+\/[^@/]+)@([^/]+)\//,
+        'https://raw.githubusercontent.com/$1/$2/');
+    }
+    fetchApp(url).catch(function () {
+      const fallbackUrl = rawFallbackUrl(url);
+      if (fallbackUrl === url) throw new Error('No fallback URL available');
+      return fetchApp(fallbackUrl);
+    })
       .then(function (appHtml) {
         appHtml = injectCursorIntoHTML(appHtml);
         if (key === 'spotify') {
@@ -1168,6 +1181,10 @@
       div.dataset.wp = wp.id;
       const img = document.createElement('img');
       img.src = WP_BASE + wp.file;
+      img.onerror = function () {
+        this.onerror = null;
+        this.src = 'https://raw.githubusercontent.com/dhisjwhd-svg/pc-wallpaper-assets-/main/' + wp.file.replace(/%20/g, ' ');
+      };
       img.alt = wp.id;
       img.loading = 'lazy';
       div.appendChild(img);
@@ -1194,6 +1211,11 @@
       if (!wp) return;
       wallpaperEl.classList.add('has-image');
       wallpaperEl.style.background = '#050505 url("' + WP_BASE + wp.file + '") center center / cover no-repeat';
+      const probe = new Image();
+      probe.onerror = function () {
+        wallpaperEl.style.background = '#050505 url("https://raw.githubusercontent.com/dhisjwhd-svg/pc-wallpaper-assets-/main/' + wp.file.replace(/%20/g, ' ') + '") center center / cover no-repeat';
+      };
+      probe.src = WP_BASE + wp.file;
       try { localStorage.setItem('lumio_wp', id); } catch (e) {}
     }
   }
