@@ -255,29 +255,6 @@
     display: block;
   }
 
-  .app-loading {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #050505;
-    z-index: 250;
-    transition: opacity 0.35s;
-  }
-  .app-loading.hide {
-    opacity: 0;
-    pointer-events: none;
-  }
-  .spinner {
-    width: 32px;
-    height: 32px;
-    border: 2px solid rgba(255,255,255,0.08);
-    border-top-color: rgba(255,255,255,0.45);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-  }
-
   /* Tiny animated close X */
   .close-x {
     position: absolute;
@@ -328,10 +305,6 @@
   @keyframes fadeUp {
     to { opacity: 1; transform: translateY(0); }
   }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
   @media (max-width: 600px) {
     :root { --widget: 76px; }
     .desktop { padding: 24px 20px 90px; }
@@ -816,9 +789,6 @@
   input, textarea, [contenteditable] {
     cursor: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADaUlEQVR4nMWWT0gUURzHPyPdpIImxEgo9rDsLniIjNjosG1rhxUk2MQIgqyQHOnSoYNBnerQIQhsBbE/YASyCaK4B3dND1FERofApIMRbCTiBhnapXgdZt7szOzM7owSfeGx8347732/vz/v90YBBBUoLvN/CieBCEI6raasYukoFwML3hF0gZW4rbEZgIWNlS2Rb0nAtJoSkni75AAN/5MctpgCpyg3u19hgYvQGQUvLGys+BLiW4Cz8Jxo+jJqPq8eOF8lxEtMTQHW8Prx2omhUInTyy3sqyHGswhlqN+2/t4WuRVtjc20NTaTHiuYzrkKmFZTIr1WYChUos/YZChUCizCC6sXz5Ne00V4n4JZ6FtuMYn7HN5sG7P6TwN63uWo3AUncSX+hj2XXrZaaPoySr67nY5yUWkwSOUAUDrKRSW/t52mR6O2hd+ArxsrpN8NmIRuNoDTyy1MhEpMhEoMGcPpPdRpRPnudldyK6y29LsB8ofv2IrW9RQY3kOdViyrVkISKQeTpsdWm3xnYWOFCY9TkF4r2Gw1BcgU9BnhdCL9+SnsiVXbrxaqbF7wFNBRLir57nazwx35sO1rQ8esfVr/Npz1sO+JwfdFfTijcGGOW09u8tXlZOQt+QcfXz/WdpweK8DLColJ/H0RnpzQn4/D5p9Bzg7OcOXVr6r9nPdB3QjIBW2NzXTe72QzPshmfLD6xQtz+n8G+dTUlAKw32i9buQQ8PvPukE0HBfd517xYfU5AK1NZxh7doyPn14rznVe5FuFAERGy4loOC7WtRERDcdFNBw3bVQ6a10EUSUA1rURdl4PETt1gzepSwD0sJvH/OBo8SGLM7f5eXeZHnYznu2qy+XnbAmARLIfNZKgBxg/mGRdGzGJpQjAJAfIaDnKS/MAzL94ICMSqAhFNBwno+VQIwlzMwlJLhFLXWNX9rI5Ly/No0YSqJEE0XDc5pBfAbxJXTKJJyOHGM92kdFyQMVrN5SX5pmMHLKJW9dGqt7z1d7USILH/KBz6T0Ai8V7HDXEybkbZIpqCfVThELmezzbZebeShxLXbMtkFGSKQA9XUZ6bJx+T4GQ4duVvewaSitkHWS0nFknbuRBBECleJTe3l5R3qF/K6i/9S5nnQ8PDyuONUG56iOR7BeJZL/wmvvFX+iplk/jozE8AAAAAElFTkSuQmCC") 3 6, text;
   }
-  .app-loading, .spinner {
-    cursor: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADq0lEQVR4nMWWT2gbRxTGf2t8E00gKq7qGBJEEJIhhzQqQT2prtyDDCbgGoeCoW5yqBV66aGHFNpemkMPgYIig3Hrg0vBuAITYx0s2dYpJTShh4ArSnETUJExVsEudi8x04N2RjOr3fWqpuSDRfueZub73p+ZWQDBS0SP/fvSRFiAEEJgWZa0A2M1nDGEjzQrXc03BDQaDfr7+wOJkMTJUASAx4c7/4ncEGBnQPd7kkvi05IrASeR/l/kAL1Byf1EufmDCuua2JkFLzw+3AkkRC+BrzBn4znR93xBve9emOwQ4iXG6RC6T09vkKidmInWub49wOs+Ynq08R3kyVCEny+/OBW5jmQoQjIUIbtYVsHpJ6FBnt0rMxOtM20vMhOtdy3CC7sfTpLda4nopd0DZi+sw/T2gCKedkRzaqy3fnpoRe584B1ciRuYtfTy+aHv+QKliWFGmhWrx23ASLNilV4dpu+7BcPfAP483CH75I4idPMBXN8eYDlaZzlaZ8Z+nNFD+yBybkULoDQx7EquQ/dln9yhdPWu0bSuu8COHtpN2E691oyyayV0chmxU5D0L3vsguxe2fB5bkNAlWDaTqeEdXGoRfbH93BuUNlKxMcmiR+cJVAX00izYq1ODIvsXpndC5O8+bRXEYlnG8Yi4tmGIUJ86fN9s26aJ19G2gSD+Nwg/LWl3k1Rm3zxweeUrt7lvOMQK2n19ye2oR/H2UUttZc2WyKgJeT3t9VfR8d5buTX+OjhPx3rOe8DZw/Ip2NCMhRh9JtRjo7zHB3nO5Ve2lT/3civsbKyYgGct49eN3I44TLSsRrOCH2BRCwlJt5/yNPdHwG43Pceiz+8xa+//WQ553mRO+GaAa9xY7klkYilxEFuTiRiKZGIpZQv4DpAdx8kAuAgN8crn0YZfPczHmVuAjDFWebZ51rlW7bWvuLvr7eZ4izFwviJXL1uTjfi9NBtwvE0U0Dx4hAHuTlFLEUAihxgLLdEs1YFoLpx3/Xb0/Uu0MkTsRRjuSXC8bRaTEKSSwxmPuFM4Zaym7Uq4XiacDxNIpYyAgoqgEeZm4r4QfwKxcI4Y7kloB21G5q1Kg/iVwxxB7m5jnFBSkA4nmaefUZrvwCwVbnHNVuctN0gS+QnNEgTClnvYmGc9NBtJWqrco/XBt5QtoTMkiwBtMpll6erHgCwzhRuddS7WauqDEh7nn01rlgYV5nzInd1+EDtBonqxn3DDsfThF+UmZ2dtfQ5flz/ArtQuhVKzdDMAAAAAElFTkSuQmCC") 0 0, wait;
-  }
 
 
   /* Background app players (audio keeps playing) */
@@ -1085,10 +1055,7 @@
   <!-- Fullscreen app -->
   <div class="bg-players" id="bgPlayers"></div>
   <div class="app-layer" id="appLayer">
-    <div class="app-loading" id="loading">
-      <div class="spinner"></div>
-    </div>
-    
+
     <iframe id="appFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads" allowfullscreen></iframe>
   </div>
 
@@ -1107,7 +1074,6 @@
   const loginError = document.getElementById('loginError');
   const layer = document.getElementById('appLayer');
   const frame = document.getElementById('appFrame');
-  const loading = document.getElementById('loading');
   const clockEl = document.getElementById('clock');
   const bgPlayers = document.getElementById('bgPlayers');
   const startBtn = document.getElementById('startBtn');
@@ -1221,7 +1187,6 @@
     const url = sources[key];
     if (!url) return;
 
-    if (loading) loading.classList.remove('hide');
     document.body.classList.add('app-open');
     if (layer) {
       layer.classList.add('open');
@@ -1243,7 +1208,6 @@
         frame.src = url;
         frame.setAttribute('title', 'MilkBox app');
       }
-      window.setTimeout(function () { if (loading) loading.classList.add('hide'); }, 1200);
       return;
     }
 
@@ -1284,11 +1248,9 @@
           frame.srcdoc = appHtml;
           frame.setAttribute('title', key.charAt(0).toUpperCase() + key.slice(1) + ' app');
         }
-        setTimeout(function () { if (loading) loading.classList.add('hide'); }, 650);
       })
       .catch(function () {
         if (frame) frame.src = url;
-        setTimeout(function () { if (loading) loading.classList.add('hide'); }, 800);
       });
   }
 
@@ -1305,7 +1267,6 @@
         frame.removeAttribute('srcdoc');
         frame.style.display = 'block';
       }
-      if (loading) loading.classList.remove('hide');
     }, 400);
   }
 
