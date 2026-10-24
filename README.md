@@ -1,120 +1,106 @@
-# 🌌 LUMIO-OS
+# LUMIO-OS
 
-LUMIO-OS is a browser-based desktop experience that transforms your browser into a polished, interactive operating system-inspired workspace. It blends entertainment, productivity, and personalization into a single immersive digital environment.
+**A browser-based desktop environment for apps, media, gaming, and customization.**
 
-Think of it as a personal desktop playground where your games, media, music, and system controls all live in one place — designed to feel familiar, modern, and fun.
+LUMIO-OS is a web-based desktop interface designed to bring supported applications and digital experiences together in a single, cohesive environment. Built with HTML, CSS, JavaScript, and SVG, the project combines an interactive desktop layout with app launching, media playback interfaces, and personalization features.
 
----
+The project focuses on usability, visual consistency, and a lightweight browser-based architecture.
 
-## ✨ Overview
+## Overview
 
-LUMIO-OS brings together the best parts of a desktop environment and a digital entertainment hub. Instead of jumping between disconnected apps and tabs, you get a unified experience that feels like a compact operating system built for browsing.
+LUMIO-OS provides a desktop-inspired interface that runs in a modern web browser. Its design incorporates familiar desktop elements, including application icons, a dock, a system clock, and interactive interface panels.
 
-With a visually rich interface, custom system panels, and media-focused features, LUMIO-OS turns your browser into a stylish desktop-like environment for browsing, playing, listening, and customizing.
+The project is actively developed, with ongoing work focused on application compatibility, asset loading, responsiveness, and overall reliability.
 
----
+## Features
 
-## 🚀 Why LUMIO-OS?
+- **Desktop Interface** — An interactive desktop layout with application shortcuts and a dock.
+- **Application Launcher** — Access supported applications through a unified interface.
+- **Media Playback** — Dedicated interfaces for supported audio and video content.
+- **Gaming Integration** — Access compatible browser-based games and gaming experiences.
+- **Desktop Customization** — Available wallpaper options and visual settings.
+- **System Interface Elements** — A clock, launcher controls, and desktop-style navigation.
+- **External Asset Support** — Integration with hosted images and other web resources.
+- **Browser-Based Architecture** — Built using standard web technologies without requiring a conventional desktop installation.
 
-- Built for a single-page, immersive desktop experience
-- Combines multiple digital activities into one interface
-- Designed to feel familiar like a modern operating system
-- Gives you a playful, polished environment for entertainment and personalization
-- Works directly in the browser without needing a heavy installation
+Feature availability varies by application, browser compatibility, network access, and external service restrictions.
 
----
+## Technology Stack
 
-## 🧩 Features
+| Technology | Purpose |
+|---|---|
+| HTML5 | Application structure and interface layout |
+| CSS3 | Styling, animations, effects, and responsive layouts |
+| JavaScript | Application behavior and interactive functionality |
+| SVG | Scalable icons and interface graphics |
 
-- 🖥️ Desktop Experience  
-  A dynamic, operating system-inspired interface with an interactive desktop layout.
+## Getting Started
 
-- 🎮 Gaming Hub  
-  Discover and launch supported browser-based games from a centralized game area.
+### Requirements
 
-- 🎬 Video Player  
-  Import and enjoy your own local video files in a sleek media player.
+- A modern web browser
+- An internet connection for features that rely on external resources
+- Compatible local media files for applicable playback features
 
-- 🎵 Music Player  
-  Play your own music library through a music-focused interface inspired by modern streaming apps.
+### Installation
 
-- ⚙️ System Settings  
-  Personalize your environment with configurable settings and system controls.
+1. Clone or download the repository.
+2. Open the project directory.
+3. Locate the relevant HTML entry file.
+4. Open it in a compatible browser or serve it through a local web server.
 
-- 📁 Unified Workspace  
-  Keep everything in a single HTML-based desktop environment instead of switching between separate tools.
+Repository: [dhisjwhd-svg/LUMIO-OS](https://github.com/dhisjwhd-svg/LUMIO-OS)
 
-- 📱 Modern Design  
-  A visually appealing interface inspired by contemporary desktop operating systems and digital entertainment platforms.
+### Main Desktop Interface
 
----
+The desktop interface is available in [`lumio-desktop.html`](https://github.com/dhisjwhd-svg/LUMIO-OS/blob/main/lumio-desktop.html).
 
-## 🧠 Vision
+Additional application modules and assets may be maintained in separate files or repositories.
 
-LUMIO-OS aims to create a more enjoyable and integrated digital experience by combining entertainment and everyday browsing into one seamless desktop-like environment.
+## Project Structure
 
-Instead of managing scattered apps, users can explore games, media, music, and customization from a single interface designed to feel intuitive and engaging.
+LUMIO-OS uses a modular collection of web resources to support its desktop interface and application experiences. Depending on the component, these resources may include:
 
----
+- HTML files for desktop and application interfaces
+- CSS for styling and layout
+- JavaScript for interactions and application logic
+- Images, icons, and wallpapers
+- External resources loaded from supported hosting services
 
-## 🛠️ Getting Started
+Refer to the repository for the current file structure and implementation details.
 
-1. Clone or download this repository.
-2. Open the project in a web browser.
-3. Launch the main app entry file in your browser.
-4. Explore the desktop and start using the available features.
+## Development Priorities
 
-Some features may require an internet connection or compatible local files, depending on the app or media you want to use.
+Development is focused on the following areas:
 
----
+- Improving application launch reliability
+- Ensuring images and external assets load consistently
+- Increasing compatibility with embedded applications and media
+- Reducing unnecessary loading delays and interface glitches
+- Improving responsiveness across different screen sizes
+- Refining desktop navigation and customization
 
-## 📦 Project Structure
+## Compatibility and Limitations
 
-The project is designed as a single-file or lightweight browser-based desktop experience, with UI components and app modules bundled into the main application structure.
+LUMIO-OS runs within the browser environment and is subject to its security and compatibility restrictions.
 
-If you are editing the project, start with the main HTML and related styling or script files used by the desktop interface.
+- Some third-party websites prevent their content from being embedded.
+- External resources require a working network connection.
+- Local file access may require user interaction or browser permissions.
+- Application functionality can vary across browsers and devices.
+- Performance depends on the browser, device resources, and the applications being used.
 
----
+LUMIO-OS is a desktop-inspired web project, not a standalone operating system.
 
-## 🎯 Best Use Cases
+## Project Status
 
-- A browser-based desktop-style personal workspace
-- A fun interface for gaming and media playback
-- A lightweight digital environment for entertainment and system-like interactions
-- A single-page experience for exploring apps in one place
+LUMIO-OS is an ongoing development project. Features, interfaces, and compatibility may change as improvements are introduced.
 
----
+## Links
 
-## 🔗 Connect
-
-Follow and explore LUMIO-OS updates and short demos on TikTok:
-
-- 🎵 TikTok: [@moon.d.flower](https://www.tiktok.com/@moon.d.flower) — opens the TikTok profile for quick viewing and follows.
-
----
-
-## 🔮 Future Ideas
-
-LUMIO-OS is built with room to grow. Potential enhancements may include:
-
-- More app integrations
-- Improved personalization settings
-- Better media library organization
-- More game support
-- Enhanced desktop responsiveness and polish
+- **Repository:** [LUMIO-OS](https://github.com/dhisjwhd-svg/LUMIO-OS)
+- **Developer updates:** [TikTok — @moon.d.flower](https://www.tiktok.com/@moon.d.flower)
 
 ---
 
-## 📌 Notes
-
-LUMIO-OS is designed as a creative desktop-inspired experience and may depend on local files or browser compatibility for some features. Performance and availability can vary based on system resources and browser support.
-
----
-
-## 🌟 Final Note
-
-LUMIO-OS is meant to feel like a digital world where entertainment, media, and everyday browsing come together in one stylish and immersive desktop experience.
-
-Your digital world, all in one desktop.
-
----
+*LUMIO-OS — A unified desktop experience built for the web.*
