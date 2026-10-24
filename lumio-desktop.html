@@ -650,6 +650,50 @@
     padding: 16px 18px 22px;
     overflow-y: auto;
   }
+  .settings-action-card {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 13px;
+    margin-top: 20px;
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.035);
+  }
+  .settings-action-title {
+    color: #f2f2f2;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .settings-action-description {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .settings-action-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 38px;
+    padding: 9px 12px;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 9px;
+    background: rgba(255,255,255,0.09);
+    color: #fff;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.16s, border-color 0.16s, transform 0.16s;
+  }
+  .settings-action-button:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.25);
+  }
+  .settings-action-button:active { transform: scale(0.985); }
+  .settings-action-button svg { width: 15px; height: 15px; flex-shrink: 0; }
   .settings-section-title {
     font-size: 11px;
     text-transform: uppercase;
@@ -948,6 +992,18 @@
             <span>None</span>
             <div class="wp-check">✓</div>
           </div>
+        </div>
+
+        <div class="settings-action-card">
+          <div class="settings-section-title" style="margin-bottom:0">Launch options</div>
+          <div class="settings-action-title">Open Lumio in a blank tab</div>
+          <div class="settings-action-description">Launch a separate copy of the Lumio desktop in an about:blank tab. Useful when you want the desktop opened separately from its current page.</div>
+          <button type="button" class="settings-action-button" id="launchBlankTab">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 3h7v7"/><path d="M10 14 21 3"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/>
+            </svg>
+            Launch in about:blank
+          </button>
         </div>
       </div>
     </div>
@@ -1310,6 +1366,42 @@
   }
   function closeSettings() {
     if (settingsLayer) settingsLayer.classList.remove('open');
+  }
+
+  // Open a working copy of the current desktop inside an about:blank tab.
+  // The new window must be opened directly from the click handler to avoid popup blocking.
+  const launchBlankTab = document.getElementById('launchBlankTab');
+  if (launchBlankTab) {
+    launchBlankTab.addEventListener('click', function () {
+      let blankWindow = null;
+      try {
+        blankWindow = window.open('about:blank', '_blank');
+        if (!blankWindow) {
+          alert('Lumio could not open a new tab. Allow pop-ups for this site, then try again.');
+          return;
+        }
+
+        const desktopCopy = document.documentElement.cloneNode(true);
+        const copiedSettings = desktopCopy.querySelector('#settingsLayer');
+        const copiedStartMenu = desktopCopy.querySelector('#startMenu');
+        const copiedAppLayer = desktopCopy.querySelector('#appLayer');
+        const copiedCloseButton = desktopCopy.querySelector('#btnClose');
+
+        // Start on the desktop, not inside the settings overlay or an open app.
+        if (copiedSettings) copiedSettings.classList.remove('open');
+        if (copiedStartMenu) copiedStartMenu.classList.remove('open');
+        if (copiedAppLayer) copiedAppLayer.classList.remove('open');
+        if (copiedCloseButton) copiedCloseButton.style.display = 'none';
+
+        blankWindow.document.open();
+        blankWindow.document.write('<!DOCTYPE html>\\n' + desktopCopy.outerHTML);
+        blankWindow.document.close();
+        blankWindow.focus();
+      } catch (error) {
+        if (blankWindow && !blankWindow.closed) blankWindow.close();
+        alert('Lumio could not launch in a blank tab. Please try again from the hosted Lumio page.');
+      }
+    });
   }
 
   if (btnSettings) btnSettings.addEventListener('click', function (e) {
