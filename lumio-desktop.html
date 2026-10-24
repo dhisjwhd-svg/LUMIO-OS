@@ -906,7 +906,17 @@
   }
 
 
-/* NOVA startup sequence — adapted from the supplied NOVA PC file */
+/* Final sizing overrides for the expanded Settings panel */
+  .settings-panel { width: min(620px, 94vw); max-height: min(680px, 88vh); }
+  @media (max-width:520px) {
+    .settings-panel { width:94vw; max-height:90vh; }
+    .settings-layout { grid-template-columns:112px minmax(0,1fr); }
+    .settings-nav { padding:10px 6px; }
+    .settings-nav-button { padding:9px 7px; gap:6px; font-size:10px; }
+    .settings-page { padding:14px 12px; }
+  }
+
+  /* NOVA startup sequence — adapted from the supplied NOVA PC file */
 #lumioBoot{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#000;color:#fff;opacity:0;visibility:hidden;pointer-events:none}
 #lumioBoot.active{opacity:1;visibility:visible;pointer-events:auto}
 #lumioBoot .boot-stage{position:relative;width:min(150px,26vw);aspect-ratio:1;display:grid;place-items:center;filter:drop-shadow(0 0 28px rgba(255,255,255,.12))}
