@@ -6,43 +6,45 @@
 <meta name="theme-color" content="#050505">
 <title>LUMIO-OS</title>
 <style>
-*{box-sizing:border-box}
-html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#050505}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050505}
 #desktop{position:fixed;inset:0;width:100%;height:100%;border:0;display:block;background:#050505}
-#fallback{position:fixed;inset:0;display:none;place-content:center;gap:12px;padding:24px;text-align:center;background:#050505;color:#eee;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-#fallback.show{display:grid}
-h1{margin:0;font-size:18px}
-p{max-width:360px;margin:0;color:#aaa;line-height:1.5}
-a{color:#d99ab4}
+#loading{position:fixed;inset:0;display:grid;place-content:center;gap:12px;text-align:center;padding:24px;background:#050505;color:#eee;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+#loading.off{display:none}.spinner{width:28px;height:28px;border:2px solid #333;border-top-color:#ddd;border-radius:50%;margin:auto;animation:spin .8s linear infinite}
+p{color:#999;max-width:320px;line-height:1.5}button{padding:10px 15px;border:1px solid #444;border-radius:9px;background:#191919;color:white;font:inherit}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 <iframe id="desktop" title="LUMIO-OS desktop" allow="fullscreen; clipboard-read; clipboard-write"></iframe>
-<main id="fallback">
-  <h1>LUMIO-OS could not open</h1>
-  <p>Open the desktop directly using the rendered HTML link below.</p>
-  <a id="direct" href="https://raw.githack.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html">Open LUMIO-OS desktop</a>
-</main>
+<div id="loading"><div class="spinner"></div><strong>Starting LUMIO-OS</strong><p id="message">Loading desktop…</p><button id="retry" hidden>Try again</button></div>
 <script>
 (() => {
   const frame = document.getElementById('desktop');
-  const fallback = document.getElementById('fallback');
+  const loading = document.getElementById('loading');
+  const message = document.getElementById('message');
+  const retry = document.getElementById('retry');
 
-  // IMPORTANT: use a host that serves the file as text/html.
-  // jsDelivr and raw.githubusercontent.com can serve HTML as plain text in
-  // some contexts, which makes the browser display the markup instead of run it.
-  // Do not use fetch()+srcdoc here: the desktop is a large, complete document
-  // with its own scripts and app logic; let the browser load it as a real page.
-  const renderedDesktop = 'https://raw.githack.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html';
+  // Use a rendered HTML endpoint. raw.githubusercontent.com and jsDelivr's
+  // generic file endpoint can be previewed as source by some iOS viewers.
+  const url = 'https://raw.githack.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html';
 
-  frame.addEventListener('load', () => {
-    // A cross-origin iframe's load event fires even for many error documents,
-    // so do not use it as proof of success or switch sources on load.
-    fallback.classList.remove('show');
-  });
-
-  frame.src = renderedDesktop;
-  document.getElementById('direct').href = renderedDesktop;
+  function start() {
+    retry.hidden = true;
+    message.textContent = 'Opening the desktop…';
+    loading.classList.remove('off');
+    // Navigate the frame directly to a hosted HTML document; do not fetch its
+    // source, stringify it, or place source text into the page.
+    frame.onload = () => {
+      loading.classList.add('off');
+    };
+    frame.onerror = () => {
+      message.textContent = 'The desktop host could not load this page.';
+      retry.hidden = false;
+    };
+    frame.src = url + '?v=' + Date.now();
+  }
+  retry.addEventListener('click', start);
+  start();
 })();
 </script>
 </body>
