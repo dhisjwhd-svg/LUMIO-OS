@@ -13,18 +13,18 @@
   #status[hidden]{display:none}
   .mark{width:34px;height:34px;margin:0 auto 8px;border:2px solid #292929;border-top-color:#f4f4f4;border-radius:50%;animation:spin .8s linear infinite}
   h1{font-size:18px;font-weight:600;letter-spacing:.02em;margin:0}
-  p{font-size:13px;color:#9a9a9a;margin:0;line-height:1.5}
+  p{font-size:13px;color:#9a9a9a;margin:0;line-height:1.5;max-width:340px}
   button{justify-self:center;margin-top:8px;padding:10px 16px;border:1px solid #393939;border-radius:10px;background:#171717;color:#fff;font:inherit;cursor:pointer}
   @keyframes spin{to{transform:rotate(360deg)}}
   @media(prefers-reduced-motion:reduce){.mark{animation:none}}
 </style>
 </head>
 <body>
-<iframe id="desktop" title="LUMIO-OS desktop" allow="fullscreen; clipboard-read; clipboard-write"></iframe>
+<iframe id="desktop" title="LUMIO-OS desktop" allow="fullscreen; clipboard-read; clipboard-write" referrerpolicy="no-referrer"></iframe>
 <main id="status" role="status" aria-live="polite">
   <div class="mark" aria-hidden="true"></div>
   <h1 id="heading">Starting LUMIO-OS</h1>
-  <p id="message">Loading the desktop…</p>
+  <p id="message">Opening the latest desktop…</p>
   <button id="retry" type="button" hidden>Try again</button>
 </main>
 <script>
@@ -35,55 +35,60 @@
   const message = document.getElementById('message');
   const retry = document.getElementById('retry');
 
-  // Fetch the current main-branch desktop on every launch.
-  // A unique query string helps bypass browser/CDN caches after GitHub updates.
-  const desktopSources = [
-    'https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html',
-    'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/LUMIO-OS@main/Assets/lumio-desktop.html'
+  // Navigate directly to the hosted HTML instead of fetch()+srcdoc.
+  // This avoids CORS failures when main.html is opened from a local file.
+  // jsDelivr serves .html with a browser-friendly content type and tracks main.
+  const sources = [
+    'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/LUMIO-OS@main/Assets/lumio-desktop.html',
+    'https://raw.githack.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html',
+    'https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html'
   ];
+  let attempt = 0;
+  let loadTimer;
 
-  async function start() {
-    retry.hidden = true;
-    heading.textContent = 'Starting LUMIO-OS';
-    message.textContent = 'Loading the latest desktop…';
-    status.hidden = false;
-
-    let lastError;
-    const cacheKey = 'v=' + Date.now();
-    for (const baseUrl of desktopSources) {
-      try {
-        const separator = baseUrl.includes('?') ? '&' : '?';
-        const url = baseUrl + separator + cacheKey;
-        const response = await fetch(url, {
-          cache: 'no-store',
-          headers: { 'Cache-Control': 'no-cache' }
-        });
-        if (!response.ok) throw new Error('HTTP ' + response.status);
-        const html = await response.text();
-
-        // Avoid replacing the working view with an error page or incomplete response.
-        if (!/<html[\s>]/i.test(html) || !/<body[\s>]/i.test(html) || !/<\/html\s*>/i.test(html) || html.length < 10000) {
-          throw new Error('The downloaded desktop file was incomplete.');
-        }
-
-        desktop.onload = () => { status.hidden = true; };
-        desktop.srcdoc = html;
-        // Reveal after the srcdoc document begins rendering.
-        window.setTimeout(() => { status.hidden = true; }, 400);
-        return;
-      } catch (error) {
-        lastError = error;
-      }
-    }
-
+  function showFailure() {
+    clearTimeout(loadTimer);
     heading.textContent = 'LUMIO-OS could not load';
-    message.textContent = 'Could not fetch the latest desktop. Check your connection and tap Try again.';
+    message.textContent = 'The hosted desktop did not respond. Check your connection, then try again.';
     retry.hidden = false;
-    console.error('LUMIO-OS launch failed:', lastError);
+    status.hidden = false;
   }
 
-  retry.addEventListener('click', start);
-  start();
+  function loadNext() {
+    clearTimeout(loadTimer);
+    if (attempt >= sources.length) {
+      showFailure();
+      return;
+    }
+
+    const source = sources[attempt++];
+    heading.textContent = 'Starting LUMIO-OS';
+    message.textContent = 'Opening the latest desktop…';
+    retry.hidden = true;
+    status.hidden = false;
+
+    // Cache-bust the CDN URL so updates on main are picked up promptly.
+    desktop.src = source + (source.includes('?') ? '&' : '?') + 'v=' + Date.now();
+
+    loadTimer = setTimeout(() => {
+      // A timed-out source may be blocked; advance to the next mirror.
+      loadNext();
+    }, 12000);
+  }
+
+  desktop.addEventListener('load', () => {
+    clearTimeout(loadTimer);
+    // Let the new document begin painting before removing the cover.
+    requestAnimationFrame(() => requestAnimationFrame(() => { status.hidden = true; }));
+  });
+
+  desktop.addEventListener('error', loadNext);
+  retry.addEventListener('click', () => {
+    attempt = 0;
+    loadNext();
+  });
+
+  loadNext();
 })();
 </script>
 </body>
