@@ -1145,13 +1145,18 @@
         // guard keeps it hidden through app/dock transitions and animation restarts.
         document.body.classList.add('unlocked');
         try { sessionStorage.setItem(LOGIN_STATE_KEY, 'true'); } catch (_) {}
-        loginScreen.classList.add('hide');
         loginScreen.setAttribute('aria-hidden', 'true');
-        window.setTimeout(function () {
-          if (loginScreen && document.body.classList.contains('unlocked')) {
-            loginScreen.style.display = 'none';
-          }
-        }, 520);
+        loginScreen.classList.add('hide');
+
+        // Keep the login overlay from being restored by a delayed animation callback.
+        // The transition is cosmetic; the unlocked desktop state is committed first.
+        const finishLogin = function () {
+          if (!document.body.classList.contains('unlocked')) return;
+          loginScreen.style.display = 'none';
+          loginScreen.removeEventListener('transitionend', finishLogin);
+        };
+        loginScreen.addEventListener('transitionend', finishLogin);
+        window.setTimeout(finishLogin, 650);
       } else {
         loginPass.classList.add('error');
         loginError.classList.add('show');
