@@ -1087,6 +1087,7 @@
 <script>
 (function () {
   const PASSWORD = 'tffmj';
+  const LOGIN_STATE_KEY = 'lumio_desktop_unlocked';
 
   const loginScreen = document.getElementById('loginScreen');
   const loginForm = document.getElementById('loginForm');
@@ -1117,6 +1118,19 @@
 
   // ----- Login -----
   let loginInProgress = false;
+  // Preserve a successful sign-in if the embedded desktop is reinitialized.
+  // The sign-out action below explicitly clears this session flag.
+  try {
+    if (sessionStorage.getItem(LOGIN_STATE_KEY) === 'true') {
+      document.body.classList.add('unlocked');
+      if (loginScreen) {
+        loginScreen.classList.add('hide');
+        loginScreen.setAttribute('aria-hidden', 'true');
+        loginScreen.style.display = 'none';
+      }
+      loginInProgress = true;
+    }
+  } catch (_) {}
   if (loginForm) {
     loginForm.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -1130,6 +1144,7 @@
         // Commit the unlocked state before hiding the login layer. The CSS
         // guard keeps it hidden through app/dock transitions and animation restarts.
         document.body.classList.add('unlocked');
+        try { sessionStorage.setItem(LOGIN_STATE_KEY, 'true'); } catch (_) {}
         loginScreen.classList.add('hide');
         loginScreen.setAttribute('aria-hidden', 'true');
         window.setTimeout(function () {
