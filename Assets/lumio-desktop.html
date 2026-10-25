@@ -187,12 +187,13 @@
   /* Dock */
   .dock {
     position: fixed;
-    bottom: max(22px, env(safe-area-inset-bottom));
+    top: 50%;
     left: 50%;
     right: auto;
+    bottom: auto;
     width: max-content;
     max-width: calc(100vw - 24px);
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     z-index: 50;
     display: flex;
     flex-direction: row;
@@ -213,7 +214,7 @@
   }
   body.app-open .dock {
     opacity: 0;
-    transform: translateX(-50%) translateY(20px);
+    transform: translate(-50%, calc(-50% + 20px));
     pointer-events: none;
   }
   .dock-item {
@@ -355,6 +356,13 @@
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
+  }
+  /* Once signed in, never let the login layer reappear during desktop transitions. */
+  body.unlocked #loginScreen {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
   }
   .login-card {
     position: relative;
@@ -1119,10 +1127,15 @@
         loginError.classList.remove('show');
         loginPass.classList.remove('error');
 
-        loginScreen.classList.add('hide');
+        // Commit the unlocked state before hiding the login layer. The CSS
+        // guard keeps it hidden through app/dock transitions and animation restarts.
         document.body.classList.add('unlocked');
+        loginScreen.classList.add('hide');
+        loginScreen.setAttribute('aria-hidden', 'true');
         window.setTimeout(function () {
-          if (loginScreen) loginScreen.style.display = 'none';
+          if (loginScreen && document.body.classList.contains('unlocked')) {
+            loginScreen.style.display = 'none';
+          }
         }, 520);
       } else {
         loginPass.classList.add('error');
@@ -1544,6 +1557,7 @@ if (settingAutoPassword) {
       loginInProgress = false;
       if (loginScreen) {
         loginScreen.style.display = '';
+        loginScreen.removeAttribute('aria-hidden');
         loginScreen.classList.remove('hide');
       }
       if (loginPass) loginPass.value = '';
