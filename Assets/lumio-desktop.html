@@ -1089,18 +1089,27 @@
   const PASSWORD = 'tffmj';
   const LOGIN_STATE_KEY = 'lumio_desktop_unlocked';
   function readLoginState() {
-    try { if (sessionStorage.getItem(LOGIN_STATE_KEY) === 'true') return true; } catch (_) {}
-    try { return localStorage.getItem(LOGIN_STATE_KEY) === 'true'; } catch (_) { return false; }
+    try {
+      const saved = sessionStorage.getItem(LOGIN_STATE_KEY);
+      // Session storage is preferred so a sign-in never carries into a new tab.
+      try { localStorage.removeItem(LOGIN_STATE_KEY); } catch (_) {}
+      return saved === 'true';
+    } catch (_) {
+      try { return localStorage.getItem(LOGIN_STATE_KEY) === 'true'; } catch (_) { return false; }
+    }
   }
   function writeLoginState(value) {
     try {
       if (value) sessionStorage.setItem(LOGIN_STATE_KEY, 'true');
       else sessionStorage.removeItem(LOGIN_STATE_KEY);
-    } catch (_) {}
-    try {
-      if (value) localStorage.setItem(LOGIN_STATE_KEY, 'true');
-      else localStorage.removeItem(LOGIN_STATE_KEY);
-    } catch (_) {}
+      try { localStorage.removeItem(LOGIN_STATE_KEY); } catch (_) {}
+    } catch (_) {
+      // Fallback only when session storage is blocked by the hosting webview.
+      try {
+        if (value) localStorage.setItem(LOGIN_STATE_KEY, 'true');
+        else localStorage.removeItem(LOGIN_STATE_KEY);
+      } catch (_) {}
+    }
   }
 
   const loginScreen = document.getElementById('loginScreen');
