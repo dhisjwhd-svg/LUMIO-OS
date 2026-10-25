@@ -24,9 +24,9 @@ p{color:#999;max-width:320px;line-height:1.5}button{padding:10px 15px;border:1px
   const message = document.getElementById('message');
   const retry = document.getElementById('retry');
 
-  // Use a rendered HTML endpoint. raw.githubusercontent.com and jsDelivr's
-  // generic file endpoint can be previewed as source by some iOS viewers.
-  const url = 'https://raw.githack.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html';
+  // Load the actual desktop HTML from the repository through jsDelivr.
+  // Keep the URL pointed at the desktop file, not a GitHub source-view page.
+  const url = 'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/LUMIO-OS@main/Assets/lumio-desktop.html';
 
   function start() {
     retry.hidden = true;
