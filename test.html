@@ -135,9 +135,68 @@ main{animation:rise-in .28s ease both}
 @media(max-width:1050px){.cards{grid-template-columns:1fr}}\n@media(max-width:850px){.tutorial-grid{grid-template-columns:1fr}.app{grid-template-columns:220px minmax(0,1fr)}main{margin:12px;padding:16px}.cards{grid-template-columns:1fr}.game-card{padding:9px}.brand h1{font-size:.88rem}}
 @media(max-width:650px){body{padding:0}.app{min-height:100vh;border-left:0;border-right:0;display:block}.top{border-right:0;border-bottom:4px solid #111}.top-inner{padding:12px}.brandline{align-items:stretch;flex-direction:row;flex-wrap:wrap}.brand{flex:1;min-width:180px;padding:10px}.brand h1{font-size:.8rem}.brand p{display:none}.top-actions{display:flex;gap:6px}.top-actions .btn{padding:8px;font-size:.65rem}.tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin-top:12px}.tab{padding:10px 6px;font-size:.62rem;text-align:center;white-space:normal}.tab-count{margin-left:2px}main{margin:12px;padding:14px;border-width:3px}.section-head{align-items:flex-start}.head-count{display:none}.toolbar{flex-wrap:wrap}.filter{max-width:none;width:100%}.cards{grid-template-columns:1fr;gap:10px}.game-card{padding:10px}.notes-inner{padding:18px 12px 20px}.note-item,.trash-item{align-items:flex-start;flex-wrap:wrap}.note-actions,.trash-actions{width:100%;padding-left:0}.notes-title h2{font-size:1.1rem}.trash-panel{padding:14px}.section-head p{font-size:.73rem}}
 @media(max-width:430px){.game-card{grid-template-columns:minmax(0,1fr) auto;gap:7px;padding:8px}.site-icon{width:36px;height:36px}.card-main{gap:8px}.card-actions{grid-template-columns:auto 29px 29px;gap:4px}.test-link{min-width:0;font-size:.58rem;padding:5px}.vote{width:29px;height:29px;font-size:.95rem}}\n@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Welcome terminal */
+.boot-screen{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow:hidden;padding:22px;background:#1e1d22;color:#e9e4dc;font-family:"Courier New",monospace;isolation:isolate;transition:opacity .65s ease,visibility .65s ease}
+.boot-screen:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 45%,#39333a 0,#252329 48%,#17161a 100%)}
+.boot-screen:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.24;background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,#000 4px),linear-gradient(90deg,transparent 49.8%,#d99ab412 50%,transparent 50.2%)}
+.boot-frame{position:relative;width:min(760px,100%);border:1px solid #68616b;background:#242329;box-shadow:0 0 0 6px #17161b,0 0 0 7px #4a444d,0 28px 90px #0009;animation:boot-arrive .8s cubic-bezier(.2,.7,.2,1) both}
+.boot-topbar,.boot-bottom{min-height:37px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#19181d;border-bottom:1px solid #4b454e;color:#aaa2ae;font-size:10px;letter-spacing:.1em}
+.boot-bottom{border-top:1px solid #4b454e;border-bottom:0;color:#77717c;font-size:9px}
+.boot-lights{display:flex;gap:5px}.boot-lights i{width:7px;height:7px;border-radius:50%;background:#d99ab4;display:block}.boot-lights i:nth-child(2){background:#d8c67d}.boot-lights i:nth-child(3){background:#7d9b88}
+.boot-status{display:flex;align-items:center;gap:7px}.boot-status b{width:6px;height:6px;background:#9fc6a9;border-radius:50%;box-shadow:0 0 9px #9fc6a9}
+.boot-content{padding:clamp(34px,7vw,64px) clamp(22px,7vw,72px) 34px;text-align:center}
+.boot-mark{width:62px;height:62px;margin:0 auto 24px;position:relative;display:grid;place-items:center;border:1px solid #786c79;color:#d99ab4;animation:mark-pulse 4s ease-in-out infinite}
+.boot-mark:before,.boot-mark:after{content:"";position:absolute;background:#d99ab4;opacity:.55}
+.boot-mark:before{width:78px;height:1px}.boot-mark:after{height:78px;width:1px}
+.mark-corner{position:absolute;width:8px;height:8px;border-color:#d99ab4;border-style:solid}.mark-corner.tl{top:-4px;left:-4px;border-width:1px 0 0 1px}.mark-corner.tr{top:-4px;right:-4px;border-width:1px 1px 0 0}.mark-corner.bl{bottom:-4px;left:-4px;border-width:0 0 1px 1px}.mark-corner.br{bottom:-4px;right:-4px;border-width:0 1px 1px 0}
+.mark-cross{font-size:25px;position:relative;z-index:1;background:#242329;padding:4px 8px}
+.boot-kicker{margin:0 0 13px;color:#d99ab4;font-size:10px;letter-spacing:.2em;font-weight:bold}
+.boot-title{margin:0;color:#f0ece5;font-size:clamp(34px,8vw,66px);font-weight:900;letter-spacing:.13em;line-height:1.1;text-shadow:3px 3px 0 #17161b;animation:title-flicker 7s infinite}
+.boot-title span{color:#d99ab4;animation:cursor-blink 1s steps(2,end) infinite}
+.boot-subtitle{margin:14px 0 27px;color:#aaa4ad;font-size:clamp(12px,2vw,14px);letter-spacing:.04em}
+.boot-divider{display:flex;align-items:center;gap:12px;margin:0 auto 22px;max-width:420px;color:#8e8791;font-size:9px;letter-spacing:.12em}
+.boot-divider span{height:1px;flex:1;background:#514a55}
+.boot-readout{max-width:420px;margin:0 auto 29px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid #4a444d;background:#1d1c21}
+.boot-readout div{padding:12px 6px;display:grid;gap:7px;border-right:1px solid #4a444d}.boot-readout div:last-child{border-right:0}
+.boot-readout span{font-size:9px;color:#827b87;letter-spacing:.13em}.boot-readout b{font-size:10px;color:#d9d2dc;letter-spacing:.04em}.boot-readout .ready-text{color:#a7c8ad}
+.enter-terminal{width:min(420px,100%);min-height:54px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 17px;border:1px solid #e4b4c8;background:#d99ab4;color:#211c22;font-weight:900;font-size:12px;letter-spacing:.13em;box-shadow:4px 4px 0 #111;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+.enter-terminal:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 #111;background:#e7b3c9}.enter-terminal:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111}
+.enter-icon{font-size:23px;line-height:1}.enter-arrow{font-size:16px}
+.boot-footnote{margin:24px 0 0;color:#817b86;font-size:9px;letter-spacing:.12em}.blink-dot{display:inline-block;width:6px;height:6px;margin-right:8px;border-radius:50%;background:#d99ab4;animation:cursor-blink 1.2s steps(2,end) infinite}
+.boot-side-note{position:absolute;right:18px;bottom:16px;color:#716b76;font-size:9px;letter-spacing:.17em;writing-mode:vertical-rl}
+.boot-screen.leaving{opacity:0;visibility:hidden;pointer-events:none}
+.app{opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .55s ease,transform .55s ease,visibility .55s ease}
+.app.app-entered{opacity:1;visibility:visible;transform:translateY(0)}
+@keyframes boot-arrive{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes mark-pulse{0%,100%{box-shadow:0 0 0 0 #d99ab400}50%{box-shadow:0 0 24px 1px #d99ab41c}}
+@keyframes cursor-blink{0%,48%{opacity:1}49%,100%{opacity:.2}}
+@keyframes title-flicker{0%,96%,100%{opacity:1}97%{opacity:.82}98%{opacity:1}99%{opacity:.9}}
+@media(max-width:500px){.boot-screen{padding:16px}.boot-topbar{font-size:8px;padding:0 9px}.boot-status{gap:4px}.boot-content{padding:38px 18px 28px}.boot-bottom{font-size:8px;padding:0 8px}.boot-side-note{display:none}.boot-readout b{font-size:8px}.boot-readout span{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.boot-screen,.boot-frame,.boot-mark,.boot-title,.boot-title span,.blink-dot,.app,.enter-terminal{animation:none!important;transition:none!important}}
+
 </style>
 </head>
 <body>
+
+<section id="bootScreen" class="boot-screen" aria-label="Terminal welcome">
+  <div class="boot-frame">
+    <div class="boot-topbar"><span class="boot-lights"><i></i><i></i><i></i></span><span>INTERNAL ACCESS TERMINAL</span><span class="boot-status"><b></b> SYSTEM READY</span></div>
+    <div class="boot-content">
+      <div class="boot-mark" aria-hidden="true"><span class="mark-corner tl"></span><span class="mark-corner tr"></span><span class="mark-corner bl"></span><span class="mark-corner br"></span><span class="mark-cross">✳</span></div>
+      <p class="boot-kicker">LUMIO NETWORK // ACCESS POINT 01</p>
+      <h1 class="boot-title">DIRECTORY<span>_</span></h1>
+      <p class="boot-subtitle">A quiet place to check the signal.</p>
+      <div class="boot-divider"><span></span><small>CONNECTION ESTABLISHED</small><span></span></div>
+      <div class="boot-readout"><div><span>NODE</span><b>LOCAL / 01</b></div><div><span>STATUS</span><b class="ready-text">READY</b></div><div><span>ACCESS</span><b>AUTHORIZED</b></div></div>
+      <button id="enterTerminal" class="enter-terminal" type="button"><span class="enter-icon">›</span><span>ENTER TERMINAL</span><span class="enter-arrow">↗</span></button>
+      <p class="boot-footnote"><span class="blink-dot"></span> WAITING FOR OPERATOR INPUT</p>
+    </div>
+    <div class="boot-bottom"><span>DT-01</span><span>SECURE SESSION // DIRECTORY SERVICE</span><span>v.02.6</span></div>
+  </div>
+  <div class="boot-side-note">LUMIO // FIELD SYSTEMS</div>
+</section>
+
 <div class="app">
 <header class="top">
   <div class="top-inner">
@@ -213,6 +272,14 @@ main{animation:rise-in .28s ease both}
   let links = loadLinks();
   let activePage = "links";
   let toastTimer;
+
+  const bootScreen = $("bootScreen");
+  const terminalApp = document.querySelector(".app");
+  $("enterTerminal").addEventListener("click", () => {
+    bootScreen.classList.add("leaving");
+    terminalApp.classList.add("app-entered");
+    window.setTimeout(() => { bootScreen.setAttribute("aria-hidden","true"); }, 700);
+  });
 
   function loadLinks(){
     try{
