@@ -62,7 +62,7 @@
         const html = await response.text();
 
         // Avoid replacing the working view with an error page or incomplete response.
-        if (!/<html[\\s>]/i.test(html) || !/<body[\\s>]/i.test(html) || !/<\\/html\\s*>/i.test(html) || html.length < 10000) {
+        if (!/<html[\s>]/i.test(html) || !/<body[\s>]/i.test(html) || !/<\/html\s*>/i.test(html) || html.length < 10000) {
           throw new Error('The downloaded desktop file was incomplete.');
         }
 
