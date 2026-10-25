@@ -69,6 +69,16 @@ main{grid-column:2;grid-row:1;min-width:0;max-width:none;margin:20px;padding:24p
 .card-url:hover{text-decoration:underline}
 .card-desc{margin:8px 0 0;font-size:.75rem;line-height:1.5;color:#635d64}
 .card-actions{display:flex;align-items:center;gap:5px;margin-top:0}
+.test-link{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:7px 8px;border:2px solid #3c5660;background:#d8e8e6;color:#183b3b;text-decoration:none;font-size:.65rem;font-weight:900;white-space:nowrap;box-shadow:2px 2px 0 #a9b8b6;transition:transform .16s ease,box-shadow .16s ease,background .16s ease}
+.test-link:before{content:"";width:7px;height:7px;border-radius:50%;background:#42966b;box-shadow:0 0 0 2px #b9ddc7;flex:none}
+.test-link:hover{background:#c4e1d6;transform:translateY(-2px);box-shadow:3px 4px 0 #a9b8b6}
+.test-link:active{transform:translateY(1px);box-shadow:0 0 0 #a9b8b6}
+@keyframes rise-in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.game-card{animation:rise-in .24s ease both;transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+.game-card:hover{border-color:#343c49;box-shadow:3px 4px 0 #a6a19a;transform:translateY(-1px)}
+.tab,.btn,.vote,.small-btn{transition:transform .16s ease,box-shadow .16s ease,filter .16s ease,background-color .16s ease}
+main{animation:rise-in .28s ease both}
+.modal{animation:rise-in .2s ease both}
 .open-link{display:none}
 .vote{width:39px;height:37px;border-radius:0;border:2px solid #39343a;font-size:1.1rem;font-weight:900;display:grid;place-items:center;box-shadow:2px 2px 0 #b0a6a9}
 .vote.yes{background:var(--green-bg);border-color:#385b43;color:var(--green)}
@@ -114,7 +124,7 @@ main{grid-column:2;grid-row:1;min-width:0;max-width:none;margin:20px;padding:24p
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#29232a;color:#fff;padding:12px 16px;border:2px solid #d8c6cf;border-radius:0;font-size:.75rem;box-shadow:4px 4px 0 #0008;z-index:50;max-width:calc(100% - 28px)}
 @media(max-width:850px){.tutorial-grid{grid-template-columns:1fr}.app{grid-template-columns:220px minmax(0,1fr)}main{margin:12px;padding:16px}.cards{grid-template-columns:1fr}.game-card{padding:9px}.brand h1{font-size:.88rem}}
 @media(max-width:650px){body{padding:0}.app{min-height:100vh;border-left:0;border-right:0;display:block}.top{border-right:0;border-bottom:4px solid #111}.top-inner{padding:12px}.brandline{align-items:stretch;flex-direction:row;flex-wrap:wrap}.brand{flex:1;min-width:180px;padding:10px}.brand h1{font-size:.8rem}.brand p{display:none}.top-actions{display:flex;gap:6px}.top-actions .btn{padding:8px;font-size:.65rem}.tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin-top:12px}.tab{padding:10px 6px;font-size:.62rem;text-align:center;white-space:normal}.tab-count{margin-left:2px}main{margin:12px;padding:14px;border-width:3px}.section-head{align-items:flex-start}.head-count{display:none}.toolbar{flex-wrap:wrap}.filter{max-width:none;width:100%}.cards{grid-template-columns:1fr;gap:10px}.game-card{padding:10px}.notes-inner{padding:18px 12px 20px}.note-item,.trash-item{align-items:flex-start;flex-wrap:wrap}.note-actions,.trash-actions{width:100%;padding-left:0}.notes-title h2{font-size:1.1rem}.trash-panel{padding:14px}.section-head p{font-size:.73rem}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media(max-width:430px){.game-card{align-items:flex-start}.card-actions{flex-direction:column;align-items:stretch}.test-link{font-size:.6rem;padding:6px}.vote{width:34px;height:32px}}\n@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
@@ -228,7 +238,8 @@ main{grid-column:2;grid-row:1;min-width:0;max-width:none;margin:20px;padding:24p
     window.scrollTo({top:0,behavior:"smooth"});
   }
   function linkCard(item){
-    return '<article class="game-card"><div class="card-main"><div class="site-icon" aria-hidden="true">'+escapeHTML(iconFor(item.name))+'</div><div class="card-copy"><h3>'+escapeHTML(item.name)+'</h3><a class="card-url" href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(host(item.url))+'</a>'+(item.description?'<p class="card-desc">'+escapeHTML(item.description)+'</p>':'')+'</div></div><div class="card-actions"><a class="open-link" href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">Open link ↗</a><button class="vote yes" type="button" data-action="notes" data-id="'+escapeHTML(item.id)+'" aria-label="Mark '+escapeHTML(item.name)+' as working" title="Works at school">✓</button><button class="vote no" type="button" data-action="trash" data-id="'+escapeHTML(item.id)+'" aria-label="Mark '+escapeHTML(item.name)+' as blocked" title="Blocked at school">×</button></div></article>';
+    const url=escapeHTML(item.url),name=escapeHTML(item.name),id=escapeHTML(item.id);
+    return '<article class="game-card"><div class="card-main"><div class="site-icon" aria-hidden="true">'+escapeHTML(iconFor(item.name))+'</div><div class="card-copy"><h3>'+name+'</h3><a class="card-url" href="'+url+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(host(item.url))+'</a>'+(item.description?'<p class="card-desc">'+escapeHTML(item.description)+'</p>':'')+'</div></div><div class="card-actions"><a class="test-link" href="'+url+'" target="_blank" rel="noopener noreferrer" aria-label="Test '+name+' on this device">Test link ↗</a><button class="vote yes" type="button" data-action="notes" data-id="'+id+'" aria-label="Mark '+name+' as working" title="Works at school">✓</button><button class="vote no" type="button" data-action="trash" data-id="'+id+'" aria-label="Mark '+name+' as blocked" title="Blocked at school">×</button></div></article>';
   }
   function renderLinks(){
     const query=$("search").value.trim().toLowerCase(),category=$("categoryFilter").value;
