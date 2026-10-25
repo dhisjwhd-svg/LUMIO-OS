@@ -1276,17 +1276,22 @@
       if (targetFrame) {
         targetFrame.style.display = 'block';
         targetFrame.removeAttribute('srcdoc');
-        targetFrame.src = url;
+        targetFrame.src = sourceUrlWithFreshVersion(url);
         targetFrame.setAttribute('title', 'MilkBox app');
       }
       return;
     }
 
+    // Always request the current main-branch app instead of a browser/CDN-cached copy.
+    // This refreshes app HTML whenever an app is opened, while persistent media frames
+    // remain mounted so Spotify/Netflix playback is not interrupted when their window closes.
+    function sourceUrlWithFreshVersion(sourceUrl) {
+      return sourceUrl + (sourceUrl.includes('?') ? '&' : '?') + '_lumio_refresh=' + Date.now();
+    }
+
     function fetchApp(sourceUrl) {
-      const requestUrl = key === 'directory'
-        ? sourceUrl + (sourceUrl.includes('?') ? '&' : '?') + 'v=' + Date.now()
-        : sourceUrl;
-      return fetch(requestUrl, { cache: key === 'directory' ? 'no-store' : 'default' }).then(function (response) {
+      const requestUrl = sourceUrlWithFreshVersion(sourceUrl);
+      return fetch(requestUrl, { cache: 'no-store' }).then(function (response) {
         if (!response.ok) throw new Error('Asset request failed: ' + response.status);
         return response.text();
       }).then(function (html) {
