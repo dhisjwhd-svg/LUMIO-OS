@@ -67,11 +67,11 @@ button:focus-visible{outline:2px solid #fff;outline-offset:3px}
       }
       const sha = commits[0].sha;
       const url = rawBase + sha + '/' + filePath;
-      return { html: await fetchText(url), version: sha, url };
+      return { html: await fetchText(url), version: sha, url, baseUrl: rawBase + sha + '/Assets/' };
     } catch (apiError) {
       // If the API is rate-limited or unavailable, still load the current main branch.
       const html = await fetchText(branchUrl + '?v=' + Date.now());
-      return { html, version: 'main (latest available)', url: branchUrl };
+      return { html, version: 'main (latest available)', url: branchUrl, baseUrl: rawBase + branch + '/Assets/' };
     }
   }
 
@@ -100,7 +100,7 @@ button:focus-visible{outline:2px solid #fff;outline-offset:3px}
         throw new Error('The raw GitHub URL did not return an HTML document.');
       }
 
-      const html = embedBaseUrl(latest.html, rawBase + branch + '/Assets/');
+      const html = embedBaseUrl(latest.html, latest.baseUrl);
       frame.onload = () => {
         loading.classList.add('off');
         versionLabel.textContent = 'Desktop revision: ' + latest.version;
