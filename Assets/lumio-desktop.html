@@ -264,12 +264,15 @@
   }
 
   .app-layer iframe {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     border: 0;
     background: #000;
     display: block;
   }
+  .app-layer iframe[hidden] { display: none !important; }
 
   /* Tiny animated close X */
   .close-x {
@@ -1059,7 +1062,9 @@
   <!-- Fullscreen app -->
   <div class="app-layer" id="appLayer">
 
-    <iframe id="appFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads" allowfullscreen></iframe>
+    <iframe id="appFrame" data-player="general" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads" allowfullscreen></iframe>
+    <iframe id="spotifyFrame" data-player="spotify" title="Spotify app" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads" allowfullscreen hidden></iframe>
+    <iframe id="netflixFrame" data-player="netflix" title="Netflix app" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads" allowfullscreen hidden></iframe>
   </div>
 
 
@@ -1101,6 +1106,10 @@
   const loginError = document.getElementById('loginError');
   const layer = document.getElementById('appLayer');
   const frame = document.getElementById('appFrame');
+  const spotifyFrame = document.getElementById('spotifyFrame');
+  const netflixFrame = document.getElementById('netflixFrame');
+  const persistentFrames = { spotify: spotifyFrame, netflix: netflixFrame };
+  let activeAppKey = '';
   const clockEl = document.getElementById('clock');
   const startBtn = document.getElementById('startBtn');
   const startMenu = document.getElementById('startMenu');
@@ -1238,6 +1247,11 @@
     if (!url) return;
 
     const requestId = ++appRequestId;
+    activeAppKey = key;
+    const targetFrame = persistentFrames[key] || frame;
+    [frame, spotifyFrame, netflixFrame].forEach(function (item) {
+      if (item) item.hidden = item !== targetFrame;
+    });
     if (closeTimer !== null) {
       clearTimeout(closeTimer);
       closeTimer = null;
@@ -1250,18 +1264,18 @@
     if (startMenu) startMenu.classList.remove('open');
 
 
-    if (frame) {
-      frame.style.display = 'block';
-      frame.src = 'about:blank';
-      frame.removeAttribute('srcdoc');
+    if (targetFrame) {
+      targetFrame.style.display = 'block';
+      targetFrame.src = 'about:blank';
+      targetFrame.removeAttribute('srcdoc');
     }
 
     if (key === 'milkbox') {
-      if (frame) {
-        frame.style.display = 'block';
-        frame.removeAttribute('srcdoc');
-        frame.src = url;
-        frame.setAttribute('title', 'MilkBox app');
+      if (targetFrame) {
+        targetFrame.style.display = 'block';
+        targetFrame.removeAttribute('srcdoc');
+        targetFrame.src = url;
+        targetFrame.setAttribute('title', 'MilkBox app');
       }
       return;
     }
@@ -1310,24 +1324,24 @@
           appHtml = injectCursorIntoHTML(appHtml);
         }
         /* All bundled apps use the same desktop iframe; avoid Spotify's separate blank-window path. */
-        if (frame) {
-          frame.style.display = 'block';
-          frame.removeAttribute('src');
-          frame.srcdoc = appHtml;
-          frame.setAttribute('title', key.charAt(0).toUpperCase() + key.slice(1) + ' app');
+        if (targetFrame) {
+          targetFrame.style.display = 'block';
+          targetFrame.removeAttribute('src');
+          targetFrame.srcdoc = appHtml;
+          targetFrame.setAttribute('title', key.charAt(0).toUpperCase() + key.slice(1) + ' app');
         }
       })
       .catch(function (error) {
         if (requestId !== appRequestId || (layer && (!layer.classList.contains('open') || layer.dataset.active !== key))) return;
-        if (frame) {
-          frame.setAttribute('title', key.charAt(0).toUpperCase() + key.slice(1) + ' app');
+        if (targetFrame) {
+          targetFrame.setAttribute('title', key.charAt(0).toUpperCase() + key.slice(1) + ' app');
           if (key === 'directory') {
-            frame.removeAttribute('src');
-            frame.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#242328;color:#f5eaf0;font:16px system-ui;text-align:center;padding:24px;box-sizing:border-box}.panel{max-width:460px;border:1px solid #6d5262;background:#302a33;padding:28px;border-radius:12px}p{color:#d1c2cc;line-height:1.5}button{padding:10px 16px;border-radius:8px;border:1px solid #c58aa7;background:#d99ab4;color:#201820;font-weight:700}</style></head><body><div class="panel"><h2>Directory could not load</h2><p>Check your connection and try again. The desktop could not fetch the latest Directory HTML.</p><button onclick="location.reload()">Retry</button></div></body></html>';
+            targetFrame.removeAttribute('src');
+            targetFrame.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#242328;color:#f5eaf0;font:16px system-ui;text-align:center;padding:24px;box-sizing:border-box}.panel{max-width:460px;border:1px solid #6d5262;background:#302a33;padding:28px;border-radius:12px}p{color:#d1c2cc;line-height:1.5}button{padding:10px 16px;border-radius:8px;border:1px solid #c58aa7;background:#d99ab4;color:#201820;font-weight:700}</style></head><body><div class="panel"><h2>Directory could not load</h2><p>Check your connection and try again. The desktop could not fetch the latest Directory HTML.</p><button onclick="location.reload()">Retry</button></div></body></html>';
             console.error('Directory app failed to load:', error);
           } else {
-            frame.removeAttribute('srcdoc');
-            frame.src = url;
+            targetFrame.removeAttribute('srcdoc');
+            targetFrame.src = url;
           }
         }
       });
@@ -1337,10 +1351,17 @@
     const requestId = ++appRequestId;
     if (closeTimer !== null) clearTimeout(closeTimer);
     closeTimer = null;
+    const closingKey = activeAppKey;
     document.body.classList.remove('app-open');
     if (layer) {
       layer.classList.remove('open');
       layer.dataset.active = '';
+    }
+    // Keep Spotify and Netflix documents mounted after closing their windows.
+    // This preserves the active audio/video session and the app's own playback state.
+    if (closingKey === 'spotify' || closingKey === 'netflix') {
+      closeTimer = null;
+      return;
     }
     closeTimer = window.setTimeout(function () {
       if (requestId !== appRequestId || (layer && layer.classList.contains('open'))) return;
