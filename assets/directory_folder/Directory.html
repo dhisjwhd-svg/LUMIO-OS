@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f8dce8">
+<title>Directory Terminal</title>
+<style>
+:root{color-scheme:light;--ink:#25242a;--muted:#6b6870;--pink:#d99ab4;--pink-deep:#b86c8e;--pink-card:#f4edf0;--yellow:#e9d68b;--yellow-paper:#f7efc8;--yellow-line:#d8c77f;--border:#b8b2b5;--surface:#e9e5e2;--green:#276747;--green-bg:#dce8d9;--red:#9c3943;--red-bg:#f0d8d5;--shadow:4px 4px 0 #27242a}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:"Courier New",ui-monospace,monospace;color:var(--ink)}
+body{background:#242328;background-image:radial-gradient(ellipse at 50% 0%,#454149 0,#242328 62%);padding:clamp(0px,2vw,22px)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:30;background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,#16151a14 4px);opacity:.38}
+button,input,select{font:inherit}
+button,a,input{-webkit-tap-highlight-color:transparent}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px dashed #8a4c6a;outline-offset:3px}
+button{cursor:pointer}
+.app{min-height:calc(100vh - clamp(0px,4vw,44px));max-width:1540px;margin:auto;background:#25242b;border:4px solid #111116;box-shadow:0 0 0 2px #777178,0 18px 60px #0007;position:relative;display:grid;grid-template-columns:278px minmax(0,1fr);align-items:stretch}
+.top{background:#252630;border-right:4px solid #111116;box-shadow:inset -3px 0 #494751;grid-column:1;grid-row:1;min-width:0}
+.top-inner{height:100%;max-width:none;margin:0;padding:24px 13px;display:flex;flex-direction:column}
+.brandline{display:flex;align-items:stretch;flex-direction:column;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;padding:16px 10px;border:3px solid #090a10;background:#111522;box-shadow:3px 3px 0 #55515a;color:#f0e9df}
+.brand-mark{display:none}
+.brand h1{font-size:1.02rem;letter-spacing:.04em;text-transform:uppercase;margin:0;font-weight:900}
+.brand p{margin:5px 0 0;color:#aaa6b0;font-size:.68rem;letter-spacing:.04em}
+.top-actions{display:grid;grid-template-columns:1fr;gap:9px}
+.btn{border:2px solid #29262c;background:#f0ece8;color:var(--ink);padding:9px 12px;border-radius:0;font-size:.76rem;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px;box-shadow:3px 3px 0 #aaa0a5}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #92858d}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #92858d}
+.btn.primary{background:#302c32;color:#f7f0ec;border-color:#17161a}
+.btn.subtle{background:#e8c3d1;border-color:#342a30}
+.tabs{display:flex;flex-direction:column;gap:8px;margin-top:12px;overflow:visible}
+.tab{border:3px solid #0d0d12;background:#8c8992;padding:15px 12px;color:#17161b;font-size:.76rem;font-weight:900;border-radius:0;white-space:nowrap;letter-spacing:.015em;text-align:left;box-shadow:3px 3px 0 #111}
+.tab+ .tab{border-left:3px solid #0d0d12}
+.tab[aria-selected="true"]{position:relative;top:0;border-color:#0d0d12;filter:brightness(.96)}
+.tab[data-page="links"]{background:#d99ab4}
+.tab[data-page="links"][aria-selected="true"]{background:#d99ab4;color:#252126}
+.tab[data-page="notes"]{background:#d8c67d}
+.tab[data-page="notes"][aria-selected="true"]{background:#d8c67d;color:#252126}
+.tab[data-page="trash"]{background:#aaa6ac}
+.tab[data-page="trash"][aria-selected="true"]{background:#aaa6ac;color:#252126}
+.tab[data-page="tutorial"]{background:#c6d0df}
+.tab[data-page="tutorial"][aria-selected="true"]{background:#c6d0df;color:#252126}
+.tab[data-page="notes"]{background:#d8c67d}
+.tab[data-page="trash"]{background:#aaa6ac}
+.tab[data-page="tutorial"]{background:#c6d0df}
+.tutorial-intro{border:2px solid #505765;background:#dce1e6;padding:18px 20px;margin-bottom:18px;box-shadow:3px 3px 0 #b4b8be}
+.tutorial-intro strong{display:block;font-size:1rem;text-transform:uppercase;margin-bottom:7px}
+.tutorial-intro p{margin:0;color:#53535d;font-size:.78rem;line-height:1.65}
+.tutorial-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.tutorial-step{background:#f4f0e8;border:2px solid #5d626c;padding:17px;box-shadow:3px 3px 0 #c0bbb3;position:relative;min-width:0}
+.tutorial-step .step-number{display:grid;place-items:center;width:35px;height:35px;background:#252630;color:#fff;border:2px solid #0d0d12;font-weight:900;margin-bottom:12px;box-shadow:2px 2px 0 #a6a0a0}
+.tutorial-step h3{margin:0 0 8px;font-size:.9rem;text-transform:uppercase}
+.tutorial-step p{margin:0;font-size:.76rem;line-height:1.65;color:#55525a}
+.tutorial-step .arrow{display:block;margin-top:12px;color:#8b4c6a;font-size:1.35rem;font-weight:900;letter-spacing:.08em}
+.tutorial-callout{margin-top:16px;padding:15px 17px;border:2px dashed #6e6970;background:#e2ddd7;font-size:.76rem;line-height:1.65}
+.tutorial-callout b{color:#342b36}
+.tutorial-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.tab-count{display:inline-grid;place-items:center;min-width:20px;height:20px;margin-left:5px;padding:0 5px;border:1px solid #8d8288;background:#eee7e7;font-size:.68rem}
+main{grid-column:2;grid-row:1;min-width:0;max-width:none;margin:20px;padding:24px;background:#e9e5dc;border:5px solid #111116;box-shadow:inset 0 0 0 2px #aaa49e,6px 6px 0 #111;align-self:stretch}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:20px}
+.section-head h2{margin:0;font-size:clamp(1.3rem,4vw,1.8rem);letter-spacing:.015em;text-transform:uppercase}
+.section-head p{margin:8px 0 0;color:var(--muted);font-size:.78rem;line-height:1.6}
+.head-count{color:var(--muted);font-size:.72rem;white-space:nowrap}
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.search{flex:1;min-width:0;width:100%;border:2px solid #aaa2a5;background:#f7f4f1;border-radius:0;padding:11px 13px;color:var(--ink);box-shadow:inset 2px 2px 0 #ded8d5}
+.filter{border:2px solid #aaa2a5;background:#f7f4f1;border-radius:0;padding:11px 12px;color:var(--ink);max-width:45%}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:12px}
+.game-card{background:#e9e5dc;border:2px solid #59606a;border-radius:0;padding:10px;min-width:0;min-height:86px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;box-shadow:2px 2px 0 #b5b0a8;overflow:hidden}
+.game-card:nth-child(3n+2){background:#efeaE5}
+.game-card:nth-child(3n){background:#e8e2e1}
+.card-main{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.site-icon{width:43px;height:43px;flex:none;display:grid;place-items:center;border:2px solid #363038;background:#d4c5c9;font-size:1.15rem;font-weight:900;color:#30262d;box-shadow:2px 2px 0 #a99da2;border-radius:0}
+.card-copy{min-width:0;flex:1}
+.card-copy h3{margin:2px 0 6px;font-size:.87rem;letter-spacing:0;overflow-wrap:anywhere}
+.card-url{font-size:.7rem;color:#68616a;overflow-wrap:anywhere;text-decoration:none}
+.card-url:hover{text-decoration:underline}
+.card-desc{margin:8px 0 0;font-size:.75rem;line-height:1.5;color:#635d64}
+.card-actions{display:grid;grid-template-columns:auto 34px 34px;align-items:center;justify-content:end;gap:5px;margin-top:0;min-width:0}
+.test-link{min-width:78px;min-height:31px;padding:5px 7px;font-size:.62rem}
+.vote{width:34px;height:32px}
+.test-link{display:inline-flex;align-items:center;justify-self:stretch;align-self:center;min-width:0;min-height:31px;padding:5px 7px;border:2px solid #3c5660;background:#d8e8e6;color:#183b3b;text-decoration:none;font-size:.62rem;font-weight:900;white-space:nowrap;box-shadow:2px 2px 0 #a9b8b6;transition:transform .16s ease,box-shadow .16s ease,background .16s ease}
+.test-link:before{content:"";width:7px;height:7px;border-radius:50%;background:#42966b;box-shadow:0 0 0 2px #b9ddc7;flex:none}
+.test-link:hover{background:#c4e1d6;transform:translateY(-2px);box-shadow:3px 4px 0 #a9b8b6}
+.test-link:active{transform:translateY(1px);box-shadow:0 0 0 #a9b8b6}
+@keyframes rise-in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.game-card{animation:rise-in .24s ease both;transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+.game-card:hover{border-color:#343c49;box-shadow:3px 4px 0 #a6a19a;transform:translateY(-1px)}
+.tab,.btn,.vote,.small-btn{transition:transform .16s ease,box-shadow .16s ease,filter .16s ease,background-color .16s ease}
+main{animation:rise-in .28s ease both}
+.modal{animation:rise-in .2s ease both}
+.open-link{display:none}
+.vote{width:39px;height:37px;border-radius:0;border:2px solid #39343a;font-size:1.1rem;font-weight:900;display:grid;place-items:center;box-shadow:2px 2px 0 #b0a6a9}
+.vote.yes{background:var(--green-bg);border-color:#385b43;color:var(--green)}
+.vote.no{background:var(--red-bg);border-color:#86464b;color:var(--red)}
+.vote:hover,.open-link:hover{filter:brightness(.95);transform:translate(-1px,-1px)}
+.empty{grid-column:1/-1;border:2px dashed #a39a9f;background:#eae5e2;padding:34px 20px;text-align:center;color:var(--muted);font-size:.82rem}
+.notes-wrap{max-width:850px;margin:0 auto;background:var(--yellow-paper);border:3px solid #554c36;border-radius:0;box-shadow:5px 5px 0 #b3a57d;overflow:hidden;position:relative}
+.notes-wrap:before{content:"";display:block;height:12px;background:#dfca77;border-bottom:2px solid #77693d}
+.notes-inner{padding:24px 26px 27px;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 34px,#dfd18d 35px)}
+.notes-title{display:flex;align-items:center;gap:12px;margin-bottom:21px}
+.note-icon{width:42px;height:42px;display:grid;place-items:center;background:#eddb8e;border:2px solid #786b40;border-radius:0;font-size:1.35rem;box-shadow:2px 2px 0 #c6b66e}
+.notes-title h2{margin:0;font-size:1.35rem;letter-spacing:0;text-transform:uppercase}
+.notes-title p{margin:4px 0 0;color:#746b43;font-size:.72rem}
+.note-list{display:grid;gap:10px}
+.note-item{display:flex;align-items:center;gap:12px;padding:13px;background:#fff9dce8;border:2px solid #c5b675;border-radius:0;box-shadow:2px 2px 0 #d8ca8b}
+.note-item .card-copy{flex:1}
+.note-item h3{margin:0 0 5px;font-size:.82rem}
+.note-item .card-url{font-size:.7rem}
+.note-actions{display:flex;gap:6px;flex-wrap:wrap}
+.small-btn{border:2px solid #8a7a48;background:#fff8d7;color:#494126;border-radius:0;padding:7px 9px;font-size:.68rem;font-weight:900;box-shadow:2px 2px 0 #d1c38c}
+.small-btn:hover{background:#fff}
+.small-btn.danger{color:var(--red);border-color:#b77d7c}
+.trash-panel{max-width:900px;margin:0 auto;background:#d0cbca;border:3px solid #454147;border-radius:0;padding:22px;box-shadow:5px 5px 0 #aaa2a3}
+.trash-heading{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.trash-icon{width:44px;height:44px;border:2px solid #3b383e;display:grid;place-items:center;background:#aaa4a7;font-size:1.4rem;box-shadow:2px 2px 0 #817b80}
+.trash-heading h2{margin:0;font-size:1.25rem;letter-spacing:0;text-transform:uppercase}
+.trash-heading p{margin:5px 0 0;color:#625b61;font-size:.72rem}
+.trash-item{display:flex;align-items:center;gap:12px;padding:14px 0;border-top:2px dashed #a39b9f}
+.trash-item .card-copy{flex:1}
+.trash-item h3{font-size:.82rem;margin:0 0 5px}
+.trash-item .card-url{font-size:.7rem}
+.trash-actions{display:flex;gap:6px;flex-wrap:wrap}
+.hidden{display:none!important}
+.modal-backdrop{position:fixed;inset:0;background:#17151bd9;display:grid;place-items:center;padding:18px;z-index:40}
+.modal{width:min(470px,100%);background:#e9e3df;border:3px solid #27242a;border-radius:0;padding:22px;box-shadow:7px 7px 0 #7d7279}
+.modal h2{font-size:1.2rem;margin:0 0 8px;letter-spacing:0;text-transform:uppercase}
+.modal p{font-size:.75rem;color:var(--muted);line-height:1.6;margin:0 0 18px}
+.field{display:grid;gap:7px;margin:13px 0}
+.field label{font-size:.72rem;font-weight:900;text-transform:uppercase}
+.field input,.field select{width:100%;border:2px solid #aaa0a5;border-radius:0;padding:11px;background:#f8f4ef;color:var(--ink)}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+#fileImport{display:none}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#29232a;color:#fff;padding:12px 16px;border:2px solid #d8c6cf;border-radius:0;font-size:.75rem;box-shadow:4px 4px 0 #0008;z-index:50;max-width:calc(100% - 28px)}
+@media(max-width:1050px){.cards{grid-template-columns:1fr}}\n@media(max-width:850px){.tutorial-grid{grid-template-columns:1fr}.app{grid-template-columns:220px minmax(0,1fr)}main{margin:12px;padding:16px}.cards{grid-template-columns:1fr}.game-card{padding:9px}.brand h1{font-size:.88rem}}
+@media(max-width:650px){body{padding:0}.app{min-height:100vh;border-left:0;border-right:0;display:block}.top{border-right:0;border-bottom:4px solid #111}.top-inner{padding:12px}.brandline{align-items:stretch;flex-direction:row;flex-wrap:wrap}.brand{flex:1;min-width:180px;padding:10px}.brand h1{font-size:.8rem}.brand p{display:none}.top-actions{display:flex;gap:6px}.top-actions .btn{padding:8px;font-size:.65rem}.tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin-top:12px}.tab{padding:10px 6px;font-size:.62rem;text-align:center;white-space:normal}.tab-count{margin-left:2px}main{margin:12px;padding:14px;border-width:3px}.section-head{align-items:flex-start}.head-count{display:none}.toolbar{flex-wrap:wrap}.filter{max-width:none;width:100%}.cards{grid-template-columns:1fr;gap:10px}.game-card{padding:10px}.notes-inner{padding:18px 12px 20px}.note-item,.trash-item{align-items:flex-start;flex-wrap:wrap}.note-actions,.trash-actions{width:100%;padding-left:0}.notes-title h2{font-size:1.1rem}.trash-panel{padding:14px}.section-head p{font-size:.73rem}}
+@media(max-width:430px){.game-card{grid-template-columns:minmax(0,1fr) auto;gap:7px;padding:8px}.site-icon{width:36px;height:36px}.card-main{gap:8px}.card-actions{grid-template-columns:auto 29px 29px;gap:4px}.test-link{min-width:0;font-size:.58rem;padding:5px}.vote{width:29px;height:29px;font-size:.95rem}}\n@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Welcome terminal */
+.boot-screen{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow:hidden;padding:22px;background:#1e1d22;color:#e9e4dc;font-family:"Courier New",monospace;isolation:isolate;transition:opacity .65s ease,visibility .65s ease}
+.boot-screen:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 45%,#39333a 0,#252329 48%,#17161a 100%)}
+.boot-screen:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.24;background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,#000 4px),linear-gradient(90deg,transparent 49.8%,#d99ab412 50%,transparent 50.2%)}
+.boot-frame{position:relative;width:min(760px,100%);border:1px solid #68616b;background:#242329;box-shadow:0 0 0 6px #17161b,0 0 0 7px #4a444d,0 28px 90px #0009;animation:boot-arrive .8s cubic-bezier(.2,.7,.2,1) both}
+.boot-topbar,.boot-bottom{min-height:37px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#19181d;border-bottom:1px solid #4b454e;color:#aaa2ae;font-size:10px;letter-spacing:.1em}
+.boot-bottom{border-top:1px solid #4b454e;border-bottom:0;color:#77717c;font-size:9px}
+.boot-lights{display:flex;gap:5px}.boot-lights i{width:7px;height:7px;border-radius:50%;background:#d99ab4;display:block}.boot-lights i:nth-child(2){background:#d8c67d}.boot-lights i:nth-child(3){background:#7d9b88}
+.boot-status{display:flex;align-items:center;gap:7px}.boot-status b{width:6px;height:6px;background:#9fc6a9;border-radius:50%;box-shadow:0 0 9px #9fc6a9}
+.boot-content{padding:clamp(34px,7vw,64px) clamp(22px,7vw,72px) 34px;text-align:center}
+.boot-mark{width:62px;height:62px;margin:0 auto 24px;position:relative;display:grid;place-items:center;border:1px solid #786c79;color:#d99ab4;animation:mark-pulse 4s ease-in-out infinite}
+.boot-mark:before,.boot-mark:after{content:"";position:absolute;background:#d99ab4;opacity:.55}
+.boot-mark:before{width:78px;height:1px}.boot-mark:after{height:78px;width:1px}
+.mark-corner{position:absolute;width:8px;height:8px;border-color:#d99ab4;border-style:solid}.mark-corner.tl{top:-4px;left:-4px;border-width:1px 0 0 1px}.mark-corner.tr{top:-4px;right:-4px;border-width:1px 1px 0 0}.mark-corner.bl{bottom:-4px;left:-4px;border-width:0 0 1px 1px}.mark-corner.br{bottom:-4px;right:-4px;border-width:0 1px 1px 0}
+.mark-cross{font-size:25px;position:relative;z-index:1;background:#242329;padding:4px 8px}
+.boot-kicker{margin:0 0 13px;color:#d99ab4;font-size:10px;letter-spacing:.2em;font-weight:bold}
+.boot-title{margin:0;color:#f0ece5;font-size:clamp(34px,8vw,66px);font-weight:900;letter-spacing:.13em;line-height:1.1;text-shadow:3px 3px 0 #17161b;animation:title-flicker 7s infinite}
+.boot-title span{color:#d99ab4;animation:cursor-blink 1s steps(2,end) infinite}
+.boot-subtitle{margin:14px 0 27px;color:#aaa4ad;font-size:clamp(12px,2vw,14px);letter-spacing:.04em}
+.boot-divider{display:flex;align-items:center;gap:12px;margin:0 auto 22px;max-width:420px;color:#8e8791;font-size:9px;letter-spacing:.12em}
+.boot-divider span{height:1px;flex:1;background:#514a55}
+.boot-readout{max-width:420px;margin:0 auto 29px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid #4a444d;background:#1d1c21}
+.boot-readout div{padding:12px 6px;display:grid;gap:7px;border-right:1px solid #4a444d}.boot-readout div:last-child{border-right:0}
+.boot-readout span{font-size:9px;color:#827b87;letter-spacing:.13em}.boot-readout b{font-size:10px;color:#d9d2dc;letter-spacing:.04em}.boot-readout .ready-text{color:#a7c8ad}
+.enter-terminal{width:min(420px,100%);min-height:54px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 17px;border:1px solid #e4b4c8;background:#d99ab4;color:#211c22;font-weight:900;font-size:12px;letter-spacing:.13em;box-shadow:4px 4px 0 #111;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+.enter-terminal:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 #111;background:#e7b3c9}.enter-terminal:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111}
+.enter-icon{font-size:23px;line-height:1}.enter-arrow{font-size:16px}
+.boot-footnote{margin:24px 0 0;color:#817b86;font-size:9px;letter-spacing:.12em}.blink-dot{display:inline-block;width:6px;height:6px;margin-right:8px;border-radius:50%;background:#d99ab4;animation:cursor-blink 1.2s steps(2,end) infinite}
+.boot-side-note{position:absolute;right:18px;bottom:16px;color:#716b76;font-size:9px;letter-spacing:.17em;writing-mode:vertical-rl}
+.boot-screen.leaving{opacity:0;visibility:hidden;pointer-events:none}
+.app{opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .55s ease,transform .55s ease,visibility .55s ease}
+.app.app-entered{opacity:1;visibility:visible;transform:translateY(0)}
+@keyframes boot-arrive{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes mark-pulse{0%,100%{box-shadow:0 0 0 0 #d99ab400}50%{box-shadow:0 0 24px 1px #d99ab41c}}
+@keyframes cursor-blink{0%,48%{opacity:1}49%,100%{opacity:.2}}
+@keyframes title-flicker{0%,96%,100%{opacity:1}97%{opacity:.82}98%{opacity:1}99%{opacity:.9}}
+@media(max-width:500px){.boot-screen{padding:16px}.boot-topbar{font-size:8px;padding:0 9px}.boot-status{gap:4px}.boot-content{padding:38px 18px 28px}.boot-bottom{font-size:8px;padding:0 8px}.boot-side-note{display:none}.boot-readout b{font-size:8px}.boot-readout span{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.boot-screen,.boot-frame,.boot-mark,.boot-title,.boot-title span,.blink-dot,.app,.enter-terminal{animation:none!important;transition:none!important}}
+
+
+/* Proportion and alignment pass */
+.app{grid-template-columns:clamp(220px,23%,290px) minmax(0,1fr);gap:0;min-height:calc(100svh - clamp(0px,4vw,44px))}
+.top-inner{padding:clamp(18px,2vw,28px) clamp(12px,1.25vw,18px)}
+.brand{min-height:78px;align-items:center;padding:15px 13px}
+.brand h1{line-height:1.25;overflow-wrap:anywhere}
+.top-actions{gap:10px}
+.top-actions .btn{width:100%;min-height:40px;line-height:1.25}
+.tabs{gap:9px;margin-top:18px}
+.tab{min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 13px;line-height:1.25}
+.tab-count{flex:none;margin-left:auto}
+main{margin:clamp(14px,1.7vw,24px);padding:clamp(18px,2.1vw,32px);min-width:0}
+.section-head{align-items:center}
+.section-head>div:first-child{min-width:0}
+.section-head p{max-width:62ch}
+.toolbar{gap:12px}
+.search,.filter{min-height:44px}
+.cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.game-card{grid-template-columns:minmax(0,1fr);align-content:space-between;gap:14px;padding:14px;min-height:142px}
+.card-main{align-items:flex-start;gap:12px}
+.site-icon{width:44px;height:44px}
+.card-copy h3{line-height:1.35;margin:1px 0 7px}
+.card-url{line-height:1.45;display:inline-block}
+.card-actions{display:flex;align-items:center;justify-content:flex-start;gap:8px;margin-top:auto}
+.test-link{min-height:36px;flex:1;justify-content:center;padding:7px 10px;font-size:.68rem}
+.vote{width:36px;height:36px;flex:none}
+.notes-wrap,.trash-panel{width:100%}
+.note-item,.trash-item{min-width:0}
+.boot-screen{padding:clamp(16px,4vw,40px)}
+.boot-frame{width:min(720px,100%);overflow:hidden}
+.boot-topbar,.boot-bottom{min-height:40px;padding-inline:clamp(10px,2vw,18px)}
+.boot-content{padding:clamp(30px,5vw,54px) clamp(18px,6vw,62px) 30px}
+.boot-mark{width:58px;height:58px;margin-bottom:22px}
+.boot-title{font-size:clamp(32px,7vw,58px);letter-spacing:.11em;overflow-wrap:anywhere}
+.boot-subtitle{line-height:1.6;max-width:38ch;margin:14px auto 25px}
+.boot-readout{width:100%;max-width:430px}
+.enter-terminal{min-height:52px;width:100%;max-width:430px;margin-inline:auto}
+.boot-footnote{line-height:1.5}
+@media(max-width:1050px){
+ .app{grid-template-columns:220px minmax(0,1fr)}
+ .cards{grid-template-columns:1fr}
+ .game-card{grid-template-columns:minmax(0,1fr) auto;min-height:112px}
+ .card-actions{display:grid;grid-template-columns:minmax(82px,1fr) 34px 34px;gap:6px}
+ .test-link{min-width:0}
+}
+@media(max-width:850px){
+ .app{grid-template-columns:200px minmax(0,1fr)}
+ main{margin:12px;padding:16px}
+ .game-card{grid-template-columns:minmax(0,1fr);min-height:138px}
+ .card-actions{display:flex}
+ .test-link{flex:1}
+}
+@media(max-width:650px){
+ .app{display:block;min-height:100svh}
+ .top-inner{padding:12px}
+ .brandline{gap:10px}
+ .top-actions{flex-direction:row;align-items:stretch}
+ .top-actions .btn{width:auto;min-width:0;flex:1;min-height:38px}
+ .tabs{gap:7px}
+ .tab{min-height:42px;justify-content:center;padding:10px 7px}
+ .tab-count{margin-left:3px}
+ main{margin:12px;padding:14px}
+ .section-head{gap:12px}
+ .section-head h2{line-height:1.15}
+ .section-head p{line-height:1.5}
+ .game-card{grid-template-columns:minmax(0,1fr);min-height:0;padding:12px}
+ .card-actions{display:flex;gap:7px}
+ .test-link{flex:1;min-width:0}
+ .vote{width:35px;height:35px}
+ .boot-screen{padding:12px}
+ .boot-frame{box-shadow:0 0 0 3px #17161b,0 0 0 4px #4a444d,0 18px 55px #0009}
+ .boot-content{padding:30px 17px 24px}
+ .boot-mark{width:48px;height:48px;margin-bottom:19px}
+ .boot-mark:before{width:62px}.boot-mark:after{height:62px}
+ .boot-title{letter-spacing:.07em;font-size:clamp(30px,9vw,44px)}
+ .boot-readout{margin-bottom:22px}
+ .boot-readout div{padding:10px 3px;gap:6px}
+ .boot-readout b{font-size:8px;overflow-wrap:anywhere}
+ .boot-readout span{font-size:8px;letter-spacing:.07em}
+ .enter-terminal{min-height:49px;padding-inline:12px;font-size:11px}
+ .boot-bottom span:nth-child(2){text-align:center}
+}
+@media(max-width:380px){
+ .brand{min-width:0}
+ .top-actions .btn{font-size:.58rem;padding:7px 5px}
+ .tab{font-size:.58rem}
+ .boot-topbar{letter-spacing:.04em}
+ .boot-bottom span:nth-child(2){max-width:56%;font-size:7px}
+ .boot-readout b{font-size:7px}
+}
+
+</style>
+</head>
+<body>
+
+<section id="bootScreen" class="boot-screen" aria-label="Terminal welcome">
+  <div class="boot-frame">
+    <div class="boot-topbar"><span class="boot-lights"><i></i><i></i><i></i></span><span>INTERNAL ACCESS TERMINAL</span><span class="boot-status"><b></b> SYSTEM READY</span></div>
+    <div class="boot-content">
+      <div class="boot-mark" aria-hidden="true"><span class="mark-corner tl"></span><span class="mark-corner tr"></span><span class="mark-corner bl"></span><span class="mark-corner br"></span><span class="mark-cross">✳</span></div>
+      <p class="boot-kicker">LUMIO NETWORK // ACCESS POINT 01</p>
+      <h1 class="boot-title">DIRECTORY<span>_</span></h1>
+      <p class="boot-subtitle">A quiet place to check the signal.</p>
+      <div class="boot-divider"><span></span><small>CONNECTION ESTABLISHED</small><span></span></div>
+      <div class="boot-readout"><div><span>NODE</span><b>LOCAL / 01</b></div><div><span>STATUS</span><b class="ready-text">READY</b></div><div><span>ACCESS</span><b>AUTHORIZED</b></div></div>
+      <button id="enterTerminal" class="enter-terminal" type="button"><span class="enter-icon">›</span><span>ENTER TERMINAL</span><span class="enter-arrow">↗</span></button>
+      <p class="boot-footnote"><span class="blink-dot"></span> WAITING FOR OPERATOR INPUT</p>
+    </div>
+    <div class="boot-bottom"><span>DT-01</span><span>SECURE SESSION // DIRECTORY SERVICE</span><span>v.02.6</span></div>
+  </div>
+  <div class="boot-side-note">LUMIO // FIELD SYSTEMS</div>
+</section>
+
+<div class="app">
+<header class="top">
+  <div class="top-inner">
+    <div class="brandline">
+      <div class="brand"><div class="brand-mark" aria-hidden="true">↗</div><div><h1>Directory Terminal</h1><p>Game links for your school network</p></div></div>
+      <div class="top-actions">
+        <button class="btn subtle" id="importBtn" type="button">↑ LOAD DIRECTORY</button>
+        <button class="btn primary" id="addBtn" type="button">＋ REGISTER SITE</button>
+        <input id="fileImport" type="file" accept=".json,application/json">
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Link pages">
+      <button class="tab" data-page="links" aria-selected="true">DIRECTORY <span class="tab-count" id="countLinks">0</span></button>
+      <button class="tab" data-page="notes" aria-selected="false">▤ LOGBOOK <span class="tab-count" id="countNotes">0</span></button>
+      <button class="tab" data-page="trash" aria-selected="false">▱ QUARANTINE <span class="tab-count" id="countTrash">0</span></button>
+      <button class="tab" data-page="tutorial" aria-selected="false">➜ FIELD GUIDE</button>
+    </nav>
+  </div>
+</header>
+<main>
+  <section id="linksPage">
+    <div class="section-head"><div><h2>Directory</h2><p>Open a link, then mark whether it works on your school network.</p></div><div class="head-count" id="linksCountText"></div></div>
+    <div class="toolbar"><input class="search" id="search" type="search" placeholder="SCAN DIRECTORY…" aria-label="Search games"><select class="filter" id="categoryFilter" aria-label="Filter by category"><option value="all">All categories</option><option value="Games">Games</option><option value="Puzzles">Puzzles</option><option value="Create">Create</option><option value="Other">Other</option></select></div>
+    <div class="cards" id="linksList"></div>
+  </section>
+  <section id="notesPage" class="hidden">
+    <div class="section-head"><div><h2>Logbook</h2><p>Links marked ✓ — available on your school network.</p></div><button class="btn" id="exportBtn" type="button">↓ EXPORT DIRECTORY</button></div>
+    <div class="notes-wrap"><div class="notes-inner"><div class="notes-title"><div class="note-icon" aria-hidden="true">▤</div><div><h2>Verified Entries</h2><p>Your working list</p></div></div><div class="note-list" id="notesList"></div></div></div>
+  </section>
+  <section id="tutorialPage" class="hidden">
+    <div class="section-head"><div><h2>Field Guide</h2><p>How to post links and check them on your own school computer.</p></div></div>
+    <div class="tutorial-intro"><strong>One shared list. Personal results.</strong><p>Our team maintains the main Links list and publishes updates from time to time. The shared page is designed to be embedded using GitHub Raw content or jsDelivr, so visitors can open the latest published version when the embedded file is updated. Your own ✓ or × checks remain local to your browser and do not change Lightspeed filtering or other students’ results.</p></div>
+    <div class="tutorial-grid">
+      <article class="tutorial-step"><div class="step-number">01</div><h3>Post a link manually</h3><p>Choose <b>＋ Add link</b> in the sidebar. Enter the site name, paste its full web address beginning with <b>https://</b>, choose a category, then select <b>Save link</b>. The new entry appears on the Links page in this browser.</p><span class="arrow" aria-hidden="true">↓  ADD LINK</span></article>
+      <article class="tutorial-step"><div class="step-number">02</div><h3>Test it on your school device</h3><p>Open the site from its address on the card. Wait for it to load normally. If it opens, mark <b>✓</b>. If it is blocked by your school’s filter or fails to load, mark <b>×</b>. These are student reports, not automatic detection.</p><span class="arrow" aria-hidden="true">OPEN → CHECK</span></article>
+      <article class="tutorial-step"><div class="step-number">03</div><h3>Keep the list tidy</h3><p><b>✓</b> moves the link to <b>Your Notes</b>, your local list of links that worked for you. <b>×</b> moves it to <b>Trash</b>, your local list of links reported blocked or not working. You can restore a link if you tested it again and it works.</p><span class="arrow" aria-hidden="true">✓ NOTES  /  × TRASH</span></article>
+      <article class="tutorial-step"><div class="step-number">04</div><h3>How team updates reach you</h3><p>Our team adds and reviews links, then updates the HTML list in the GitHub repository. The page can be served through GitHub Raw content or a jsDelivr embed/CDN link. We publish changes occasionally, so reload the updated page to see the latest team list. Your personal ✓ / × choices are separate from these published updates.</p><span class="arrow" aria-hidden="true">TEAM EDITS → PUBLISH → REFRESH</span></article>
+    </div>
+    <div class="tutorial-callout"><b>Important:</b> Published team links are shared when the hosted HTML is updated; personal additions, Notes, and Trash are stored in your browser and do not automatically publish back to GitHub. The Test link button opens the site on your device, but this page cannot automatically detect or change school filter settings. If a site should be available for classwork, ask a teacher or school IT staff to review it.</div>
+    <div class="tutorial-actions"><button class="btn primary" type="button" id="tutorialGoLinks">← Open Directory</button><button class="btn" type="button" id="tutorialAddLink">＋ Register Site</button></div>
+  </section>
+  <section id="trashPage" class="hidden">
+    <div class="section-head"><div><h2>Quarantine</h2><p>Links marked ✕ — blocked or not working at school.</p></div></div>
+    <div class="trash-panel"><div class="trash-heading"><div class="trash-icon" aria-hidden="true">▱</div><div><h2>Flagged Entries</h2><p>Restore a link to the main list or move it to Your Notes.</p></div></div><div id="trashList"></div><div id="trashFooter" class="hidden" style="padding-top:16px"><button class="btn" id="clearTrashBtn" type="button">PURGE QUARANTINE</button></div></div>
+  </section>
+</main>
+</div>
+<div class="modal-backdrop hidden" id="addModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <form class="modal" id="linkForm">
+    <h2 id="modalTitle">Register Site</h2><p>Add a game or site to the shared-format list. Your changes are saved in this browser.</p>
+    <div class="field"><label for="linkName">Name</label><input id="linkName" name="name" maxlength="70" required placeholder="Game name"></div>
+    <div class="field"><label for="linkUrl">Website address</label><input id="linkUrl" name="url" type="url" required placeholder="https://example.com"></div>
+    <div class="field"><label for="linkCategory">Category</label><select id="linkCategory" name="category"><option>Games</option><option>Puzzles</option><option>Create</option><option>Other</option></select></div>
+    <div class="modal-actions"><button class="btn" id="cancelAdd" type="button">Cancel</button><button class="btn primary" type="submit">Register Site</button></div>
+  </form>
+</div>
+<div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+  "use strict";
+  const STORAGE_KEY = "lightspeed-links-v2";
+  const starterLinks = [];
+  const sharedLinkSources = [
+    "https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/assets/directory_folder/linker.html",
+    "https://cdn.jsdelivr.net/gh/dhisjwhd-svg/LUMIO-OS@main/assets/directory_folder/linker.html"
+  ];
+  const $ = id => document.getElementById(id);
+  let links = loadLinks();
+  let activePage = "links";
+  let toastTimer;
+
+  const bootScreen = $("bootScreen");
+  const terminalApp = document.querySelector(".app");
+  $("enterTerminal").addEventListener("click", () => {
+    bootScreen.classList.add("leaving");
+    terminalApp.classList.add("app-entered");
+    window.setTimeout(() => { bootScreen.setAttribute("aria-hidden","true"); }, 700);
+  });
+
+  function loadLinks(){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if(Array.isArray(parsed) && parsed.every(validLink)) {
+        const oldStarterIds = new Set(["crazygames","coolmath","poki","scratch","chess","tetris","slither","neal"]);
+        return parsed.filter(item => !oldStarterIds.has(item.id));
+      }
+    }catch(e){}
+    return starterLinks.map(item=>({...item}));
+  }
+  function validLink(item){
+    return item && typeof item.id==="string" && typeof item.name==="string" && typeof item.url==="string" && ["active","notes","trash"].includes(item.status);
+  }
+  function save(){
+    try{localStorage.setItem(STORAGE_KEY,JSON.stringify(links));}
+    catch(e){notify("Could not save in this browser. Export a backup.");}
+    render();
+  }
+  function escapeHTML(value){
+    return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+  }
+  function host(url){try{return new URL(url).hostname.replace(/^www\./,"");}catch(e){return url;}}
+  function iconFor(name){const n=name.toLowerCase();if(n.includes("chess"))return "♞";if(n.includes("scratch"))return "✳";if(n.includes("tetris"))return "▦";if(n.includes("poki"))return "p";if(n.includes("coolmath"))return "π";if(n.includes("crazy"))return "✦";if(n.includes("slither"))return "◉";return "↗";}
+  function notify(message){
+    const node=$("toast");node.textContent=message;node.classList.remove("hidden");
+    clearTimeout(toastTimer);toastTimer=setTimeout(()=>node.classList.add("hidden"),2600);
+  }
+  function setPage(page){
+    activePage=page;
+    ["links","notes","trash","tutorial"].forEach(name=>{
+      $(name+"Page").classList.toggle("hidden",name!==page);
+      document.querySelector('[data-page="'+name+'"]').setAttribute("aria-selected",String(name===page));
+    });
+    render();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+  function linkCard(item){
+    const url=escapeHTML(item.url),name=escapeHTML(item.name),id=escapeHTML(item.id);
+    return '<article class="game-card"><div class="card-main"><div class="site-icon" aria-hidden="true">'+escapeHTML(iconFor(item.name))+'</div><div class="card-copy"><h3>'+name+'</h3><a class="card-url" href="'+url+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(host(item.url))+'</a>'+(item.description?'<p class="card-desc">'+escapeHTML(item.description)+'</p>':'')+'</div></div><div class="card-actions"><a class="test-link" href="'+url+'" target="_blank" rel="noopener noreferrer" aria-label="Test '+name+' on this device">RUN CHECK ↗</a><button class="vote yes" type="button" data-action="notes" data-id="'+id+'" aria-label="Mark '+name+' as working" title="VERIFIED ✓">✓</button><button class="vote no" type="button" data-action="trash" data-id="'+id+'" aria-label="Mark '+name+' as blocked" title="FLAG ×">×</button></div></article>';
+  }
+  function renderLinks(){
+    const query=$("search").value.trim().toLowerCase(),category=$("categoryFilter").value;
+    const list=links.filter(x=>x.status==="active"&&(category==="all"||x.category===category)&&(x.name+" "+x.url+" "+x.category).toLowerCase().includes(query));
+    $("linksList").innerHTML=list.length?list.map(linkCard).join(""):'<div class="empty">No matching links.</div>';
+    $("linksCountText").textContent=links.filter(x=>x.status==="active").length+" links";
+  }
+  function renderNotes(){
+    const list=links.filter(x=>x.status==="notes");
+    $("notesList").innerHTML=list.length?list.map(item=>'<article class="note-item"><div class="site-icon" aria-hidden="true">'+escapeHTML(iconFor(item.name))+'</div><div class="card-copy"><h3>'+escapeHTML(item.name)+'</h3><a class="card-url" href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(host(item.url))+'</a></div><div class="note-actions"><a class="small-btn" href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">Open ↗</a><button class="small-btn" data-action="active" data-id="'+escapeHTML(item.id)+'">↶ REINSTATE</button><button class="small-btn danger" data-action="trash" data-id="'+escapeHTML(item.id)+'" aria-label="Move '+escapeHTML(item.name)+' to trash">×</button></div></article>').join(""):'<div class="empty">Your notes are empty. Mark a link ✓ on the main page to save it here.</div>';
+  }
+  function renderTrash(){
+    const list=links.filter(x=>x.status==="trash");
+    $("trashList").innerHTML=list.length?list.map(item=>'<article class="trash-item"><div class="site-icon" aria-hidden="true">'+escapeHTML(iconFor(item.name))+'</div><div class="card-copy"><h3>'+escapeHTML(item.name)+'</h3><a class="card-url" href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(host(item.url))+'</a></div><div class="trash-actions"><button class="small-btn" data-action="active" data-id="'+escapeHTML(item.id)+'">↶ REINSTATE</button><button class="small-btn" data-action="notes" data-id="'+escapeHTML(item.id)+'">▤ Move to notes</button><button class="small-btn danger" data-action="delete" data-id="'+escapeHTML(item.id)+'">PURGE FILE ×</button></div></article>').join(""):'<div class="empty">Trash is empty.</div>';
+    $("trashFooter").classList.toggle("hidden",!list.length);
+  }
+  function render(){
+    $("countLinks").textContent=links.filter(x=>x.status==="active").length;
+    $("countNotes").textContent=links.filter(x=>x.status==="notes").length;
+    $("countTrash").textContent=links.filter(x=>x.status==="trash").length;
+    renderLinks();renderNotes();renderTrash();
+  }
+  document.querySelectorAll(".tab").forEach(button=>button.addEventListener("click",()=>setPage(button.dataset.page)));
+  $("search").addEventListener("input",renderLinks);
+  $("categoryFilter").addEventListener("change",renderLinks);
+  document.addEventListener("click",event=>{
+    const button=event.target.closest("[data-action][data-id]");
+    if(!button)return;
+    const item=links.find(x=>x.id===button.dataset.id);if(!item)return;
+    const action=button.dataset.action;
+    if(action==="delete"){
+      if(!confirm("Delete "+item.name+" permanently from this browser?"))return;
+      links=links.filter(x=>x.id!==item.id);notify("Link deleted.");
+    }else if(action==="notes"){item.status="notes";notify("Saved to Your Notes.");}
+    else if(action==="trash"){item.status="trash";notify("Moved to Trash.");}
+    else if(action==="active"){item.status="active";notify("Restored to Directory.");}
+    save();
+  });
+  $("addBtn").addEventListener("click",()=>{$("addModal").classList.remove("hidden");$("linkName").focus();});
+  $("tutorialGoLinks").addEventListener("click",()=>setPage("links"));
+  $("tutorialAddLink").addEventListener("click",()=>{$("addModal").classList.remove("hidden");$("linkName").focus();});
+  $("cancelAdd").addEventListener("click",closeModal);
+  $("addModal").addEventListener("click",event=>{if(event.target===$("addModal"))closeModal();});
+  document.addEventListener("keydown",event=>{if(event.key==="Escape")closeModal();});
+  function closeModal(){$("addModal").classList.add("hidden");$("linkForm").reset();}
+  $("linkForm").addEventListener("submit",event=>{
+    event.preventDefault();
+    const name=$("linkName").value.trim(),rawUrl=$("linkUrl").value.trim(),category=$("linkCategory").value;
+    let url;try{url=new URL(rawUrl);}catch(e){notify("Enter a valid website address.");return;}
+    if(!["https:","http:"].includes(url.protocol)){notify("Use an http or https link.");return;}
+    if(links.some(x=>x.url.replace(/\/$/,"").toLowerCase()===url.href.replace(/\/$/,"").toLowerCase())){notify("That link is already in the list.");return;}
+    links.unshift({id:makeId(),name,url:url.href,category,status:"active"});
+    closeModal();save();setPage("links");notify("Link added.");
+  });
+  function makeId(){return "link-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8);}
+  $("importBtn").addEventListener("click",()=>$("fileImport").click());
+  $("fileImport").addEventListener("change",async event=>{
+    const file=event.target.files&&event.target.files[0];if(!file)return;
+    try{
+      const data=JSON.parse(await file.text()),incoming=Array.isArray(data)?data:data.links;
+      if(!Array.isArray(incoming))throw new Error("This file does not contain a links list.");
+      let added=0,skipped=0;
+      incoming.forEach(raw=>{
+        if(!raw||typeof raw.name!=="string"||typeof raw.url!=="string"){skipped++;return;}
+        let url;try{url=new URL(raw.url)}catch(e){skipped++;return}
+        if(!["http:","https:"].includes(url.protocol)||links.some(x=>x.url.toLowerCase()===url.href.toLowerCase())){skipped++;return}
+        const status=["active","notes","trash"].includes(raw.status)?raw.status:"active";
+        links.push({id:makeId(),name:raw.name.trim().slice(0,70)||host(url.href),url:url.href,category:["Games","Puzzles","Create","Other"].includes(raw.category)?raw.category:"Games",status});
+        added++;
+      });
+      save();notify("Imported "+added+" links"+(skipped?", skipped "+skipped+" invalid or duplicate":"")+".");
+    }catch(error){notify(error.message||"Could not read that JSON file.");}
+    event.target.value="";
+  });
+  $("exportBtn").addEventListener("click",()=>{
+    const data={format:"lightspeed-links",version:1,exportedAt:new Date().toISOString(),links:links.map(({id,name,url,category,status})=>({id,name,url,category,status}))};
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+    const objectUrl=URL.createObjectURL(blob),a=document.createElement("a");
+    a.href=objectUrl;a.download="lightspeed-links.json";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(objectUrl);
+    notify("Team list exported.");
+  });
+  $("clearTrashBtn").addEventListener("click",()=>{
+    const count=links.filter(x=>x.status==="trash").length;if(!count)return;
+    if(!confirm("Permanently delete all "+count+" trashed links?"))return;
+    links=links.filter(x=>x.status!=="trash");save();notify("Trash emptied.");
+  });
+  render();
+  loadSharedDirectory();
+
+  async function loadSharedDirectory(){
+    for(const source of sharedLinkSources){
+      try{
+        const response = await fetch(source,{cache:"no-store"});
+        if(!response.ok) throw new Error("Shared list unavailable");
+        const markup = await response.text();
+        const parsed = new DOMParser().parseFromString(markup,"text/html");
+        const shared = [...parsed.querySelectorAll("a[data-directory-link]")].map((a,index)=>{
+          const rawUrl = a.getAttribute("href") || "";
+          let url;
+          try{url = new URL(rawUrl)}catch(e){return null}
+          if(!["https:","http:"].includes(url.protocol)) return null;
+          const name = (a.dataset.name || a.textContent || host(url.href)).trim().slice(0,70);
+          const category = ["Games","Puzzles","Create","Other"].includes(a.dataset.category) ? a.dataset.category : "Games";
+          return {id:"shared-"+host(url.href).replace(/[^a-z0-9]+/gi,"-"),name,url:url.href,category,status:"active"};
+        }).filter(Boolean);
+        const known = new Set(links.map(item=>item.url.replace(/\/$/,"").toLowerCase()));
+        let added = 0;
+        shared.forEach(item=>{
+          const key = item.url.replace(/\/$/,"").toLowerCase();
+          if(!known.has(key)){links.push(item);known.add(key);added++;}
+        });
+        save();
+        notify("Shared directory connected · "+shared.length+" link"+(shared.length===1?"":"s")+" loaded.");
+        return;
+      }catch(error){}
+    }
+    notify("Could not connect to linker.html. Open the hosted Directory page to load shared links.");
+  }
+})();
+</script>
+</body>
+</html>
