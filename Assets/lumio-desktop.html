@@ -1428,8 +1428,9 @@ if (settingAutoPassword) {
     });
   }
 
-  // Open a working copy of the current desktop inside an about:blank tab.
-  // The new window must be opened directly from the click handler to avoid popup blocking.
+  // Launch the actual desktop document in a new about:blank tab.
+  // Open the tab synchronously in the click handler so popup blockers allow it,
+  // then load the canonical HTML rather than cloning a possibly half-open UI.
   const launchBlankTab = document.getElementById('launchBlankTab');
   if (launchBlankTab) {
     launchBlankTab.addEventListener('click', function () {
@@ -1441,22 +1442,40 @@ if (settingAutoPassword) {
           return;
         }
 
-        const desktopCopy = document.documentElement.cloneNode(true);
-        const copiedSettings = desktopCopy.querySelector('#settingsLayer');
-        const copiedStartMenu = desktopCopy.querySelector('#startMenu');
-        const copiedAppLayer = desktopCopy.querySelector('#appLayer');
-        const copiedCloseButton = desktopCopy.querySelector('#btnClose');
-
-        // Start on the desktop, not inside the settings overlay or an open app.
-        if (copiedSettings) copiedSettings.classList.remove('open');
-        if (copiedStartMenu) copiedStartMenu.classList.remove('open');
-        if (copiedAppLayer) copiedAppLayer.classList.remove('open');
-        if (copiedCloseButton) copiedCloseButton.style.display = 'none';
-
         blankWindow.document.open();
-        blankWindow.document.write('<!DOCTYPE html>\n' + desktopCopy.outerHTML);
+        blankWindow.document.write('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Starting LUMIO-OS…</title><style>html,body{margin:0;height:100%;background:#050505;color:#eee;font:14px -apple-system,BlinkMacSystemFont,sans-serif}body{display:grid;place-items:center}p{opacity:.7}</style></head><body><p>Starting LUMIO-OS…</p></body></html>');
         blankWindow.document.close();
-        blankWindow.focus();
+
+        const desktopUrl = 'https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html';
+        fetch(desktopUrl + '?v=' + Date.now(), { cache: 'no-store' })
+          .then(function (response) {
+            if (!response.ok) throw new Error('Desktop file unavailable (' + response.status + ')');
+            return response.text();
+          })
+          .then(function (html) {
+            if (!blankWindow || blankWindow.closed) return;
+            blankWindow.document.open();
+            blankWindow.document.write(html);
+            blankWindow.document.close();
+            blankWindow.focus();
+          })
+          .catch(function () {
+            // Fallback: run the already-loaded document if remote fetch is blocked.
+            if (!blankWindow || blankWindow.closed) return;
+            const desktopCopy = document.documentElement.cloneNode(true);
+            const copiedSettings = desktopCopy.querySelector('#settingsLayer');
+            const copiedStartMenu = desktopCopy.querySelector('#startMenu');
+            const copiedAppLayer = desktopCopy.querySelector('#appLayer');
+            const copiedCloseButton = desktopCopy.querySelector('#btnClose');
+            if (copiedSettings) copiedSettings.classList.remove('open');
+            if (copiedStartMenu) copiedStartMenu.classList.remove('open');
+            if (copiedAppLayer) copiedAppLayer.classList.remove('open');
+            if (copiedCloseButton) copiedCloseButton.style.display = 'none';
+            blankWindow.document.open();
+            blankWindow.document.write('<!doctype html>' + desktopCopy.outerHTML);
+            blankWindow.document.close();
+            blankWindow.focus();
+          });
       } catch (error) {
         if (blankWindow && !blankWindow.closed) blankWindow.close();
         alert('Lumio could not launch in a blank tab. Please try again from the hosted Lumio page.');
