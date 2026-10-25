@@ -37,15 +37,17 @@ Some features rely on external resources and therefore need an internet connecti
 ```text
 LUMIO-OS/
 ├── Assets/
-│   ├── directory_folder/
 │   └── lumio-desktop.html
+└── README.md
+
+Supporting Directory app files are maintained in the [lumio-assets repository](https://github.com/dhisjwhd-svg/lumio-assets/tree/main/assets/directory_folder).
 ├── main.html
 └── README.md
 ```
 
 - `main.html` — project entry page.
 - `Assets/lumio-desktop.html` — main desktop interface implementation.
-- `Assets/directory_folder/` — supporting project directory.
+- `lumio-assets/assets/directory_folder/` — Directory app and shared link source.
 
 ## Built with
 
