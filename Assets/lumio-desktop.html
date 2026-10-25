@@ -546,18 +546,25 @@
     transition: background 0.15s;
   }
   .start-menu button:hover {
-  .start-menu-divider { height:1px; margin:5px 4px; background:rgba(255,255,255,.09); }
-  .start-menu .start-profile-button { gap:10px; padding:10px 9px; margin-bottom:2px; border:1px solid rgba(240,185,213,.12); background:linear-gradient(110deg,rgba(240,185,213,.09),rgba(255,255,255,.025)); }
-  .start-menu .start-profile-button:hover { background:rgba(240,185,213,.14); }
-  .start-profile-avatar { width:34px; height:34px; flex:0 0 34px; border-radius:50%; overflow:hidden; border:1px solid rgba(240,185,213,.35); background:#17101d; }
-  .start-profile-avatar img { width:100%; height:100%; display:block; object-fit:cover; }
-  .start-profile-copy { display:flex; flex-direction:column; gap:3px; min-width:0; flex:1; }
-  .start-menu .start-profile-copy strong { color:#f6d8e8; font-size:12px; font-weight:700; }
-  .start-menu .start-profile-copy span { color:rgba(255,255,255,.48); font-size:10px; }
-  .start-profile-arrow { color:rgba(240,185,213,.8); font-size:15px; }
     background: rgba(255,255,255,0.08);
     color: #fff;
   }
+  .start-menu-divider { height:1px; margin:5px 4px; background:rgba(255,255,255,.09); }
+  .start-menu .start-profile-button {
+    gap:8px;
+    padding:6px 12px;
+    margin-bottom:0;
+    min-height:35px;
+    border:1px solid rgba(240,185,213,.12);
+    background:linear-gradient(110deg,rgba(240,185,213,.07),rgba(255,255,255,.02));
+  }
+  .start-menu .start-profile-button:hover { background:rgba(240,185,213,.12); }
+  .start-profile-avatar { width:23px; height:23px; flex:0 0 23px; border-radius:50%; overflow:hidden; border:1px solid rgba(240,185,213,.35); background:#17101d; }
+  .start-profile-avatar img { width:100%; height:100%; display:block; object-fit:cover; }
+  .start-profile-copy { display:flex; flex-direction:column; gap:1px; min-width:0; flex:1; line-height:1.15; }
+  .start-menu .start-profile-copy strong { color:#f6d8e8; font-size:12px; font-weight:700; }
+  .start-menu .start-profile-copy span { color:rgba(255,255,255,.48); font-size:9px; }
+  .start-profile-arrow { color:rgba(240,185,213,.8); font-size:13px; }
   .start-menu button svg {
     width: 15px;
     height: 15px;
