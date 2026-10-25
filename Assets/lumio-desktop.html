@@ -1088,6 +1088,20 @@
 (function () {
   const PASSWORD = 'tffmj';
   const LOGIN_STATE_KEY = 'lumio_desktop_unlocked';
+  function readLoginState() {
+    try { if (sessionStorage.getItem(LOGIN_STATE_KEY) === 'true') return true; } catch (_) {}
+    try { return localStorage.getItem(LOGIN_STATE_KEY) === 'true'; } catch (_) { return false; }
+  }
+  function writeLoginState(value) {
+    try {
+      if (value) sessionStorage.setItem(LOGIN_STATE_KEY, 'true');
+      else sessionStorage.removeItem(LOGIN_STATE_KEY);
+    } catch (_) {}
+    try {
+      if (value) localStorage.setItem(LOGIN_STATE_KEY, 'true');
+      else localStorage.removeItem(LOGIN_STATE_KEY);
+    } catch (_) {}
+  }
 
   const loginScreen = document.getElementById('loginScreen');
   const loginForm = document.getElementById('loginForm');
@@ -1121,7 +1135,7 @@
   // Preserve a successful sign-in if the embedded desktop is reinitialized.
   // The sign-out action below explicitly clears this session flag.
   try {
-    if (sessionStorage.getItem(LOGIN_STATE_KEY) === 'true') {
+    if (readLoginState()) {
       document.body.classList.add('unlocked');
       if (loginScreen) {
         loginScreen.classList.add('hide');
@@ -1144,7 +1158,7 @@
         // Commit the unlocked state before hiding the login layer. The CSS
         // guard keeps it hidden through app/dock transitions and animation restarts.
         document.body.classList.add('unlocked');
-        try { sessionStorage.setItem(LOGIN_STATE_KEY, 'true'); } catch (_) {}
+        writeLoginState(true);
         loginScreen.setAttribute('aria-hidden', 'true');
         loginScreen.classList.add('hide');
 
@@ -1574,7 +1588,7 @@ if (settingAutoPassword) {
       closeApp();
       closeSettings();
       document.body.classList.remove('unlocked');
-      try { sessionStorage.removeItem(LOGIN_STATE_KEY); } catch (_) {}
+      writeLoginState(false);
       loginInProgress = false;
       if (loginScreen) {
         loginScreen.style.display = '';
