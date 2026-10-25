@@ -73,8 +73,6 @@ main{grid-column:2;grid-row:1;min-width:0;max-width:none;margin:20px;padding:24p
 .site-icon{width:43px;height:43px;flex:none;display:grid;place-items:center;border:2px solid #363038;background:#d4c5c9;font-size:1.15rem;font-weight:900;color:#30262d;box-shadow:2px 2px 0 #a99da2;border-radius:0}
 .card-copy{min-width:0;flex:1}
 .card-copy h3{margin:2px 0 6px;font-size:.87rem;letter-spacing:0;overflow-wrap:anywhere}
-.title-open{padding:0;border:0;background:transparent;color:inherit;font:inherit;font-weight:900;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:#c3a6b2;text-underline-offset:3px}
-.title-open:hover{color:#8b4c6a}.detail-back{grid-column:1/-1;margin-bottom:8px}.detail-back h3{margin:14px 0 4px;font-size:1.25rem}.detail-back p{margin:0 0 12px;color:var(--muted);font-size:.75rem}
 .card-url{font-size:.7rem;color:#68616a;overflow-wrap:anywhere;text-decoration:none}
 .card-url:hover{text-decoration:underline}
 .card-desc{margin:8px 0 0;font-size:.75rem;line-height:1.5;color:#635d64}
@@ -362,7 +360,6 @@ main{margin:clamp(14px,1.7vw,24px);padding:clamp(18px,2.1vw,32px);min-width:0}
   const $ = id => document.getElementById(id);
   let links = loadLinks();
   let activePage = "links";
-  let selectedTitle = null;
   let toastTimer;
 
   const bootScreen = $("bootScreen");
@@ -409,24 +406,14 @@ main{margin:clamp(14px,1.7vw,24px);padding:clamp(18px,2.1vw,32px);min-width:0}
     render();
     window.scrollTo({top:0,behavior:"smooth"});
   }
-  function linkCard(item, groupCount=1){
+  function linkCard(item){
     const url=escapeHTML(item.url),name=escapeHTML(item.name),id=escapeHTML(item.id);
-    const alternatives=groupCount>1?'<p class="card-desc">'+groupCount+' available links · Open title to choose</p>':'';
-    return '<article class="game-card"><div class="card-main"><div class="site-icon" aria-hidden="true">'+escapeHTML(iconFor(item.name))+'</div><div class="card-copy"><h3><button class="title-open" type="button" data-open-title="'+escapeHTML(item.name)+'">'+name+'</button></h3><a class="card-url" href="'+url+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(host(item.url))+'</a>'+(item.description?'<p class="card-desc">'+escapeHTML(item.description)+'</p>':'')+alternatives+'</div></div><div class="card-actions">'+(groupCount>1?'<button class="test-link" type="button" data-open-title="'+escapeHTML(item.name)+'">CHOOSE LINK ↓</button>':'<a class="test-link" href="'+url+'" target="_blank" rel="noopener noreferrer" aria-label="Open '+name+'">OPEN ↗</a>')+'<button class="vote yes" type="button" data-action="notes" data-id="'+id+'" aria-label="Save '+name+' to Notes" title="SAVE ✓">✓</button><button class="vote no" type="button" data-action="trash" data-id="'+id+'" aria-label="Move '+name+' to Trash" title="TRASH ×">×</button></div></article>';
+    return '<article class="game-card"><div class="card-main"><div class="site-icon" aria-hidden="true">'+escapeHTML(iconFor(item.name))+'</div><div class="card-copy"><h3>'+name+'</h3><a class="card-url" href="'+url+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(host(item.url))+'</a>'+(item.description?'<p class="card-desc">'+escapeHTML(item.description)+'</p>':'')+'</div></div><div class="card-actions"><a class="test-link" href="'+url+'" target="_blank" rel="noopener noreferrer" aria-label="Open '+name+'">OPEN ↗</a><button class="vote yes" type="button" data-action="notes" data-id="'+id+'" aria-label="Save '+name+' to Notes" title="SAVE ✓">✓</button><button class="vote no" type="button" data-action="trash" data-id="'+id+'" aria-label="Move '+name+' to Trash" title="TRASH ×">×</button></div></article>';
   }
   function renderLinks(){
     const query=$("search").value.trim().toLowerCase(),category=$("categoryFilter").value;
     const list=links.filter(x=>x.status==="active"&&(category==="all"||x.category===category)&&(x.name+" "+x.url+" "+x.category).toLowerCase().includes(query));
-    if(selectedTitle){
-      const choices=list.filter(x=>x.name.toLowerCase()===selectedTitle.toLowerCase());
-      $("linksList").innerHTML='<div class="detail-back"><button class="btn" type="button" data-back-directory>← Back to Directory</button><h3>'+escapeHTML(selectedTitle)+'</h3><p>'+choices.length+' available link'+(choices.length===1?'':'s')+'</p></div>'+ (choices.length?choices.map(item=>'<article class="game-card"><div class="card-main"><div class="site-icon" aria-hidden="true">↗</div><div class="card-copy"><h3>'+escapeHTML(host(item.url))+'</h3><a class="card-url" href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(item.url)+'</a></div></div><div class="card-actions"><a class="test-link" href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">OPEN ↗</a></div></article>').join(''):'<div class="empty">No links found for this title.</div>');
-      $("linksCountText").textContent=choices.length+" alternatives";
-      return;
-    }
-    const groups=new Map();
-    list.forEach(item=>{const key=item.name.trim().toLowerCase();if(!groups.has(key))groups.set(key,[]);groups.get(key).push(item);});
-    const titles=[...groups.values()];
-    $("linksList").innerHTML=titles.length?titles.map(group=>linkCard(group[0],group.length)).join(""):'<div class="empty">No matching links.</div>';
+    $("linksList").innerHTML=list.length?list.map(item=>linkCard(item)).join(""):'<div class="empty">No matching links.</div>';
     $("linksCountText").textContent=links.filter(x=>x.status==="active").length+" links";
   }
   function renderNotes(){
@@ -448,9 +435,6 @@ main{margin:clamp(14px,1.7vw,24px);padding:clamp(18px,2.1vw,32px);min-width:0}
   $("search").addEventListener("input",renderLinks);
   $("categoryFilter").addEventListener("change",renderLinks);
   document.addEventListener("click",event=>{
-    const titleButton=event.target.closest("[data-open-title]");
-    if(titleButton){selectedTitle=titleButton.dataset.openTitle;renderLinks();return;}
-    if(event.target.closest("[data-back-directory]")){selectedTitle=null;renderLinks();return;}
     const button=event.target.closest("[data-action][data-id]");
     if(!button)return;
     const item=links.find(x=>x.id===button.dataset.id);if(!item)return;
