@@ -375,7 +375,8 @@ main{margin:clamp(14px,1.7vw,24px);padding:clamp(18px,2.1vw,32px);min-width:0}
       const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
       if(Array.isArray(parsed) && parsed.every(validLink)) {
         const oldStarterIds = new Set(["crazygames","coolmath","poki","scratch","chess","tetris","slither","neal"]);
-        return parsed.filter(item => !oldStarterIds.has(item.id));
+        // Purge the retired Unblocked Zone entry from older browser-saved copies too.
+      return parsed.filter(item => !oldStarterIds.has(item.id) && item.name.toLowerCase() !== "unblocked zone" && !item.url.toLowerCase().includes("1kao7z7ksq1v4e50y3zbcm9r.s3.amazonaws.com"));
       }
     }catch(e){}
     return starterLinks.map(item=>({...item}));
