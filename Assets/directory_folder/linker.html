@@ -1,18 +1,13 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Directory Link Source</title>
-</head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Directory Link Source</title></head>
 <body>
-<!--
-  Shared link source for Directory.html.
-  Add more links by copying an anchor with data-directory-link.
-  Directory.html fetches this file through GitHub Raw first, then jsDelivr.
--->
+<!-- Shared directory source. Multiple entries with the same data-name appear as alternate links on one title page. -->
 <main>
-  <a data-directory-link data-name="Poki" data-category="Games" href="https://poki.com/">poki.com</a>
+  <a data-directory-link data-name="Poki" data-category="Games" href="https://poki.com/">Poki</a>
+  <!-- Example format for a title with multiple authorized destinations:
+  <a data-directory-link data-name="Example Site" data-category="Other" href="https://example.com/">Example Site — Main</a>
+  <a data-directory-link data-name="Example Site" data-category="Other" href="https://www.example.org/">Example Site — Alternate</a>
+  -->
 </main>
-</body>
-</html>
+</body></html>
