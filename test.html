@@ -175,6 +175,97 @@ main{animation:rise-in .28s ease both}
 @media(max-width:500px){.boot-screen{padding:16px}.boot-topbar{font-size:8px;padding:0 9px}.boot-status{gap:4px}.boot-content{padding:38px 18px 28px}.boot-bottom{font-size:8px;padding:0 8px}.boot-side-note{display:none}.boot-readout b{font-size:8px}.boot-readout span{font-size:8px}}
 @media(prefers-reduced-motion:reduce){.boot-screen,.boot-frame,.boot-mark,.boot-title,.boot-title span,.blink-dot,.app,.enter-terminal{animation:none!important;transition:none!important}}
 
+
+/* Proportion and alignment pass */
+.app{grid-template-columns:clamp(220px,23%,290px) minmax(0,1fr);gap:0;min-height:calc(100svh - clamp(0px,4vw,44px))}
+.top-inner{padding:clamp(18px,2vw,28px) clamp(12px,1.25vw,18px)}
+.brand{min-height:78px;align-items:center;padding:15px 13px}
+.brand h1{line-height:1.25;overflow-wrap:anywhere}
+.top-actions{gap:10px}
+.top-actions .btn{width:100%;min-height:40px;line-height:1.25}
+.tabs{gap:9px;margin-top:18px}
+.tab{min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 13px;line-height:1.25}
+.tab-count{flex:none;margin-left:auto}
+main{margin:clamp(14px,1.7vw,24px);padding:clamp(18px,2.1vw,32px);min-width:0}
+.section-head{align-items:center}
+.section-head>div:first-child{min-width:0}
+.section-head p{max-width:62ch}
+.toolbar{gap:12px}
+.search,.filter{min-height:44px}
+.cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.game-card{grid-template-columns:minmax(0,1fr);align-content:space-between;gap:14px;padding:14px;min-height:142px}
+.card-main{align-items:flex-start;gap:12px}
+.site-icon{width:44px;height:44px}
+.card-copy h3{line-height:1.35;margin:1px 0 7px}
+.card-url{line-height:1.45;display:inline-block}
+.card-actions{display:flex;align-items:center;justify-content:flex-start;gap:8px;margin-top:auto}
+.test-link{min-height:36px;flex:1;justify-content:center;padding:7px 10px;font-size:.68rem}
+.vote{width:36px;height:36px;flex:none}
+.notes-wrap,.trash-panel{width:100%}
+.note-item,.trash-item{min-width:0}
+.boot-screen{padding:clamp(16px,4vw,40px)}
+.boot-frame{width:min(720px,100%);overflow:hidden}
+.boot-topbar,.boot-bottom{min-height:40px;padding-inline:clamp(10px,2vw,18px)}
+.boot-content{padding:clamp(30px,5vw,54px) clamp(18px,6vw,62px) 30px}
+.boot-mark{width:58px;height:58px;margin-bottom:22px}
+.boot-title{font-size:clamp(32px,7vw,58px);letter-spacing:.11em;overflow-wrap:anywhere}
+.boot-subtitle{line-height:1.6;max-width:38ch;margin:14px auto 25px}
+.boot-readout{width:100%;max-width:430px}
+.enter-terminal{min-height:52px;width:100%;max-width:430px;margin-inline:auto}
+.boot-footnote{line-height:1.5}
+@media(max-width:1050px){
+ .app{grid-template-columns:220px minmax(0,1fr)}
+ .cards{grid-template-columns:1fr}
+ .game-card{grid-template-columns:minmax(0,1fr) auto;min-height:112px}
+ .card-actions{display:grid;grid-template-columns:minmax(82px,1fr) 34px 34px;gap:6px}
+ .test-link{min-width:0}
+}
+@media(max-width:850px){
+ .app{grid-template-columns:200px minmax(0,1fr)}
+ main{margin:12px;padding:16px}
+ .game-card{grid-template-columns:minmax(0,1fr);min-height:138px}
+ .card-actions{display:flex}
+ .test-link{flex:1}
+}
+@media(max-width:650px){
+ .app{display:block;min-height:100svh}
+ .top-inner{padding:12px}
+ .brandline{gap:10px}
+ .top-actions{flex-direction:row;align-items:stretch}
+ .top-actions .btn{width:auto;min-width:0;flex:1;min-height:38px}
+ .tabs{gap:7px}
+ .tab{min-height:42px;justify-content:center;padding:10px 7px}
+ .tab-count{margin-left:3px}
+ main{margin:12px;padding:14px}
+ .section-head{gap:12px}
+ .section-head h2{line-height:1.15}
+ .section-head p{line-height:1.5}
+ .game-card{grid-template-columns:minmax(0,1fr);min-height:0;padding:12px}
+ .card-actions{display:flex;gap:7px}
+ .test-link{flex:1;min-width:0}
+ .vote{width:35px;height:35px}
+ .boot-screen{padding:12px}
+ .boot-frame{box-shadow:0 0 0 3px #17161b,0 0 0 4px #4a444d,0 18px 55px #0009}
+ .boot-content{padding:30px 17px 24px}
+ .boot-mark{width:48px;height:48px;margin-bottom:19px}
+ .boot-mark:before{width:62px}.boot-mark:after{height:62px}
+ .boot-title{letter-spacing:.07em;font-size:clamp(30px,9vw,44px)}
+ .boot-readout{margin-bottom:22px}
+ .boot-readout div{padding:10px 3px;gap:6px}
+ .boot-readout b{font-size:8px;overflow-wrap:anywhere}
+ .boot-readout span{font-size:8px;letter-spacing:.07em}
+ .enter-terminal{min-height:49px;padding-inline:12px;font-size:11px}
+ .boot-bottom span:nth-child(2){text-align:center}
+}
+@media(max-width:380px){
+ .brand{min-width:0}
+ .top-actions .btn{font-size:.58rem;padding:7px 5px}
+ .tab{font-size:.58rem}
+ .boot-topbar{letter-spacing:.04em}
+ .boot-bottom span:nth-child(2){max-width:56%;font-size:7px}
+ .boot-readout b{font-size:7px}
+}
+
 </style>
 </head>
 <body>
