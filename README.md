@@ -1,106 +1,76 @@
 # LUMIO-OS
 
-**A browser-based desktop environment for apps, media, gaming, and customization.**
+A browser-based desktop experience for entertainment, apps, and customization.
 
-LUMIO-OS is a web-based desktop interface designed to bring supported applications and digital experiences together in a single, cohesive environment. Built with HTML, CSS, JavaScript, and SVG, the project combines an interactive desktop layout with app launching, media playback interfaces, and personalization features.
+LUMIO-OS brings a desktop-inspired interface to the web, with a central workspace for launching supported experiences. It is built with HTML, CSS, JavaScript, and SVG.
 
-The project focuses on usability, visual consistency, and a lightweight browser-based architecture.
-
-## Overview
-
-LUMIO-OS provides a desktop-inspired interface that runs in a modern web browser. Its design incorporates familiar desktop elements, including application icons, a dock, a system clock, and interactive interface panels.
-
-The project is actively developed, with ongoing work focused on application compatibility, asset loading, responsiveness, and overall reliability.
-
-## Features
-
-- **Desktop Interface** — An interactive desktop layout with application shortcuts and a dock.
-- **Application Launcher** — Access supported applications through a unified interface.
-- **Media Playback** — Dedicated interfaces for supported audio and video content.
-- **Gaming Integration** — Access compatible browser-based games and gaming experiences.
-- **Desktop Customization** — Available wallpaper options and visual settings.
-- **System Interface Elements** — A clock, launcher controls, and desktop-style navigation.
-- **External Asset Support** — Integration with hosted images and other web resources.
-- **Browser-Based Architecture** — Built using standard web technologies without requiring a conventional desktop installation.
-
-Feature availability varies by application, browser compatibility, network access, and external service restrictions.
-
-## Technology Stack
-
-| Technology | Purpose |
-|---|---|
-| HTML5 | Application structure and interface layout |
-| CSS3 | Styling, animations, effects, and responsive layouts |
-| JavaScript | Application behavior and interactive functionality |
-| SVG | Scalable icons and interface graphics |
-
-## Getting Started
-
-### Requirements
-
-- A modern web browser
-- An internet connection for features that rely on external resources
-- Compatible local media files for applicable playback features
-
-### Installation
-
-1. Clone or download the repository.
-2. Open the project directory.
-3. Locate the relevant HTML entry file.
-4. Open it in a compatible browser or serve it through a local web server.
-
-Repository: [dhisjwhd-svg/LUMIO-OS](https://github.com/dhisjwhd-svg/LUMIO-OS)
-
-### Main Desktop Interface
-
-The desktop interface is available in [`lumio-desktop.html`](https://github.com/dhisjwhd-svg/LUMIO-OS/blob/main/lumio-desktop.html).
-
-Additional application modules and assets may be maintained in separate files or repositories.
-
-## Project Structure
-
-LUMIO-OS uses a modular collection of web resources to support its desktop interface and application experiences. Depending on the component, these resources may include:
-
-- HTML files for desktop and application interfaces
-- CSS for styling and layout
-- JavaScript for interactions and application logic
-- Images, icons, and wallpapers
-- External resources loaded from supported hosting services
-
-Refer to the repository for the current file structure and implementation details.
-
-## Development Priorities
-
-Development is focused on the following areas:
-
-- Improving application launch reliability
-- Ensuring images and external assets load consistently
-- Increasing compatibility with embedded applications and media
-- Reducing unnecessary loading delays and interface glitches
-- Improving responsiveness across different screen sizes
-- Refining desktop navigation and customization
-
-## Compatibility and Limitations
-
-LUMIO-OS runs within the browser environment and is subject to its security and compatibility restrictions.
-
-- Some third-party websites prevent their content from being embedded.
-- External resources require a working network connection.
-- Local file access may require user interaction or browser permissions.
-- Application functionality can vary across browsers and devices.
-- Performance depends on the browser, device resources, and the applications being used.
-
-LUMIO-OS is a desktop-inspired web project, not a standalone operating system.
-
-## Project Status
-
-LUMIO-OS is an ongoing development project. Features, interfaces, and compatibility may change as improvements are introduced.
-
-## Links
-
-- **Repository:** [LUMIO-OS](https://github.com/dhisjwhd-svg/LUMIO-OS)
-- **Developer updates:** [TikTok — @moon.d.flower](https://www.tiktok.com/@moon.d.flower)
+[**Open LUMIO-OS**](https://github.com/dhisjwhd-svg/LUMIO-OS/blob/main/main.html) · [View source](https://github.com/dhisjwhd-svg/LUMIO-OS)
 
 ---
 
-*LUMIO-OS — A unified desktop experience built for the web.*
+## Overview
+
+LUMIO-OS is an ongoing web project focused on creating a cohesive, interactive desktop-style environment. It is designed to make supported apps and media experiences easy to access from one interface.
+
+### Highlights
+
+- **Desktop interface** — desktop-style navigation and application shortcuts.
+- **App access** — a central place to open supported experiences.
+- **Entertainment** — interfaces for compatible media and browser-based games.
+- **Personalization** — visual options and desktop customization where supported.
+- **Web-native** — built with standard front-end technologies.
+
+Features may behave differently depending on the browser, device, network connection, and third-party service restrictions.
+
+## Get started
+
+### Open the project
+
+1. Open [`main.html`](https://github.com/dhisjwhd-svg/LUMIO-OS/blob/main/main.html) to launch the current entry page.
+2. If you want to inspect the desktop implementation directly, open [`Assets/lumio-desktop.html`](https://github.com/dhisjwhd-svg/LUMIO-OS/blob/main/Assets/lumio-desktop.html).
+3. For a local copy, download or clone the repository and open the HTML entry page in a modern browser.
+
+Some features rely on external resources and therefore need an internet connection. If a browser blocks local-file functionality, try serving the files through a local web server.
+
+## Repository layout
+
+```text
+LUMIO-OS/
+├── Assets/
+│   ├── directory_folder/
+│   └── lumio-desktop.html
+├── main.html
+└── README.md
+```
+
+- `main.html` — project entry page.
+- `Assets/lumio-desktop.html` — main desktop interface implementation.
+- `Assets/directory_folder/` — supporting project directory.
+
+## Built with
+
+| Technology | Role |
+| --- | --- |
+| HTML | Structure and page content |
+| CSS | Layout, styling, and visual effects |
+| JavaScript | Interaction and interface behavior |
+| SVG | Scalable interface graphics |
+
+## Compatibility
+
+LUMIO-OS runs inside a web browser; it is not a standalone operating system. Third-party sites may block embedding, external assets may require a connection, and browser permissions can limit access to local files. Performance and feature support vary by device and browser.
+
+## Development
+
+The project is actively evolving. Current work focuses on improving reliability, application compatibility, asset loading, responsive behavior, and the overall desktop experience.
+
+## Links
+
+- [GitHub repository](https://github.com/dhisjwhd-svg/LUMIO-OS)
+- [Main entry page](https://github.com/dhisjwhd-svg/LUMIO-OS/blob/main/main.html)
+- [Desktop interface source](https://github.com/dhisjwhd-svg/LUMIO-OS/blob/main/Assets/lumio-desktop.html)
+- [TikTok · @moon.d.flower](https://www.tiktok.com/@moon.d.flower)
+
+---
+
+<sub>LUMIO-OS · A desktop-inspired experience for the web.</sub>
