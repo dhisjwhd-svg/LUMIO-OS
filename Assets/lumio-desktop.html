@@ -184,51 +184,6 @@
     text-shadow: 0 2px 10px rgba(0,0,0,0.95), 0 0 16px currentColor;
   }
 
-  /* Personal desktop identity widget */
-  .moon-widget {
-    position: absolute;
-    top: 92px;
-    right: 28px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 246px;
-    padding: 11px 12px;
-    border: 1px solid rgba(255,255,255,.11);
-    border-radius: 16px;
-    background: linear-gradient(135deg, rgba(255,255,255,.085), rgba(255,255,255,.035));
-    color: var(--text);
-    text-align: left;
-    cursor: pointer;
-    box-shadow: 0 12px 32px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.045);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    transition: transform .25s var(--ease), border-color .25s, background .25s;
-    opacity: 0;
-    animation: fadeUp .65s var(--ease) .3s forwards;
-  }
-  .moon-widget:hover { transform: translateY(-3px); border-color: rgba(240,185,213,.32); background: linear-gradient(135deg, rgba(240,185,213,.12), rgba(255,255,255,.04)); }
-  .moon-widget:active { transform: translateY(-1px) scale(.99); }
-  .moon-widget:focus-visible { outline: 2px solid #f0b9d5; outline-offset: 4px; }
-  .moon-widget-avatar { width: 43px; height: 43px; flex: 0 0 43px; border-radius: 50%; overflow: hidden; border: 1px solid rgba(240,185,213,.4); background: #17101d; }
-  .moon-widget-avatar img { width: 100%; height: 100%; display: block; object-fit: cover; }
-  .moon-widget-copy { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
-  .moon-widget-copy strong { color: #f6d8e8; font-size: 12px; font-weight: 700; letter-spacing: .01em; white-space: nowrap; }
-  .moon-widget-copy > span { color: rgba(255,255,255,.48); font-size: 11px; }
-  .moon-widget-arrow { color: rgba(240,185,213,.8); font-size: 17px; transition: transform .2s; }
-  .moon-widget:hover .moon-widget-arrow { transform: translate(2px,-2px); }
-  @media (max-width: 700px) {
-    .moon-widget { top: 78px; right: 18px; width: 190px; padding: 8px 9px; gap: 9px; }
-    .moon-widget-avatar { width: 35px; height: 35px; flex-basis: 35px; }
-    .moon-widget-copy strong { font-size: 11px; }
-    .moon-widget-copy > span { font-size: 10px; }
-  }
-  @media (max-width: 420px) {
-    .moon-widget { top: 74px; right: 14px; width: 164px; }
-    .moon-widget-arrow { display: none; }
-    .desktop { padding-left: 16px; padding-right: 16px; }
-  }
-
   /* Dock */
   .dock {
     position: fixed;
@@ -591,6 +546,15 @@
     transition: background 0.15s;
   }
   .start-menu button:hover {
+  .start-menu-divider { height:1px; margin:5px 4px; background:rgba(255,255,255,.09); }
+  .start-menu .start-profile-button { gap:10px; padding:10px 9px; margin-bottom:2px; border:1px solid rgba(240,185,213,.12); background:linear-gradient(110deg,rgba(240,185,213,.09),rgba(255,255,255,.025)); }
+  .start-menu .start-profile-button:hover { background:rgba(240,185,213,.14); }
+  .start-profile-avatar { width:34px; height:34px; flex:0 0 34px; border-radius:50%; overflow:hidden; border:1px solid rgba(240,185,213,.35); background:#17101d; }
+  .start-profile-avatar img { width:100%; height:100%; display:block; object-fit:cover; }
+  .start-profile-copy { display:flex; flex-direction:column; gap:3px; min-width:0; flex:1; }
+  .start-menu .start-profile-copy strong { color:#f6d8e8; font-size:12px; font-weight:700; }
+  .start-menu .start-profile-copy span { color:rgba(255,255,255,.48); font-size:10px; }
+  .start-profile-arrow { color:rgba(240,185,213,.8); font-size:15px; }
     background: rgba(255,255,255,0.08);
     color: #fff;
   }
@@ -940,12 +904,6 @@
       <div class="clock" id="clock"></div>
     </div>
 
-    <button class="moon-widget" type="button" id="moonWidget" aria-label="Open Moon profile">
-      <span class="moon-widget-avatar"><img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/Kirby-Dvd.jpg" alt=""></span>
-      <span class="moon-widget-copy"><strong>moon.d.flower</strong><span>Personal profile</span></span>
-      <span class="moon-widget-arrow" aria-hidden="true">↗</span>
-    </button>
-
     <div class="apps">
       <div class="app" data-app="netflix" role="button" tabindex="0" aria-label="Open Netflix">
         <div class="app-icon">
@@ -1006,6 +964,12 @@
   <!-- Start menu (bottom left) -->
   <div class="start-wrap" id="startWrap">
     <div class="start-menu" id="startMenu">
+      <button type="button" class="start-profile-button" id="moonWidget" aria-label="Open Moon profile">
+        <span class="start-profile-avatar"><img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/Kirby-Dvd.jpg" alt=""></span>
+        <span class="start-profile-copy"><strong>moon.d.flower</strong><span>Open profile</span></span>
+        <span class="start-profile-arrow" aria-hidden="true">↗</span>
+      </button>
+      <div class="start-menu-divider" aria-hidden="true"></div>
       <button type="button" id="btnSettings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3"/>
@@ -1339,6 +1303,15 @@
   const moonWidget = document.getElementById('moonWidget');
   if (moonWidget) {
     moonWidget.addEventListener('click', function () { openApp('moon'); });
+  }
+
+  // ----- Moon profile shortcut in the Start menu -----
+  const moonWidget = document.getElementById('moonWidget');
+  if (moonWidget) {
+    moonWidget.addEventListener('click', function () {
+      if (startMenu) startMenu.classList.remove('open');
+      openApp('moon');
+    });
   }
 
   // ----- Desktop / dock icons -----
