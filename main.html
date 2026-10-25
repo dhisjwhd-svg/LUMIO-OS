@@ -18,16 +18,13 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050505}
 (async function(){
   const frame=document.getElementById('desktop');
   const status=document.getElementById('status');
-  // Pin the CDN request to the newest commit touching lumio-desktop.html.
-  // A commit-pinned URL avoids JSDelivr's potentially stale @main cache.
-  const version='2bb1734ef84637cfe5e6769469cf7f7a7c2fc868';
-  const root='https://cdn.jsdelivr.net/gh/dhisjwhd-svg/LUMIO-OS@'+version+'/Assets/';
-  const source=root+'lumio-desktop.html';
+  const source='https://cdn.jsdelivr.net/gh/dhisjwhd-svg/LUMIO-OS@main/Assets/lumio-desktop.html';
+  const assets='https://cdn.jsdelivr.net/gh/dhisjwhd-svg/LUMIO-OS@main/Assets/';
   try {
-    const response=await fetch(source,{cache:'no-store'});
+    const response=await fetch(source+'?refresh='+Date.now(),{cache:'no-store'});
     if(!response.ok) throw new Error('HTTP '+response.status);
     let html=await response.text();
-    const base='<base href="'+root+'">';
+    const base='<base href="'+assets+'">';
     if(/<head(?:\s[^>]*)?>/i.test(html)) html=html.replace(/<head(?:\s[^>]*)?>/i,match=>match+base);
     else html=base+html;
     frame.addEventListener('load',()=>{status.hidden=true;},{once:true});
