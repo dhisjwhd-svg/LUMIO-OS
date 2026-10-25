@@ -1200,7 +1200,7 @@
         if (!response.ok) throw new Error('Asset request failed: ' + response.status);
         return response.text();
       }).then(function (html) {
-        if (key === 'directory' && (!/<html[\\s>]/i.test(html) || !/<body[\\s>]/i.test(html) || html.length < 5000)) {
+        if (key === 'directory' && (!/<html[\s>]/i.test(html) || !/<body[\s>]/i.test(html) || html.length < 5000)) {
           throw new Error('Directory HTML response was incomplete.');
         }
         return html;
