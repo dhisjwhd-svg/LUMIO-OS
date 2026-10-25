@@ -1070,7 +1070,7 @@
     spotify: 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/Spotify.html',
     steam:   'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/Steam.html',
     milkbox: 'https://milkbox.b-cdn.net/',
-    directory: 'https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/directory_folder/Directory.html'
+    directory: 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/directory_folder/Directory.html'
   };
 
   // ----- Login -----
@@ -1221,8 +1221,7 @@
     })
       .then(function (appHtml) {
         if (requestId !== appRequestId || (layer && (!layer.classList.contains('open') || layer.dataset.active !== key))) return;
-        /* Directory is self-contained and lives in LUMIO-OS, not lumio-assets.
-           Do not inject lumio-assets' base URL or desktop cursor CSS into it. */
+        /* Directory now lives in lumio-assets. Keep its document-relative resources rooted at the moved folder. */
         if (key !== 'directory') {
           if (appHtml.toLowerCase().indexOf('<base ') === -1) {
             var headIndex = appHtml.toLowerCase().indexOf('<head');
