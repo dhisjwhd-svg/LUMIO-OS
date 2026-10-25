@@ -35,34 +35,41 @@
   const message = document.getElementById('message');
   const retry = document.getElementById('retry');
 
-  // The desktop was moved into Assets/. Keep both CDN and raw GitHub paths in sync.
-  const sources = [
-    'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/LUMIO-OS@main/Assets/lumio-desktop.html',
-    'https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html'
+  // Fetch the current main-branch desktop on every launch.
+  // A unique query string helps bypass browser/CDN caches after GitHub updates.
+  const desktopSources = [
+    'https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html',
+    'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/LUMIO-OS@main/Assets/lumio-desktop.html'
   ];
 
   async function start() {
     retry.hidden = true;
     heading.textContent = 'Starting LUMIO-OS';
-    message.textContent = 'Loading the desktop…';
+    message.textContent = 'Loading the latest desktop…';
     status.hidden = false;
 
     let lastError;
-    for (const url of sources) {
+    const cacheKey = 'v=' + Date.now();
+    for (const baseUrl of desktopSources) {
       try {
-        const response = await fetch(url, { cache: 'no-store' });
+        const separator = baseUrl.includes('?') ? '&' : '?';
+        const url = baseUrl + separator + cacheKey;
+        const response = await fetch(url, {
+          cache: 'no-store',
+          headers: { 'Cache-Control': 'no-cache' }
+        });
         if (!response.ok) throw new Error('HTTP ' + response.status);
         const html = await response.text();
 
-        // Reject error pages or truncated responses instead of displaying a blank desktop.
-        if (!/<html[\s>]/i.test(html) || !/<body[\s>]/i.test(html) || !/<\/html\s*>/i.test(html) || html.length < 10000) {
+        // Avoid replacing the working view with an error page or incomplete response.
+        if (!/<html[\\s>]/i.test(html) || !/<body[\\s>]/i.test(html) || !/<\\/html\\s*>/i.test(html) || html.length < 10000) {
           throw new Error('The downloaded desktop file was incomplete.');
         }
 
-        desktop.srcdoc = html;
         desktop.onload = () => { status.hidden = true; };
-        // Some browsers do not reliably fire iframe load for srcdoc, so reveal it shortly after assignment.
-        window.setTimeout(() => { status.hidden = true; }, 250);
+        desktop.srcdoc = html;
+        // Reveal after the srcdoc document begins rendering.
+        window.setTimeout(() => { status.hidden = true; }, 400);
         return;
       } catch (error) {
         lastError = error;
@@ -70,7 +77,7 @@
     }
 
     heading.textContent = 'LUMIO-OS could not load';
-    message.textContent = 'Check your connection and try again. If you opened this file directly, open it through a browser with internet access.';
+    message.textContent = 'Could not fetch the latest desktop. Check your connection and tap Try again.';
     retry.hidden = false;
     console.error('LUMIO-OS launch failed:', lastError);
   }
