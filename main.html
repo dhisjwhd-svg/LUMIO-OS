@@ -23,31 +23,35 @@ p{color:#999;max-width:320px;line-height:1.5}button{padding:10px 15px;border:1px
   const loading = document.getElementById('loading');
   const message = document.getElementById('message');
   const retry = document.getElementById('retry');
-
-  // Fetch the raw HTML source, then render that source inside the desktop frame.
-  // A direct iframe to raw.githubusercontent.com may show plain text instead.
   const sourceUrl = 'https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html';
+  const assetBase = 'https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/';
 
   async function start() {
     retry.hidden = true;
-    message.textContent = 'Loading desktop source…';
+    message.textContent = 'Loading desktop…';
     loading.classList.remove('off');
     frame.removeAttribute('src');
-    frame.srcdoc = '<!doctype html><html><body style="margin:0;background:#050505;color:#eee;font:14px system-ui;display:grid;place-items:center;height:100vh">Loading LUMIO-OS…</body></html>';
     try {
       const response = await fetch(sourceUrl + '?v=' + Date.now(), { cache: 'no-store' });
       if (!response.ok) throw new Error('HTTP ' + response.status);
-      const html = await response.text();
-      if (!html.trim().toLowerCase().startsWith('<!doctype') && !html.trim().toLowerCase().startsWith('<html')) {
+      let html = await response.text();
+      if (!/^\s*(?:<!doctype\s+html|<html\b)/i.test(html)) {
         throw new Error('The raw URL did not return an HTML document.');
       }
-      frame.srcdoc = html;
-      // srcdoc is rendered directly; hide the overlay after the frame begins loading.
+
+      // Preserve the original document's relative asset paths when embedding it.
+      const baseTag = '<base href="' + assetBase + '">';
+      if (/<head\b[^>]*>/i.test(html)) {
+        html = html.replace(/<head\b([^>]*)>/i, match => match + '\n' + baseTag);
+      } else {
+        html = '<head>' + baseTag + '</head>' + html;
+      }
+
       frame.onload = () => loading.classList.add('off');
-      // Keep a short fallback for browsers that do not fire srcdoc onload reliably.
-      window.setTimeout(() => loading.classList.add('off'), 1200);
+      frame.srcdoc = html;
+      window.setTimeout(() => loading.classList.add('off'), 1800);
     } catch (error) {
-      message.textContent = 'Could not load the raw desktop HTML. Check your connection and retry.';
+      message.textContent = 'Could not load the desktop. Check your connection and try again.';
       retry.hidden = false;
       console.error('LUMIO-OS launch failed:', error);
     }
