@@ -1263,6 +1263,8 @@
     }
     if (startMenu) startMenu.classList.remove('open');
 
+    // Reopen an existing media document without reloading it or resetting playback.
+    if (persistentFrames[key] && targetFrame.dataset.loaded === 'true') return;
 
     if (targetFrame) {
       targetFrame.style.display = 'block';
@@ -1328,6 +1330,7 @@
           targetFrame.style.display = 'block';
           targetFrame.removeAttribute('src');
           targetFrame.srcdoc = appHtml;
+          if (persistentFrames[key]) targetFrame.dataset.loaded = 'true';
           targetFrame.setAttribute('title', key.charAt(0).toUpperCase() + key.slice(1) + ' app');
         }
       })
@@ -1342,6 +1345,7 @@
           } else {
             targetFrame.removeAttribute('srcdoc');
             targetFrame.src = url;
+            if (persistentFrames[key]) targetFrame.dataset.loaded = 'true';
           }
         }
       });
