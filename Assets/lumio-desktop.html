@@ -913,6 +913,18 @@
         </div>
         <span class="app-label">Steam</span>
       </div>
+      <div class="app" data-app="directory" role="button" tabindex="0" aria-label="Open Directory">
+        <div class="app-icon directory-icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64" width="64" height="64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="directoryTile" x1="8" y1="5" x2="55" y2="59" gradientUnits="userSpaceOnUse"><stop stop-color="#65D6FF"/><stop offset="1" stop-color="#4767E8"/></linearGradient></defs>
+            <rect x="4" y="4" width="56" height="56" rx="15" fill="url(#directoryTile)"/>
+            <path d="M15 22.5C15 20.57 16.57 19 18.5 19H28L32 23H45.5C47.43 23 49 24.57 49 26.5V43.5C49 45.43 47.43 47 45.5 47H18.5C16.57 47 15 45.43 15 43.5V22.5Z" fill="white" fill-opacity=".96"/>
+            <path d="M23 30H41M23 36H41M23 42H35" stroke="#4774D9" stroke-width="2.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="app-label">Directory</span>
+      </div>
+
       <div class="app" data-app="milkbox" role="button" tabindex="0" aria-label="Open MilkBox">
         <div class="app-icon">
           <img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/milkbox.png?v=20261024-2" alt="" draggable="false">
@@ -928,6 +940,14 @@
     </div>
     <div class="dock-item" data-app="spotify" title="Spotify" role="button" tabindex="0" aria-label="Open Spotify">
       <img src="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/43ccffa667f4a188cd544755831639a3.jpg" alt="">
+    </div>
+    <div class="dock-item directory-dock-icon" data-app="directory" title="Directory" role="button" tabindex="0" aria-label="Open Directory">
+      <svg viewBox="0 0 64 64" width="100%" height="100%" aria-hidden="true">
+        <defs><linearGradient id="directoryDock" x1="8" y1="5" x2="55" y2="59" gradientUnits="userSpaceOnUse"><stop stop-color="#65D6FF"/><stop offset="1" stop-color="#4767E8"/></linearGradient></defs>
+        <rect x="4" y="4" width="56" height="56" rx="15" fill="url(#directoryDock)"/>
+        <path d="M15 22.5C15 20.57 16.57 19 18.5 19H28L32 23H45.5C47.43 23 49 24.57 49 26.5V43.5C49 45.43 47.43 47 45.5 47H18.5C16.57 47 15 45.43 15 43.5V22.5Z" fill="white" fill-opacity=".96"/>
+        <path d="M23 30H41M23 36H41M23 42H35" stroke="#4774D9" stroke-width="2.8" stroke-linecap="round"/>
+      </svg>
     </div>
     <div class="dock-item" data-app="milkbox" title="MilkBox" role="button" tabindex="0" aria-label="Open MilkBox">
       <img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/milkbox.png?v=20261024-2" alt="MilkBox">
@@ -1058,7 +1078,8 @@
     netflix: 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/Netflix.html',
     spotify: 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/Spotify.html',
     steam:   'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/Steam.html',
-    milkbox: 'https://milkbox.b-cdn.net/'
+    milkbox: 'https://milkbox.b-cdn.net/',
+    directory: 'https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/directory_folder/Directory.html'
   };
 
   // ----- Login -----
