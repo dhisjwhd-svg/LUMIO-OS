@@ -187,14 +187,20 @@
   /* Dock */
   .dock {
     position: fixed;
-    bottom: 22px;
+    bottom: max(22px, env(safe-area-inset-bottom));
     left: 50%;
+    right: auto;
+    width: max-content;
+    max-width: calc(100vw - 24px);
     transform: translateX(-50%);
     z-index: 50;
     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     align-items: center;
-    gap: 6px;
-    padding: 8px 12px;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 10px;
     background: rgba(12,12,12,0.72);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -213,6 +219,8 @@
   .dock-item {
     width: 44px;
     height: 44px;
+    flex: 0 0 44px;
+    min-width: 44px;
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
