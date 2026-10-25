@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#f8dce8">
-<title>Lightspeed Links</title>
+<title>Directory Terminal</title>
 <style>
 :root{color-scheme:light;--ink:#25242a;--muted:#6b6870;--pink:#d99ab4;--pink-deep:#b86c8e;--pink-card:#f4edf0;--yellow:#e9d68b;--yellow-paper:#f7efc8;--yellow-line:#d8c77f;--border:#b8b2b5;--surface:#e9e5e2;--green:#276747;--green-bg:#dce8d9;--red:#9c3943;--red-bg:#f0d8d5;--shadow:4px 4px 0 #27242a}
 *{box-sizing:border-box}
@@ -142,33 +142,33 @@ main{animation:rise-in .28s ease both}
 <header class="top">
   <div class="top-inner">
     <div class="brandline">
-      <div class="brand"><div class="brand-mark" aria-hidden="true">↗</div><div><h1>Lightspeed Links</h1><p>Game links for your school network</p></div></div>
+      <div class="brand"><div class="brand-mark" aria-hidden="true">↗</div><div><h1>Directory Terminal</h1><p>Game links for your school network</p></div></div>
       <div class="top-actions">
-        <button class="btn subtle" id="importBtn" type="button">↑ Import</button>
-        <button class="btn primary" id="addBtn" type="button">＋ Add link</button>
+        <button class="btn subtle" id="importBtn" type="button">↑ LOAD DIRECTORY</button>
+        <button class="btn primary" id="addBtn" type="button">＋ REGISTER SITE</button>
         <input id="fileImport" type="file" accept=".json,application/json">
       </div>
     </div>
     <nav class="tabs" aria-label="Link pages">
-      <button class="tab" data-page="links" aria-selected="true">Links <span class="tab-count" id="countLinks">0</span></button>
-      <button class="tab" data-page="notes" aria-selected="false">▤ Your Notes <span class="tab-count" id="countNotes">0</span></button>
-      <button class="tab" data-page="trash" aria-selected="false">▱ Trash <span class="tab-count" id="countTrash">0</span></button>
-      <button class="tab" data-page="tutorial" aria-selected="false">➜ How it works</button>
+      <button class="tab" data-page="links" aria-selected="true">DIRECTORY <span class="tab-count" id="countLinks">0</span></button>
+      <button class="tab" data-page="notes" aria-selected="false">▤ LOGBOOK <span class="tab-count" id="countNotes">0</span></button>
+      <button class="tab" data-page="trash" aria-selected="false">▱ QUARANTINE <span class="tab-count" id="countTrash">0</span></button>
+      <button class="tab" data-page="tutorial" aria-selected="false">➜ FIELD GUIDE</button>
     </nav>
   </div>
 </header>
 <main>
   <section id="linksPage">
-    <div class="section-head"><div><h2>Game links</h2><p>Open a link, then mark whether it works on your school network.</p></div><div class="head-count" id="linksCountText"></div></div>
-    <div class="toolbar"><input class="search" id="search" type="search" placeholder="Search games…" aria-label="Search games"><select class="filter" id="categoryFilter" aria-label="Filter by category"><option value="all">All categories</option><option value="Games">Games</option><option value="Puzzles">Puzzles</option><option value="Create">Create</option><option value="Other">Other</option></select></div>
+    <div class="section-head"><div><h2>Directory</h2><p>Open a link, then mark whether it works on your school network.</p></div><div class="head-count" id="linksCountText"></div></div>
+    <div class="toolbar"><input class="search" id="search" type="search" placeholder="SCAN DIRECTORY…" aria-label="Search games"><select class="filter" id="categoryFilter" aria-label="Filter by category"><option value="all">All categories</option><option value="Games">Games</option><option value="Puzzles">Puzzles</option><option value="Create">Create</option><option value="Other">Other</option></select></div>
     <div class="cards" id="linksList"></div>
   </section>
   <section id="notesPage" class="hidden">
-    <div class="section-head"><div><h2>Your Notes</h2><p>Links marked ✓ — available on your school network.</p></div><button class="btn" id="exportBtn" type="button">↓ Export team list</button></div>
-    <div class="notes-wrap"><div class="notes-inner"><div class="notes-title"><div class="note-icon" aria-hidden="true">▤</div><div><h2>Saved links</h2><p>Your working list</p></div></div><div class="note-list" id="notesList"></div></div></div>
+    <div class="section-head"><div><h2>Logbook</h2><p>Links marked ✓ — available on your school network.</p></div><button class="btn" id="exportBtn" type="button">↓ EXPORT DIRECTORY</button></div>
+    <div class="notes-wrap"><div class="notes-inner"><div class="notes-title"><div class="note-icon" aria-hidden="true">▤</div><div><h2>Verified Entries</h2><p>Your working list</p></div></div><div class="note-list" id="notesList"></div></div></div>
   </section>
   <section id="tutorialPage" class="hidden">
-    <div class="section-head"><div><h2>Quick-start guide</h2><p>How to post links and check them on your own school computer.</p></div></div>
+    <div class="section-head"><div><h2>Field Guide</h2><p>How to post links and check them on your own school computer.</p></div></div>
     <div class="tutorial-intro"><strong>One shared list. Personal results.</strong><p>Our team maintains the main Links list and publishes updates from time to time. The shared page is designed to be embedded using GitHub Raw content or jsDelivr, so visitors can open the latest published version when the embedded file is updated. Your own ✓ or × checks remain local to your browser and do not change Lightspeed filtering or other students’ results.</p></div>
     <div class="tutorial-grid">
       <article class="tutorial-step"><div class="step-number">01</div><h3>Post a link manually</h3><p>Choose <b>＋ Add link</b> in the sidebar. Enter the site name, paste its full web address beginning with <b>https://</b>, choose a category, then select <b>Save link</b>. The new entry appears on the Links page in this browser.</p><span class="arrow" aria-hidden="true">↓  ADD LINK</span></article>
@@ -177,21 +177,21 @@ main{animation:rise-in .28s ease both}
       <article class="tutorial-step"><div class="step-number">04</div><h3>How team updates reach you</h3><p>Our team adds and reviews links, then updates the HTML list in the GitHub repository. The page can be served through GitHub Raw content or a jsDelivr embed/CDN link. We publish changes occasionally, so reload the updated page to see the latest team list. Your personal ✓ / × choices are separate from these published updates.</p><span class="arrow" aria-hidden="true">TEAM EDITS → PUBLISH → REFRESH</span></article>
     </div>
     <div class="tutorial-callout"><b>Important:</b> Published team links are shared when the hosted HTML is updated; personal additions, Notes, and Trash are stored in your browser and do not automatically publish back to GitHub. The Test link button opens the site on your device, but this page cannot automatically detect or change school filter settings. If a site should be available for classwork, ask a teacher or school IT staff to review it.</div>
-    <div class="tutorial-actions"><button class="btn primary" type="button" id="tutorialGoLinks">← Go to Links</button><button class="btn" type="button" id="tutorialAddLink">＋ Add a link</button></div>
+    <div class="tutorial-actions"><button class="btn primary" type="button" id="tutorialGoLinks">← Open Directory</button><button class="btn" type="button" id="tutorialAddLink">＋ Register Site</button></div>
   </section>
   <section id="trashPage" class="hidden">
-    <div class="section-head"><div><h2>Trash</h2><p>Links marked ✕ — blocked or not working at school.</p></div></div>
-    <div class="trash-panel"><div class="trash-heading"><div class="trash-icon" aria-hidden="true">▱</div><div><h2>Removed links</h2><p>Restore a link to the main list or move it to Your Notes.</p></div></div><div id="trashList"></div><div id="trashFooter" class="hidden" style="padding-top:16px"><button class="btn" id="clearTrashBtn" type="button">Empty trash</button></div></div>
+    <div class="section-head"><div><h2>Quarantine</h2><p>Links marked ✕ — blocked or not working at school.</p></div></div>
+    <div class="trash-panel"><div class="trash-heading"><div class="trash-icon" aria-hidden="true">▱</div><div><h2>Flagged Entries</h2><p>Restore a link to the main list or move it to Your Notes.</p></div></div><div id="trashList"></div><div id="trashFooter" class="hidden" style="padding-top:16px"><button class="btn" id="clearTrashBtn" type="button">PURGE QUARANTINE</button></div></div>
   </section>
 </main>
 </div>
 <div class="modal-backdrop hidden" id="addModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <form class="modal" id="linkForm">
-    <h2 id="modalTitle">Add a link</h2><p>Add a game or site to the shared-format list. Your changes are saved in this browser.</p>
+    <h2 id="modalTitle">Register Site</h2><p>Add a game or site to the shared-format list. Your changes are saved in this browser.</p>
     <div class="field"><label for="linkName">Name</label><input id="linkName" name="name" maxlength="70" required placeholder="Game name"></div>
     <div class="field"><label for="linkUrl">Website address</label><input id="linkUrl" name="url" type="url" required placeholder="https://example.com"></div>
     <div class="field"><label for="linkCategory">Category</label><select id="linkCategory" name="category"><option>Games</option><option>Puzzles</option><option>Create</option><option>Other</option></select></div>
-    <div class="modal-actions"><button class="btn" id="cancelAdd" type="button">Cancel</button><button class="btn primary" type="submit">Save link</button></div>
+    <div class="modal-actions"><button class="btn" id="cancelAdd" type="button">Cancel</button><button class="btn primary" type="submit">Register Site</button></div>
   </form>
 </div>
 <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
@@ -249,7 +249,7 @@ main{animation:rise-in .28s ease both}
   }
   function linkCard(item){
     const url=escapeHTML(item.url),name=escapeHTML(item.name),id=escapeHTML(item.id);
-    return '<article class="game-card"><div class="card-main"><div class="site-icon" aria-hidden="true">'+escapeHTML(iconFor(item.name))+'</div><div class="card-copy"><h3>'+name+'</h3><a class="card-url" href="'+url+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(host(item.url))+'</a>'+(item.description?'<p class="card-desc">'+escapeHTML(item.description)+'</p>':'')+'</div></div><div class="card-actions"><a class="test-link" href="'+url+'" target="_blank" rel="noopener noreferrer" aria-label="Test '+name+' on this device">Test link ↗</a><button class="vote yes" type="button" data-action="notes" data-id="'+id+'" aria-label="Mark '+name+' as working" title="Works at school">✓</button><button class="vote no" type="button" data-action="trash" data-id="'+id+'" aria-label="Mark '+name+' as blocked" title="Blocked at school">×</button></div></article>';
+    return '<article class="game-card"><div class="card-main"><div class="site-icon" aria-hidden="true">'+escapeHTML(iconFor(item.name))+'</div><div class="card-copy"><h3>'+name+'</h3><a class="card-url" href="'+url+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(host(item.url))+'</a>'+(item.description?'<p class="card-desc">'+escapeHTML(item.description)+'</p>':'')+'</div></div><div class="card-actions"><a class="test-link" href="'+url+'" target="_blank" rel="noopener noreferrer" aria-label="Test '+name+' on this device">RUN CHECK ↗</a><button class="vote yes" type="button" data-action="notes" data-id="'+id+'" aria-label="Mark '+name+' as working" title="VERIFIED ✓">✓</button><button class="vote no" type="button" data-action="trash" data-id="'+id+'" aria-label="Mark '+name+' as blocked" title="FLAG ×">×</button></div></article>';
   }
   function renderLinks(){
     const query=$("search").value.trim().toLowerCase(),category=$("categoryFilter").value;
@@ -259,11 +259,11 @@ main{animation:rise-in .28s ease both}
   }
   function renderNotes(){
     const list=links.filter(x=>x.status==="notes");
-    $("notesList").innerHTML=list.length?list.map(item=>'<article class="note-item"><div class="site-icon" aria-hidden="true">'+escapeHTML(iconFor(item.name))+'</div><div class="card-copy"><h3>'+escapeHTML(item.name)+'</h3><a class="card-url" href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(host(item.url))+'</a></div><div class="note-actions"><a class="small-btn" href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">Open ↗</a><button class="small-btn" data-action="active" data-id="'+escapeHTML(item.id)+'">Back to links</button><button class="small-btn danger" data-action="trash" data-id="'+escapeHTML(item.id)+'" aria-label="Move '+escapeHTML(item.name)+' to trash">×</button></div></article>').join(""):'<div class="empty">Your notes are empty. Mark a link ✓ on the main page to save it here.</div>';
+    $("notesList").innerHTML=list.length?list.map(item=>'<article class="note-item"><div class="site-icon" aria-hidden="true">'+escapeHTML(iconFor(item.name))+'</div><div class="card-copy"><h3>'+escapeHTML(item.name)+'</h3><a class="card-url" href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(host(item.url))+'</a></div><div class="note-actions"><a class="small-btn" href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">Open ↗</a><button class="small-btn" data-action="active" data-id="'+escapeHTML(item.id)+'">↶ REINSTATE</button><button class="small-btn danger" data-action="trash" data-id="'+escapeHTML(item.id)+'" aria-label="Move '+escapeHTML(item.name)+' to trash">×</button></div></article>').join(""):'<div class="empty">Your notes are empty. Mark a link ✓ on the main page to save it here.</div>';
   }
   function renderTrash(){
     const list=links.filter(x=>x.status==="trash");
-    $("trashList").innerHTML=list.length?list.map(item=>'<article class="trash-item"><div class="site-icon" aria-hidden="true">'+escapeHTML(iconFor(item.name))+'</div><div class="card-copy"><h3>'+escapeHTML(item.name)+'</h3><a class="card-url" href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(host(item.url))+'</a></div><div class="trash-actions"><button class="small-btn" data-action="active" data-id="'+escapeHTML(item.id)+'">↶ Restore to links</button><button class="small-btn" data-action="notes" data-id="'+escapeHTML(item.id)+'">▤ Move to notes</button><button class="small-btn danger" data-action="delete" data-id="'+escapeHTML(item.id)+'">Delete</button></div></article>').join(""):'<div class="empty">Trash is empty.</div>';
+    $("trashList").innerHTML=list.length?list.map(item=>'<article class="trash-item"><div class="site-icon" aria-hidden="true">'+escapeHTML(iconFor(item.name))+'</div><div class="card-copy"><h3>'+escapeHTML(item.name)+'</h3><a class="card-url" href="'+escapeHTML(item.url)+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(host(item.url))+'</a></div><div class="trash-actions"><button class="small-btn" data-action="active" data-id="'+escapeHTML(item.id)+'">↶ REINSTATE</button><button class="small-btn" data-action="notes" data-id="'+escapeHTML(item.id)+'">▤ Move to notes</button><button class="small-btn danger" data-action="delete" data-id="'+escapeHTML(item.id)+'">PURGE FILE ×</button></div></article>').join(""):'<div class="empty">Trash is empty.</div>';
     $("trashFooter").classList.toggle("hidden",!list.length);
   }
   function render(){
@@ -285,7 +285,7 @@ main{animation:rise-in .28s ease both}
       links=links.filter(x=>x.id!==item.id);notify("Link deleted.");
     }else if(action==="notes"){item.status="notes";notify("Saved to Your Notes.");}
     else if(action==="trash"){item.status="trash";notify("Moved to Trash.");}
-    else if(action==="active"){item.status="active";notify("Restored to Links.");}
+    else if(action==="active"){item.status="active";notify("Restored to Directory.");}
     save();
   });
   $("addBtn").addEventListener("click",()=>{$("addModal").classList.remove("hidden");$("linkName").focus();});
