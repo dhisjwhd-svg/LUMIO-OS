@@ -3,77 +3,89 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#06152e">
-<title>LIGHTSPEED ARCHIVE</title>
+<meta name="theme-color" content="#08090b">
+<title>Lightspeed</title>
 <style>
-:root{color-scheme:dark;--ice:#d8f2ff;--blue:#62bdff;--muted:#8db8d7}
+:root{color-scheme:dark;--bg:#08090b;--panel:#111316;--line:#292d32;--text:#f0f2f4;--muted:#9299a2;--green:#b9f6ca}
 *{box-sizing:border-box}
-html,body{width:100%;min-height:100%;margin:0}
-body{min-height:100vh;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 42%,#174e83 0%,#0a2b52 38%,#06152e 76%,#030914 100%);font-family:"Courier New",monospace;color:var(--ice)}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#02091635 4px 5px)}
-body:after{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 35%,#02071399 100%)}
-main{position:relative;z-index:1;width:min(760px,100%);padding:28px 22px;text-align:center}
-.eyebrow{margin:0 0 14px;color:#83caff;font-size:.7rem;letter-spacing:.32em;text-transform:uppercase}
-h1{display:inline-block;margin:0;color:var(--ice);font-size:clamp(2.2rem,9vw,6.6rem);font-weight:900;letter-spacing:.08em;line-height:1.02;text-shadow:0 0 5px #d8f2ff,0 0 18px #62bdffb0,0 0 44px #168bff80;overflow-wrap:anywhere;transition:transform .25s ease,text-shadow .25s ease,color .25s ease}
-.subtitle{margin:18px 0 28px;color:#b2d8f1;font-size:.78rem;letter-spacing:.14em;line-height:1.8}
-.escape-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:58px;padding:0 25px;border:1px solid #9adfff9c;border-radius:5px;background:linear-gradient(135deg,#bcecff,#62bdff 48%,#2388d8);color:#031426;font:900 .78rem "Courier New",monospace;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;box-shadow:0 0 22px #168bff45,inset 0 1px #fff9;transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
-.escape-btn:hover{transform:translateY(-3px);filter:brightness(1.12);box-shadow:0 10px 35px #168bff65,0 0 0 4px #62bdff15}
-.escape-btn:active{transform:translateY(0) scale(.98)}
-.escape-btn:focus-visible{outline:2px solid white;outline-offset:5px}
-.arrow{font-size:1.25rem}
-.status{min-height:24px;margin:19px 0 0;color:#9dc7e6;font-size:.68rem;letter-spacing:.1em}
-.corner{position:fixed;z-index:1;color:#6e9fc4;font-size:.6rem;letter-spacing:.12em;opacity:.75}
-.tl{top:18px;left:18px}.br{right:18px;bottom:18px;text-align:right}
-body.escape-mode{animation:breakout .8s ease both}
-body.escape-mode main{animation:lift .8s cubic-bezier(.2,.8,.2,1) both}
-body.escape-mode h1{color:#fff;text-shadow:0 0 10px white,0 0 30px #62bdff,0 0 80px #168bff}
-body.escape-mode .escape-btn{background:linear-gradient(135deg,#d4ffe9,#70f4c2);border-color:#b4ffe2}
-.particle{position:fixed;z-index:3;left:var(--x);top:var(--y);width:5px;height:5px;border-radius:50%;background:#d8f2ff;box-shadow:0 0 14px #62bdff;pointer-events:none;animation:fly 1.1s ease-out forwards}
-@keyframes breakout{0%{filter:brightness(1)}35%{filter:brightness(1.8)}100%{filter:brightness(1.12)}}
-@keyframes lift{0%{transform:scale(1);opacity:1}45%{transform:scale(1.04) translateY(-8px)}100%{transform:scale(1);opacity:1}}
-@keyframes fly{to{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
-@media(max-width:480px){.escape-btn{width:100%;max-width:340px;padding:0 15px;font-size:.7rem}.subtitle{font-size:.68rem}.corner{font-size:.52rem}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition:none!important}}
+html,body{margin:0;min-height:100%;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+body{background:var(--bg);color:var(--text)}
+button,a{font:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid var(--green);outline-offset:4px}
+.page{min-height:100vh;display:grid;place-items:center;padding:28px}
+#gate{width:min(680px,100%);text-align:center;transition:opacity .35s,transform .35s}
+.mark{font-size:clamp(2.8rem,9vw,6.8rem);font-weight:850;letter-spacing:-.085em;line-height:.95;margin:0;color:#f4f6f7}
+.gate-sub{font-size:.76rem;color:#9299a2;margin:22px 0 30px;letter-spacing:.1em}
+.escape-btn{min-height:52px;padding:0 22px;background:#f0f2f4;color:#090a0b;border:0;border-radius:4px;font-weight:750;cursor:pointer;transition:background .18s,transform .18s}
+.escape-btn:hover{background:var(--green);transform:translateY(-2px)}
+#terminal{display:none;width:min(940px,100%);padding:28px 0;animation:appear .45s ease both}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:18px;border-bottom:1px solid var(--line);color:var(--muted);font-size:.72rem}
+.linux-mark{display:flex;align-items:center;gap:10px;color:#f2f3f4;font-weight:750;letter-spacing:.04em}
+.dot{width:8px;height:8px;background:var(--green);border-radius:50%;box-shadow:0 0 12px #b9f6ca45}
+h2{font-size:clamp(1.8rem,5vw,3.2rem);letter-spacing:-.07em;margin:34px 0 8px;font-weight:760}
+.intro{margin:0 0 28px;color:var(--muted);font-size:.83rem;line-height:1.7}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.link-card{display:flex;flex-direction:column;gap:28px;min-height:150px;padding:19px;text-decoration:none;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:6px;transition:border-color .2s,background .2s,transform .2s}
+.link-card:hover{border-color:#6c8274;background:#151a17;transform:translateY(-2px)}
+.card-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.card-icon{width:34px;height:34px;display:grid;place-items:center;border:1px solid #383d43;border-radius:5px;color:var(--green);font-size:1rem}
+.out{color:#7d858e;font-size:1rem}
+.card-title{font-size:.95rem;font-weight:700;margin-bottom:7px}
+.card-desc{font-size:.72rem;line-height:1.6;color:var(--muted)}
+.footer{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;color:#747b84;font-size:.67rem}
+@keyframes appear{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:520px){.page{padding:20px}.grid{grid-template-columns:1fr}.link-card{min-height:125px;gap:20px}#terminal{padding:10px 0}.topline{font-size:.65rem}h2{margin-top:27px}.footer{font-size:.6rem}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<div class="corner tl">LUMIO // ARCHIVE 01</div>
-<div class="corner br">SIMULATION ONLY · LOCAL INTERACTION</div>
-<main>
-<p class="eyebrow">Restricted zone // student edition</p>
-<h1 id="archive-title">LIGHTSPEED<br>ARCHIVE</h1>
-<p class="subtitle">ACADEMIC JAIL DETECTED.<br>INITIATE A VERY UNOFFICIAL BREAK.</p>
-<button class="escape-btn" id="escape-btn" type="button">
-<span class="arrow" aria-hidden="true">↗</span>
-<span id="button-label">Escape Academic Jail</span>
-</button>
-<p class="status" id="status" role="status" aria-live="polite">SYSTEM IDLE — AWAITING INPUT</p>
-</main>
+<div class="page">
+<section id="gate" aria-label="Escape screen">
+  <h1 class="mark">LIGHTSPEED</h1>
+  <p class="gate-sub">ACADEMIC JAIL</p>
+  <button class="escape-btn" id="escape" type="button">Escape Academic Jail <span aria-hidden="true">↗</span></button>
+</section>
+<section id="terminal" aria-label="Link dashboard">
+  <div class="topline">
+    <div class="linux-mark"><span class="dot" aria-hidden="true"></span> lightspeed@localhost</div>
+    <span>~/links</span>
+  </div>
+  <h2>Quick links<span style="color:var(--green)">.</span></h2>
+  <p class="intro">Choose where to go.</p>
+  <nav class="grid" aria-label="Quick links">
+    <a class="link-card" href="https://www.google.com/" target="_blank" rel="noopener noreferrer">
+      <div class="card-top"><span class="card-icon" aria-hidden="true">⌕</span><span class="out" aria-hidden="true">↗</span></div>
+      <div><div class="card-title">Google</div><div class="card-desc">Search the web</div></div>
+    </a>
+    <a class="link-card" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+      <div class="card-top"><span class="card-icon" aria-hidden="true">▶</span><span class="out" aria-hidden="true">↗</span></div>
+      <div><div class="card-title">YouTube</div><div class="card-desc">Videos and music</div></div>
+    </a>
+    <a class="link-card" href="https://github.com/" target="_blank" rel="noopener noreferrer">
+      <div class="card-top"><span class="card-icon" aria-hidden="true">⌘</span><span class="out" aria-hidden="true">↗</span></div>
+      <div><div class="card-title">GitHub</div><div class="card-desc">Projects and code</div></div>
+    </a>
+    <a class="link-card" href="https://www.wikipedia.org/" target="_blank" rel="noopener noreferrer">
+      <div class="card-top"><span class="card-icon" aria-hidden="true">文</span><span class="out" aria-hidden="true">↗</span></div>
+      <div><div class="card-title">Wikipedia</div><div class="card-desc">Explore topics</div></div>
+    </a>
+  </nav>
+  <div class="footer"><span>LIGHTSPEED</span><span>4 LINKS</span></div>
+</section>
+</div>
 <script>
-const button=document.getElementById("escape-btn");
-const label=document.getElementById("button-label");
-const status=document.getElementById("status");
-let escaped=false;
-function escapeAcademicJail(){
-  escaped=!escaped;
-  document.body.classList.toggle("escape-mode",escaped);
-  label.textContent=escaped?"Escape sequence complete":"Escape Academic Jail";
-  status.textContent=escaped?"✨ ESCAPE SIMULATED — TAKE A BREATH, YOU'VE EARNED A RESET":"SYSTEM IDLE — AWAITING INPUT";
-  button.setAttribute("aria-pressed",String(escaped));
-  if(escaped&&!matchMedia("(prefers-reduced-motion: reduce)").matches){
-    for(let i=0;i<34;i++){
-      const p=document.createElement("i");
-      p.className="particle";
-      p.style.setProperty("--x",Math.random()*100+"vw");
-      p.style.setProperty("--y",Math.random()*100+"vh");
-      p.style.setProperty("--dx",(Math.random()-.5)*260+"px");
-      p.style.setProperty("--dy",(Math.random()-.5)*260+"px");
-      document.body.appendChild(p);
-      p.addEventListener("animationend",()=>p.remove(),{once:true});
-    }
-  }
-}
-button.addEventListener("click",escapeAcademicJail);
+const gate=document.getElementById("gate");
+const terminal=document.getElementById("terminal");
+document.getElementById("escape").addEventListener("click",()=>{
+  gate.style.opacity="0";
+  gate.style.transform="translateY(-8px)";
+  gate.setAttribute("aria-hidden","true");
+  window.setTimeout(()=>{
+    gate.style.display="none";
+    terminal.style.display="block";
+    terminal.querySelector("a").focus({preventScroll:true});
+  },350);
+});
 </script>
 </body>
 </html>
