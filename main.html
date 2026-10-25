@@ -7,103 +7,42 @@
 <title>LUMIO-OS</title>
 <style>
 *{box-sizing:border-box}
-html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#050505;color:#eee;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-#desktop{position:fixed;inset:0;width:100%;height:100%;border:0;background:#050505;display:block}
-#status{position:fixed;inset:0;display:grid;place-content:center;gap:12px;text-align:center;padding:24px;background:#050505;z-index:2}
-#status[hidden]{display:none}
-.mark{width:34px;height:34px;margin:0 auto 8px;border:2px solid #292929;border-top-color:#f4f4f4;border-radius:50%;animation:spin .8s linear infinite}
-h1{font-size:18px;font-weight:600;letter-spacing:.02em;margin:0}
-p{font-size:13px;color:#9a9a9a;margin:0;line-height:1.5;max-width:340px}
-button{justify-self:center;margin-top:8px;padding:10px 16px;border:1px solid #393939;border-radius:10px;background:#171717;color:#fff;font:inherit;cursor:pointer}
-@keyframes spin{to{transform:rotate(360deg)}}
-@media(prefers-reduced-motion:reduce){.mark{animation:none}}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#050505}
+#desktop{position:fixed;inset:0;width:100%;height:100%;border:0;display:block;background:#050505}
+#fallback{position:fixed;inset:0;display:none;place-content:center;gap:12px;padding:24px;text-align:center;background:#050505;color:#eee;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+#fallback.show{display:grid}
+h1{margin:0;font-size:18px}
+p{max-width:360px;margin:0;color:#aaa;line-height:1.5}
+a{color:#d99ab4}
 </style>
 </head>
 <body>
 <iframe id="desktop" title="LUMIO-OS desktop" allow="fullscreen; clipboard-read; clipboard-write"></iframe>
-<main id="status" role="status" aria-live="polite">
-  <div class="mark" aria-hidden="true"></div>
-  <h1 id="heading">Starting LUMIO-OS</h1>
-  <p id="message">Loading LUMIO-OS…</p>
-  <button id="retry" type="button" hidden>Try again</button>
+<main id="fallback">
+  <h1>LUMIO-OS could not open</h1>
+  <p>Open the desktop directly using the rendered HTML link below.</p>
+  <a id="direct" href="https://raw.githack.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html">Open LUMIO-OS desktop</a>
 </main>
 <script>
 (() => {
   const frame = document.getElementById('desktop');
-  const status = document.getElementById('status');
-  const heading = document.getElementById('heading');
-  const message = document.getElementById('message');
-  const retry = document.getElementById('retry');
+  const fallback = document.getElementById('fallback');
 
-  // Fetch the HTML source, then execute it as a real document inside srcdoc.
-  // Do not navigate the iframe to a raw-content URL: some mirrors serve it as text.
-  const sources = [
-    'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/LUMIO-OS@main/Assets/lumio-desktop.html',
-    'https://raw.githack.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html',
-    'https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html'
-  ];
-  let runId = 0;
+  // IMPORTANT: use a host that serves the file as text/html.
+  // jsDelivr and raw.githubusercontent.com can serve HTML as plain text in
+  // some contexts, which makes the browser display the markup instead of run it.
+  // Do not use fetch()+srcdoc here: the desktop is a large, complete document
+  // with its own scripts and app logic; let the browser load it as a real page.
+  const renderedDesktop = 'https://raw.githack.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html';
 
-  function fail() {
-    heading.textContent = 'LUMIO-OS could not load';
-    message.textContent = 'The desktop could not be downloaded. Check your internet connection and try again.';
-    retry.hidden = false;
-    status.hidden = false;
-  }
+  frame.addEventListener('load', () => {
+    // A cross-origin iframe's load event fires even for many error documents,
+    // so do not use it as proof of success or switch sources on load.
+    fallback.classList.remove('show');
+  });
 
-  async function start() {
-    const thisRun = ++runId;
-    retry.hidden = true;
-    heading.textContent = 'Starting LUMIO-OS';
-    message.textContent = 'Downloading the latest desktop…';
-    status.hidden = false;
-    frame.removeAttribute('src');
-    frame.srcdoc = '<!doctype html><html><body style="margin:0;background:#050505"></body></html>';
-
-    for (const baseUrl of sources) {
-      try {
-        const url = baseUrl + (baseUrl.includes('?') ? '&' : '?') + 'v=' + Date.now();
-        const response = await fetch(url, { cache: 'no-store' });
-        if (!response.ok) throw new Error('HTTP ' + response.status);
-        let html = await response.text();
-
-        // Reject CDN error pages and incomplete/plain responses.
-        if (html.length < 10000 || !/<html\b/i.test(html) || !/<body\b/i.test(html) || !/<\/html\s*>/i.test(html)) {
-          throw new Error('Invalid desktop HTML response');
-        }
-        if (thisRun !== runId) return;
-
-        // Preserve correct paths for any relative assets in the desktop document.
-        const baseTag = '<base href="https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/">';
-        if (/<head\b[^>]*>/i.test(html)) {
-          html = html.replace(/<head\b[^>]*>/i, match => match + '\n' + baseTag);
-        } else {
-          throw new Error('Desktop HTML has no head element');
-        }
-
-        let settled = false;
-        const reveal = () => {
-          if (settled || thisRun !== runId) return;
-          settled = true;
-          status.hidden = true;
-        };
-        frame.onload = () => {
-          // srcdoc is a separate document; allow the first render frame.
-          requestAnimationFrame(() => requestAnimationFrame(reveal));
-        };
-        frame.srcdoc = html;
-        // Safety fallback in case a browser does not dispatch iframe load for srcdoc.
-        setTimeout(reveal, 1800);
-        return;
-      } catch (error) {
-        console.warn('LUMIO-OS source failed:', baseUrl, error);
-      }
-    }
-    if (thisRun === runId) fail();
-  }
-
-  retry.addEventListener('click', start);
-  start();
+  frame.src = renderedDesktop;
+  document.getElementById('direct').href = renderedDesktop;
 })();
 </script>
 </body>
