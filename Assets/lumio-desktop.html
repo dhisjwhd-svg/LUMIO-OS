@@ -1569,6 +1569,7 @@ if (settingAutoPassword) {
       closeApp();
       closeSettings();
       document.body.classList.remove('unlocked');
+      try { sessionStorage.removeItem(LOGIN_STATE_KEY); } catch (_) {}
       loginInProgress = false;
       if (loginScreen) {
         loginScreen.style.display = '';
