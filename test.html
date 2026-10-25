@@ -32,7 +32,15 @@ button{cursor:pointer}
 .tabs{display:flex;flex-direction:column;gap:8px;margin-top:12px;overflow:visible}
 .tab{border:3px solid #0d0d12;background:#8c8992;padding:15px 12px;color:#17161b;font-size:.76rem;font-weight:900;border-radius:0;white-space:nowrap;letter-spacing:.015em;text-align:left;box-shadow:3px 3px 0 #111}
 .tab+ .tab{border-left:3px solid #0d0d12}
-.tab[aria-selected="true"]{background:#d99ab4;color:#252126;position:relative;top:0;border-color:#0d0d12}
+.tab[aria-selected="true"]{position:relative;top:0;border-color:#0d0d12;filter:brightness(.96)}
+.tab[data-page="links"]{background:#d99ab4}
+.tab[data-page="links"][aria-selected="true"]{background:#d99ab4;color:#252126}
+.tab[data-page="notes"]{background:#d8c67d}
+.tab[data-page="notes"][aria-selected="true"]{background:#d8c67d;color:#252126}
+.tab[data-page="trash"]{background:#aaa6ac}
+.tab[data-page="trash"][aria-selected="true"]{background:#aaa6ac;color:#252126}
+.tab[data-page="tutorial"]{background:#c6d0df}
+.tab[data-page="tutorial"][aria-selected="true"]{background:#c6d0df;color:#252126}
 .tab[data-page="notes"]{background:#d8c67d}
 .tab[data-page="trash"]{background:#aaa6ac}
 .tab[data-page="tutorial"]{background:#c6d0df}
@@ -161,14 +169,14 @@ main{animation:rise-in .28s ease both}
   </section>
   <section id="tutorialPage" class="hidden">
     <div class="section-head"><div><h2>Quick-start guide</h2><p>How to post links and check them on your own school computer.</p></div></div>
-    <div class="tutorial-intro"><strong>One shared list. Personal results.</strong><p>The Links page is the public list of suggested sites for everyone using this page. When you test a link at school, your ✓ or × choice is saved only in your current browser. It does not change Lightspeed filtering, test the site automatically, or update other students’ computers.</p></div>
+    <div class="tutorial-intro"><strong>One shared list. Personal results.</strong><p>Our team maintains the main Links list and publishes updates from time to time. The shared page is designed to be embedded using GitHub Raw content or jsDelivr, so visitors can open the latest published version when the embedded file is updated. Your own ✓ or × checks remain local to your browser and do not change Lightspeed filtering or other students’ results.</p></div>
     <div class="tutorial-grid">
       <article class="tutorial-step"><div class="step-number">01</div><h3>Post a link manually</h3><p>Choose <b>＋ Add link</b> in the sidebar. Enter the site name, paste its full web address beginning with <b>https://</b>, choose a category, then select <b>Save link</b>. The new entry appears on the Links page in this browser.</p><span class="arrow" aria-hidden="true">↓  ADD LINK</span></article>
       <article class="tutorial-step"><div class="step-number">02</div><h3>Test it on your school device</h3><p>Open the site from its address on the card. Wait for it to load normally. If it opens, mark <b>✓</b>. If it is blocked by your school’s filter or fails to load, mark <b>×</b>. These are student reports, not automatic detection.</p><span class="arrow" aria-hidden="true">OPEN → CHECK</span></article>
       <article class="tutorial-step"><div class="step-number">03</div><h3>Keep the list tidy</h3><p><b>✓</b> moves the link to <b>Your Notes</b>, your local list of links that worked for you. <b>×</b> moves it to <b>Trash</b>, your local list of links reported blocked or not working. You can restore a link if you tested it again and it works.</p><span class="arrow" aria-hidden="true">✓ NOTES  /  × TRASH</span></article>
-      <article class="tutorial-step"><div class="step-number">04</div><h3>Share the list with others</h3><p>Use <b>Export team list</b> in Your Notes to download a JSON file. Send that file to classmates or the list maintainer; they can choose <b>↑ Import</b> to add its links. Import/export is how this standalone page shares entries.</p><span class="arrow" aria-hidden="true">EXPORT ↓  →  IMPORT ↑</span></article>
+      <article class="tutorial-step"><div class="step-number">04</div><h3>How team updates reach you</h3><p>Our team adds and reviews links, then updates the HTML list in the GitHub repository. The page can be served through GitHub Raw content or a jsDelivr embed/CDN link. We publish changes occasionally, so reload the updated page to see the latest team list. Your personal ✓ / × choices are separate from these published updates.</p><span class="arrow" aria-hidden="true">TEAM EDITS → PUBLISH → REFRESH</span></article>
     </div>
-    <div class="tutorial-callout"><b>Important:</b> “Public” means the Links page is intended as the common list—not that browser changes sync online automatically. Additions, Notes, and Trash are stored in your browser unless you export and share a list. This page cannot see or change school filter settings. If a site should be available for classwork, ask a teacher or school IT staff to review it.</div>
+    <div class="tutorial-callout"><b>Important:</b> Published team links are shared when the hosted HTML is updated; personal additions, Notes, and Trash are stored in your browser and do not automatically publish back to GitHub. The Test link button opens the site on your device, but this page cannot automatically detect or change school filter settings. If a site should be available for classwork, ask a teacher or school IT staff to review it.</div>
     <div class="tutorial-actions"><button class="btn primary" type="button" id="tutorialGoLinks">← Go to Links</button><button class="btn" type="button" id="tutorialAddLink">＋ Add a link</button></div>
   </section>
   <section id="trashPage" class="hidden">
