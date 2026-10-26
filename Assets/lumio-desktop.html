@@ -55,7 +55,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 32px 28px 80px;
+    padding: 32px 28px 32px;
     transition: opacity 0.4s var(--ease), transform 0.5s var(--ease);
   }
   body.app-open .desktop {
@@ -157,7 +157,7 @@
   }
   .app:hover .app-icon img { transform: scale(1.06); }
   .app:active .app-icon { transform: translateY(-2px) scale(0.98); }
-  .app:focus-visible .app-icon, .dock-item:focus-visible {
+  .app:focus-visible .app-icon {
     outline: 2px solid rgba(255,255,255,0.9);
     outline-offset: 4px;
   }
@@ -184,67 +184,7 @@
     text-shadow: 0 2px 10px rgba(0,0,0,0.95), 0 0 16px currentColor;
   }
 
-  /* Dock */
-  .dock {
-    position: fixed;
-    bottom: max(22px, env(safe-area-inset-bottom));
-    left: 50%;
-    right: auto;
-    top: auto;
-    width: max-content;
-    max-width: calc(100vw - 24px);
-    transform: translateX(-50%);
-    z-index: 50;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    padding: 8px 10px;
-    background: rgba(12,12,12,0.72);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 18px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    opacity: 0;
-    animation: fadeUp 0.7s var(--ease) 0.4s forwards;
-    transition: opacity 0.35s var(--ease), transform 0.4s var(--ease);
-  }
-  body.app-open .dock {
-    opacity: 0;
-    transform: translateX(-50%) translateY(20px);
-    pointer-events: none;
-  }
-  .dock-item {
-    width: 44px;
-    height: 44px;
-    flex: 0 0 44px;
-    min-width: 44px;
-    border-radius: 12px;
-    overflow: hidden;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: transform 0.25s var(--ease), border-color 0.2s;
-  }
-  .dock-item.circle {
-    border-radius: 50%;
-  }
-  .dock-item img { width: 100%; height: 100%; object-fit: cover; }
-  /* Keep the MilkBox artwork fully visible and avoid unnecessary crop/zoom softness. */
-  .app[data-app="milkbox"] .app-icon img,
-  .dock-item[data-app="milkbox"] img {
-    object-fit: contain;
-    image-rendering: auto;
-    transform: none;
-  }
-  .app[data-app="milkbox"]:hover .app-icon img { transform: none; }
-  .dock-item.circle img { border-radius: 50%; }
-  .dock-item:hover {
-    transform: translateY(-8px) scale(1.08);
-    border-color: rgba(255,255,255,0.15);
-  }
+  /* Bottom-center dock intentionally removed; desktop shortcuts remain on the desktop. */
 
   /* Fullscreen app layer */
   .app-layer {
@@ -326,7 +266,7 @@
   }
   @media (max-width: 600px) {
     :root { --widget: 76px; }
-    .desktop { padding: 24px 20px 90px; }
+    .desktop { padding: 24px 20px 32px; }
     .apps { gap: 22px; }
     .brand { font-size: 19px; }
     .clock { font-size: 13px; padding: 8px 10px; }
@@ -476,7 +416,6 @@
     80% { transform: translateX(4px); }
   }
   body:not(.unlocked) .desktop,
-  body:not(.unlocked) .dock,
   body:not(.unlocked) .wallpaper {
     opacity: 0;
     pointer-events: none;
@@ -1109,6 +1048,15 @@
   const spotifyFrame = document.getElementById('spotifyFrame');
   const netflixFrame = document.getElementById('netflixFrame');
   const persistentFrames = { spotify: spotifyFrame, netflix: netflixFrame };
+  Object.keys(persistentFrames).forEach(function (key) {
+    const mediaFrame = persistentFrames[key];
+    if (!mediaFrame) return;
+    mediaFrame.addEventListener('load', function () {
+      if (mediaFrame.dataset.loading !== 'true' || !mediaFrame.hasAttribute('srcdoc')) return;
+      mediaFrame.dataset.loaded = 'true';
+      mediaFrame.dataset.loading = 'false';
+    });
+  });
   let activeAppKey = '';
   const clockEl = document.getElementById('clock');
   const startBtn = document.getElementById('startBtn');
@@ -1128,7 +1076,7 @@
     steam:   'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/Steam.html',
     milkbox: 'https://milkbox.b-cdn.net/',
     directory: 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/directory_folder/Directory.html',
-    moon: 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/moon.html'
+    moon: 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/TFF.html'
   };
 
   // ----- Login -----
@@ -1315,27 +1263,29 @@
     })
       .then(function (appHtml) {
         if (requestId !== appRequestId || (layer && (!layer.classList.contains('open') || layer.dataset.active !== key))) return;
-        /* Directory now lives in lumio-assets. Keep its document-relative resources rooted at the moved folder. */
-        if (key !== 'directory') {
-          if (appHtml.toLowerCase().indexOf('<base ') === -1) {
-            var headIndex = appHtml.toLowerCase().indexOf('<head');
-            if (headIndex !== -1) {
-              var headEnd = appHtml.indexOf('>', headIndex);
-              if (headEnd !== -1) {
-                appHtml = appHtml.slice(0, headEnd + 1) +
-                  '<base href="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/">' +
-                  appHtml.slice(headEnd + 1);
-              }
+        // Resolve relative resources from each app's actual folder.
+        if (appHtml.toLowerCase().indexOf('<base ') === -1) {
+          var headIndex = appHtml.toLowerCase().indexOf('<head');
+          if (headIndex !== -1) {
+            var headEnd = appHtml.indexOf('>', headIndex);
+            if (headEnd !== -1) {
+              var appBasePath = key === 'directory'
+                ? 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/directory_folder/'
+                : 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/';
+              appHtml = appHtml.slice(0, headEnd + 1) + '<base href="' + appBasePath + '">' + appHtml.slice(headEnd + 1);
             }
           }
-          appHtml = injectCursorIntoHTML(appHtml);
         }
+        appHtml = injectCursorIntoHTML(appHtml);
         /* All bundled apps use the same desktop iframe; avoid Spotify's separate blank-window path. */
         if (targetFrame) {
           targetFrame.style.display = 'block';
           targetFrame.removeAttribute('src');
           targetFrame.srcdoc = appHtml;
-          if (persistentFrames[key]) targetFrame.dataset.loaded = 'true';
+          if (persistentFrames[key]) {
+            targetFrame.dataset.loading = 'true';
+            delete targetFrame.dataset.loaded;
+          }
           targetFrame.setAttribute('title', key.charAt(0).toUpperCase() + key.slice(1) + ' app');
         }
       })
@@ -1350,7 +1300,10 @@
           } else {
             targetFrame.removeAttribute('srcdoc');
             targetFrame.src = url;
-            if (persistentFrames[key]) targetFrame.dataset.loaded = 'true';
+              if (persistentFrames[key]) {
+              delete targetFrame.dataset.loaded;
+              targetFrame.dataset.loading = 'false';
+            }
           }
         }
       });
@@ -1381,6 +1334,21 @@
       }
       closeTimer = null;
     }, 400);
+  }
+
+  // Closing an app keeps playback; signing out explicitly stops local media.
+  function stopEmbeddedMedia() {
+    [spotifyFrame, netflixFrame, frame].forEach(function (mediaFrame) {
+      if (!mediaFrame) return;
+      try {
+        const mediaDocument = mediaFrame.contentDocument;
+        if (!mediaDocument) return;
+        mediaDocument.querySelectorAll('audio, video').forEach(function (media) {
+          try { media.pause(); } catch (_) {}
+          try { media.currentTime = 0; } catch (_) {}
+        });
+      } catch (_) {}
+    });
   }
 
   // ----- Moon profile shortcut in the Start menu -----
@@ -1607,6 +1575,7 @@ if (settingAutoPassword) {
       e.preventDefault();
       e.stopPropagation();
       if (startMenu) startMenu.classList.remove('open');
+      stopEmbeddedMedia();
       closeApp();
       closeSettings();
       document.body.classList.remove('unlocked');
