@@ -28,7 +28,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050505}
     const response=await fetch(url+(url.includes('?')?'&':'?')+'_lumio='+Date.now(),{cache:'no-store'});
     if(!response.ok) throw new Error('Desktop request failed: HTTP '+response.status);
     const html=await response.text();
-    if(!/<html[\\s>]/i.test(html)||!/<body[\\s>]/i.test(html)||html.length<10000) throw new Error('Desktop response was incomplete.');
+    if(!/<html[\s>]/i.test(html)||!/<body[\s>]/i.test(html)||html.length<10000) throw new Error('Desktop response was incomplete.');
     return html;
   }
   try {
@@ -39,7 +39,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050505}
     }
     if(!html) throw lastError||new Error('No desktop source available');
     const base='<base href="'+assetBase+'">';
-    if(/<head(?:\\s[^>]*)?>/i.test(html)) html=html.replace(/<head(?:\\s[^>]*)?>/i,match=>match+base);
+    if(/<head(?:\s[^>]*)?>/i.test(html)) html=html.replace(/<head(?:\s[^>]*)?>/i,match=>match+base);
     else throw new Error('Desktop HTML has no head element.');
     frame.addEventListener('load',()=>{status.hidden=true;},{once:true});
     frame.srcdoc=html;
