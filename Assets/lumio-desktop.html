@@ -1355,8 +1355,7 @@
   window.addEventListener('message', function (event) {
     const data = event.data;
     if (!data || data.type !== 'lumio-retry-app' || typeof data.app !== 'string') return;
-    const sourceFrames = [frame, spotifyFrame, netflixFrame];
-    if (sourceFrames.indexOf(event.source && event.source.frameElement ? event.source.frameElement : null) !== -1) return;
+    // Accept retry requests only from one of the desktop's known app frames.
     if (data.app !== activeAppKey || !sources[data.app]) return;
     if (event.source !== frame.contentWindow && event.source !== spotifyFrame.contentWindow && event.source !== netflixFrame.contentWindow) return;
     openApp(data.app);
