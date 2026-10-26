@@ -1275,9 +1275,15 @@
     if (key === 'milkbox') {
       if (targetFrame) {
         targetFrame.style.display = 'block';
+        targetFrame.hidden = false;
         targetFrame.removeAttribute('srcdoc');
-        targetFrame.src = sourceUrlWithFreshVersion(url);
         targetFrame.setAttribute('title', 'MilkBox app');
+        targetFrame.setAttribute('loading', 'eager');
+        targetFrame.setAttribute('allow', 'fullscreen; autoplay; clipboard-read; clipboard-write');
+        targetFrame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+        // Use the canonical app URL directly: cache-busting query parameters can break
+        // some CDN-hosted app routes and are unnecessary for this externally hosted page.
+        targetFrame.src = url;
       }
       return;
     }
