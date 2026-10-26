@@ -1281,9 +1281,9 @@
         targetFrame.setAttribute('loading', 'eager');
         targetFrame.setAttribute('allow', 'fullscreen; autoplay; encrypted-media; picture-in-picture; clipboard-read; clipboard-write');
         targetFrame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
-        targetFrame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-top-navigation-by-user-activation');
-        // Keep MilkBox inside the same full-screen app layer as the other apps.
-        // Direct iframe navigation lets the remote app load its own scripts/assets.
+        // Keep MilkBox confined to the LUMIO app window: scripts/forms work,
+        // but the embedded site cannot open pop-up tabs or navigate the top-level page.
+        targetFrame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-modals allow-downloads');
         targetFrame.src = url;
       }
       return;
