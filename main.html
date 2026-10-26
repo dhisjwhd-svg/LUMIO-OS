@@ -41,7 +41,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050505}
     const response=await fetch(url+(url.includes('?')?'&':'?')+'_lumio='+Date.now(),{cache:'no-store'});
     if(!response.ok) throw new Error('Desktop request failed: HTTP '+response.status);
     const html=await response.text();
-    if(!/<html[\s>]/i.test(html)||!/<body[\s>]/i.test(html)||html.length<10000||!/id=["']appLayer["']/i.test(html)||!/function\s+openApp\s*\(/.test(html)||!/milkbox:\s*['"]https:\/\/milkbox\.b-cdn\.net\//i.test(html)||!/targetFrame\.src\s*=\s*url/i.test(html)||!/setAttribute\(['"]sandbox['"],\s*['"][^'"]*allow-scripts/i.test(html)) throw new Error('Desktop response was incomplete or missing the MilkBox in-app embed fix.');
+    if(!/<html[\s>]/i.test(html)||!/<body[\s>]/i.test(html)||html.length<10000||!/id=["']appLayer["']/i.test(html)||!/function\s+openApp\s*\(/.test(html)||!/milkbox:\s*['"]https:\/\/milkbox\.b-cdn\.net\//i.test(html)||!/targetFrame\.src\s*=\s*url/i.test(html)||!/setAttribute\(['"]sandbox['"],\s*['"][^'"]*allow-scripts/i.test(html)||/if\s*\(key\s*===\s*['"]milkbox['"]\)[\s\S]{0,1200}?allow-popups/i.test(html)||/if\s*\(key\s*===\s*['"]milkbox['"]\)[\s\S]{0,1200}?allow-top-navigation/i.test(html)) throw new Error('Desktop response was incomplete or MilkBox is not confined to the in-app iframe.');
     return html;
   }
   async function loadDesktop(){
