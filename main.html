@@ -41,7 +41,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050505}
     const response=await fetch(url+(url.includes('?')?'&':'?')+'_lumio='+Date.now(),{cache:'no-store'});
     if(!response.ok) throw new Error('Desktop request failed: HTTP '+response.status);
     const html=await response.text();
-    if(!/<html[\s>]/i.test(html)||!/<body[\s>]/i.test(html)||html.length<10000||!/id=["']appLayer["']/i.test(html)||!/function\s+openApp\s*\(/.test(html)) throw new Error('Desktop response was incomplete or not the expected LUMIO-OS build.');
+    if(!/<html[\s>]/i.test(html)||!/<body[\s>]/i.test(html)||html.length<10000||!/id=["']appLayer["']/i.test(html)||!/function\s+openApp\s*\(/.test(html)||!/milkbox:\s*['"]https:\/\/milkbox\.b-cdn\.net\//i.test(html)||!/targetFrame\.src\s*=\s*url/i.test(html)) throw new Error('Desktop response was incomplete or missing the MilkBox embed fix.');
     return html;
   }
   async function loadDesktop(){
