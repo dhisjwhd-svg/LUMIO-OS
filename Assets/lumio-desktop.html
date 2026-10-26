@@ -1330,7 +1330,7 @@
               var headEnd = appHtml.indexOf('>', headIndex);
               if (headEnd !== -1) {
                 appHtml = appHtml.slice(0, headEnd + 1) +
-                  '<base href="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/">' +
+                  '<base href="' + url.substring(0, url.lastIndexOf('/') + 1).replace('https://raw.githubusercontent.com/', 'https://cdn.jsdelivr.net/gh/').replace('/main/', '@main/') + '">' +
                   appHtml.slice(headEnd + 1);
               }
             }
@@ -1643,6 +1643,29 @@ if (settingAutoPassword) {
     else if (startMenu) startMenu.classList.remove('open');
   });
 })();
+
+  // Keep remote image assets resilient when either CDN or raw GitHub is blocked.
+  // One fallback attempt per image prevents an endless error loop.
+  document.querySelectorAll('img').forEach(function (img) {
+    img.onerror = null;
+    img.addEventListener('error', function () {
+      if (img.dataset.lumioFallbackTried === 'true') return;
+      const current = img.currentSrc || img.src;
+      let fallback = '';
+      const cdnPrefix = 'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/';
+      const rawPrefix = 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/';
+      if (current.indexOf(cdnPrefix) === 0) fallback = rawPrefix + current.slice(cdnPrefix.length);
+      else if (current.indexOf(rawPrefix) === 0) fallback = cdnPrefix + current.slice(rawPrefix.length);
+      const wallpaperCdn = 'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/pc-wallpaper-assets-@main/';
+      const wallpaperRaw = 'https://raw.githubusercontent.com/dhisjwhd-svg/pc-wallpaper-assets-/main/';
+      if (!fallback && current.indexOf(wallpaperCdn) === 0) fallback = wallpaperRaw + current.slice(wallpaperCdn.length);
+      else if (!fallback && current.indexOf(wallpaperRaw) === 0) fallback = wallpaperCdn + current.slice(wallpaperRaw.length);
+      if (!fallback || fallback === current) return;
+      img.dataset.lumioFallbackTried = 'true';
+      img.src = fallback;
+    });
+  });
+
 </script>
 
 </body>
