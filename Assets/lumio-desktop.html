@@ -1341,20 +1341,26 @@
       })
       .catch(function (error) {
         if (requestId !== appRequestId || (layer && (!layer.classList.contains('open') || layer.dataset.active !== key))) return;
-        if (targetFrame) {
-          targetFrame.setAttribute('title', key.charAt(0).toUpperCase() + key.slice(1) + ' app');
-          if (key === 'directory') {
-            targetFrame.removeAttribute('src');
-            targetFrame.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#242328;color:#f5eaf0;font:16px system-ui;text-align:center;padding:24px;box-sizing:border-box}.panel{max-width:460px;border:1px solid #6d5262;background:#302a33;padding:28px;border-radius:12px}p{color:#d1c2cc;line-height:1.5}button{padding:10px 16px;border-radius:8px;border:1px solid #c58aa7;background:#d99ab4;color:#201820;font-weight:700}</style></head><body><div class="panel"><h2>Directory could not load</h2><p>Check your connection and try again. The desktop could not fetch the latest Directory HTML.</p><button onclick="location.reload()">Retry</button></div></body></html>';
-            console.error('Directory app failed to load:', error);
-          } else {
-            targetFrame.removeAttribute('srcdoc');
-            targetFrame.src = url;
-            if (persistentFrames[key]) targetFrame.dataset.loaded = 'true';
-          }
-        }
+        if (!targetFrame) return;
+        targetFrame.setAttribute('title', key.charAt(0).toUpperCase() + key.slice(1) + ' app');
+        targetFrame.removeAttribute('src');
+        if (persistentFrames[key]) delete targetFrame.dataset.loaded;
+        const safeKey = JSON.stringify(key);
+        targetFrame.srcdoc = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>App unavailable</title><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#111116;color:#f5f2f5;font:15px system-ui,-apple-system,sans-serif;text-align:center;padding:24px}.panel{width:min(460px,100%);border:1px solid #39343e;background:#1b1920;padding:30px;border-radius:18px;box-shadow:0 18px 60px #0006}h2{margin:0 0 10px;font-size:22px}p{color:#b9b3c0;line-height:1.6;margin:0 0 22px}button{padding:11px 18px;border-radius:10px;border:1px solid #e0a4c0;background:#e0a4c0;color:#24151e;font-weight:750;cursor:pointer}button:focus-visible{outline:3px solid #fff;outline-offset:3px}</style></head><body><main class="panel"><h2>' + key.charAt(0).toUpperCase() + key.slice(1) + ' couldn\'t load</h2><p>Check your connection, then try loading this app again.</p><button type="button" id="retry">Retry</button></main><script>document.getElementById("retry").addEventListener("click",function(){parent.postMessage({type:"lumio-retry-app",app:" + safeKey + "}, "*");});<\/script></body></html>';
+        console.error('LUMIO app failed to load:', key, error);
       });
   }
+
+  // Retry controls in the app-load fallback ask the desktop to fetch the app again.
+  window.addEventListener('message', function (event) {
+    const data = event.data;
+    if (!data || data.type !== 'lumio-retry-app' || typeof data.app !== 'string') return;
+    const sourceFrames = [frame, spotifyFrame, netflixFrame];
+    if (sourceFrames.indexOf(event.source && event.source.frameElement ? event.source.frameElement : null) !== -1) return;
+    if (data.app !== activeAppKey || !sources[data.app]) return;
+    if (event.source !== frame.contentWindow && event.source !== spotifyFrame.contentWindow && event.source !== netflixFrame.contentWindow) return;
+    openApp(data.app);
+  });
 
   function closeApp() {
     const requestId = ++appRequestId;
