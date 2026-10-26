@@ -1246,6 +1246,16 @@
     const url = sources[key];
     if (!url) return;
 
+    // MilkBox may refuse iframe embedding. Open its real page directly from the
+    // user's click so the site can run normally instead of leaving a black frame.
+    if (key === 'milkbox') {
+      const milkboxWindow = window.open(url, '_blank');
+      if (milkboxWindow) {
+        try { milkboxWindow.opener = null; } catch (_) {}
+        return;
+      }
+    }
+
     const requestId = ++appRequestId;
     activeAppKey = key;
     const targetFrame = persistentFrames[key] || frame;
@@ -1276,14 +1286,11 @@
       if (targetFrame) {
         targetFrame.style.display = 'block';
         targetFrame.hidden = false;
-        targetFrame.removeAttribute('srcdoc');
-        targetFrame.setAttribute('title', 'MilkBox app');
-        targetFrame.setAttribute('loading', 'eager');
-        targetFrame.setAttribute('allow', 'fullscreen; autoplay; clipboard-read; clipboard-write');
-        targetFrame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
-        // Use the canonical app URL directly: cache-busting query parameters can break
-        // some CDN-hosted app routes and are unnecessary for this externally hosted page.
-        targetFrame.src = url;
+        targetFrame.removeAttribute('src');
+        targetFrame.setAttribute('title', 'MilkBox launch options');
+        // If the browser blocked the direct tab, show a usable link instead of
+        // pretending the remote site can always be embedded in an iframe.
+        targetFrame.srcdoc = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Open MilkBox</title><style>*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#070709;color:#f5f5f7;font:15px system-ui,-apple-system,sans-serif}body{min-height:100vh;display:grid;place-items:center;padding:24px}.panel{width:min(440px,100%);padding:30px;border:1px solid #ffffff20;border-radius:20px;background:linear-gradient(145deg,#19191e,#0d0d10);box-shadow:0 24px 70px #0009;text-align:center}h1{font-size:25px;margin:0 0 10px;letter-spacing:-.6px}p{color:#aaaab4;line-height:1.65;margin:0 0 22px}.launch{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 22px;border-radius:12px;background:#f5d65d;color:#18140a;text-decoration:none;font-weight:800}.launch:focus-visible{outline:3px solid white;outline-offset:4px}.note{font-size:12px;margin-top:17px;color:#777782}</style></head><body><main class="panel"><h1>MilkBox</h1><p>MilkBox could not open in a new tab automatically. Use the button below to launch the actual site.</p><a class="launch" href="https://milkbox.b-cdn.net/" target="_blank" rel="noopener noreferrer">Open MilkBox</a><p class="note">The site is opened directly so its own player and controls can work normally.</p></main></body></html>';
       }
       return;
     }
