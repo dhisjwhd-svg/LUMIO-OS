@@ -1237,6 +1237,21 @@
       return;
     }
 
+    // TFF is a standalone profile page. Navigate to the HTML document directly
+    // through jsDelivr so the browser renders it as a page instead of depending
+    // on a cross-origin fetch followed by srcdoc injection.
+    if (key === 'moon') {
+      if (targetFrame) {
+        targetFrame.style.display = 'block';
+        targetFrame.removeAttribute('srcdoc');
+        targetFrame.src = sourceUrlWithFreshVersion(
+          'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/assets/TFF.html'
+        );
+        targetFrame.setAttribute('title', 'TFF profile');
+      }
+      return;
+    }
+
     // Always request the current main-branch app instead of a browser/CDN-cached copy.
     // This refreshes app HTML whenever an app is opened, while persistent media frames
     // remain mounted so Spotify/Netflix playback is not interrupted when their window closes.
