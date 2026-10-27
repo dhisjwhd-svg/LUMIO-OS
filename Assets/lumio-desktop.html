@@ -11,6 +11,7 @@
     --text: #e8e8e8;
     --muted: #888;
     --widget: 88px;
+    --directory-accent: #d99ab4;
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
@@ -176,7 +177,7 @@
   .app:nth-child(2) .app-label { color: #1ed760; }
   .app:nth-child(3) .app-label { color: #79c8ff; }
   .app[data-app="milkbox"] .app-label { color: #ffd75e; }
-  .app[data-app="directory"] .app-label { color: #d99ab4; text-shadow: 0 0 10px rgba(217,154,180,.28); }
+  .app[data-app="directory"] .app-label { color: var(--directory-accent); text-shadow: 0 0 10px rgba(217,154,180,.28); }
   .app[data-app="moon"] .app-label { color: #f0b9d5; text-shadow: 0 0 12px rgba(240,185,213,.3); }
   .app[data-app="moon"] .app-icon { border-color: rgba(240,185,213,.22); }
   .app:hover .app-label {
