@@ -2,71 +2,76 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>LUMIO-OS</title>
 <style>
+:root{color-scheme:dark;background:#050505}
+*{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050505}
 #desktop{position:fixed;inset:0;width:100%;height:100%;border:0;display:block;background:#050505}
-#status{position:fixed;inset:0;display:grid;place-items:center;background:#050505;color:#aaa;font:14px system-ui,sans-serif;z-index:2;padding:24px;text-align:center}
+#status{position:fixed;inset:0;z-index:2;display:grid;place-items:center;padding:24px;background:#050505;color:#b7b7bd;font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;text-align:center}
 #status[hidden]{display:none}
-.status-card{max-width:420px;line-height:1.6}
-#retry{margin-top:16px;padding:10px 16px;border:1px solid #555;border-radius:9px;background:#171717;color:#f4f4f4;font:inherit;cursor:pointer}
+.status-card{width:min(100%,380px)}
+.status-mark{width:38px;height:38px;margin:0 auto 18px;border:1px solid #34343a;border-radius:12px;display:grid;place-items:center;color:#fff;font-size:15px;font-weight:800;letter-spacing:-.08em}
+.status-title{margin:0 0 6px;color:#f5f5f7;font-size:17px;font-weight:650;letter-spacing:-.025em}
+.status-copy{margin:0;color:#8c8c94}
+#retry{margin-top:18px;padding:10px 15px;border:1px solid #38383f;border-radius:10px;background:#151519;color:#f5f5f7;font:inherit;cursor:pointer;transition:background .18s,border-color .18s}
+#retry:hover{background:#222228;border-color:#60606a}
 #retry:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media(prefers-reduced-motion:no-preference){.status-mark{animation:pulse 1.6s ease-in-out infinite alternate}@keyframes pulse{to{box-shadow:0 0 24px #ffffff16;border-color:#686873}}}
 </style>
 </head>
 <body>
 <iframe id="desktop" title="LUMIO-OS desktop" allow="fullscreen; clipboard-read; clipboard-write"></iframe>
-<div id="status" role="status" aria-live="polite">Loading the latest LUMIO-OS…</div>
+<div id="status" role="status" aria-live="polite">
+  <div class="status-card">
+    <div class="status-mark" aria-hidden="true">L</div>
+    <p class="status-title">Starting LUMIO-OS</p>
+    <p class="status-copy">Loading the latest desktop…</p>
+  </div>
+</div>
 <script>
-(function(){
+(()=> {
+  'use strict';
   const frame=document.getElementById('desktop');
   const status=document.getElementById('status');
+  const statusCopy=status.querySelector('.status-copy');
   const sources=[
-    'https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html?_lumio_build=20261026-5',
-    'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/LUMIO-OS@main/Assets/lumio-desktop.html?_lumio_build=20261026-5'
+    'https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html',
+    'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/LUMIO-OS@main/Assets/lumio-desktop.html'
   ];
   const assetBase='https://cdn.jsdelivr.net/gh/dhisjwhd-svg/LUMIO-OS@main/Assets/';
-  // Prefer GitHub Raw for fresh main-branch HTML, with jsDelivr as fallback; cache-bust every request.
-  let requestId=0;
-  function showLoading(){
+  let loadToken=0;
+  function fail(){
     status.hidden=false;
-    status.textContent='Loading the latest LUMIO-OS…';
-  }
-  function showError(){
-    status.hidden=false;
-    status.innerHTML='<div class="status-card">LUMIO-OS could not load. Check your connection and try again.<br><button id="retry" type="button">Retry loading</button></div>';
-    document.getElementById('retry').addEventListener('click',loadDesktop);
-  }
-  async function fetchLatest(url){
-    const response=await fetch(url+(url.includes('?')?'&':'?')+'_lumio='+Date.now(),{cache:'no-store'});
-    if(!response.ok) throw new Error('Desktop request failed: HTTP '+response.status);
-    const html=await response.text();
-    if(!/<html[\s>]/i.test(html)||!/<head[\s>]/i.test(html)||!/<body[\s>]/i.test(html)||!/<\/html\s*>/i.test(html)||html.length<10000||!/id=["']appLayer["']/i.test(html)||!/function\s+openApp\s*\(/.test(html)||!/milkbox:\s*['"]https:\/\/milkbox\.b-cdn\.net\//i.test(html)||!/targetFrame\.src\s*=\s*url/i.test(html)||!/setAttribute\(['"]sandbox['"],\s*['"][^'"]*allow-scripts/i.test(html)||/if\s*\(key\s*===\s*['"]milkbox['"]\)[\s\S]{0,1200}?allow-popups/i.test(html)||/if\s*\(key\s*===\s*['"]milkbox['"]\)[\s\S]{0,1200}?allow-top-navigation/i.test(html)) throw new Error('Desktop response was incomplete or MilkBox is not confined to the in-app iframe.');
-    return html;
+    status.innerHTML='<div class="status-card"><div class="status-mark" aria-hidden="true">L</div><p class="status-title">Couldn’t load LUMIO-OS</p><p class="status-copy">Check your connection, then try again.</p><button id="retry" type="button">Try again</button></div>';
+    status.querySelector('#retry').addEventListener('click',loadDesktop);
   }
   async function loadDesktop(){
-    const id=++requestId;
-    showLoading();
-    let html,lastError;
+    const token=++loadToken;
+    status.hidden=false;
+    statusCopy.textContent='Loading the latest desktop…';
+    let html=null;
     for(const source of sources){
-      try { html=await fetchLatest(source); break; }
-      catch(error){ lastError=error; }
+      try{
+        const url=source+(source.includes('?')?'&':'?')+'v='+Date.now();
+        const response=await fetch(url,{cache:'no-store',redirect:'follow'});
+        if(!response.ok) throw new Error('HTTP '+response.status);
+        const candidate=await response.text();
+        if(!/<html[\s>]/i.test(candidate)||!/<head[\s>]/i.test(candidate)||!/<body[\s>]/i.test(candidate)||!/<\/html\s*>/i.test(candidate)||candidate.length<10000) throw new Error('Incomplete desktop document');
+        html=candidate;
+        break;
+      }catch(error){console.warn('LUMIO-OS source unavailable:',source,error);}
     }
-    if(id!==requestId) return;
-    if(!html){
-      console.error('LUMIO-OS load failed:',lastError);
-      showError();
-      return;
+    if(token!==loadToken)return;
+    if(!html){fail();return;}
+    if(!/<base\b/i.test(html)){
+      html=html.replace(/<head(\s[^>]*)?>/i,match=>match+'\n<base href="'+assetBase+'">');
     }
-    const base='<base href="'+assetBase+'">';
-    if(/<head(?:\s[^>]*)?>/i.test(html)) html=html.replace(/<head(?:\s[^>]*)?>/i,match=>match+base);
-    else {
-      console.error('LUMIO-OS response has no head element.');
-      showError();
-      return;
-    }
-    frame.onload=function(){ if(id===requestId) status.hidden=true; };
+    frame.onload=()=>{if(token===loadToken)status.hidden=true;};
+    frame.onerror=()=>{if(token===loadToken)fail();};
     frame.srcdoc=html;
   }
   loadDesktop();
