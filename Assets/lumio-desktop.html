@@ -148,6 +148,14 @@
     display: block;
     transition: transform 0.4s var(--ease);
   }
+  .app-icon.brand-icon { display:grid; place-items:center; padding:12px; }
+  .app-icon.brand-icon img { width:100%; height:100%; object-fit:contain; }
+  .spotify-brand { background:#101010; }
+  .spotify-brand img { filter: invert(72%) sepia(73%) saturate(531%) hue-rotate(78deg) brightness(96%) contrast(92%); }
+  .steam-brand { background:linear-gradient(145deg,#25384b,#101820); }
+  .steam-brand img { filter:brightness(0) invert(1); }
+  .milkbox-brand { background:#171717; }
+  .milkbox-brand img { padding:2px; }
   .app-icon.circle img {
     border-radius: 50%;
   }
@@ -179,7 +187,6 @@
   .app[data-app="steam"] .app-label { color: #c7d5e0; }
   .app[data-app="spotify"] .app-label { color: #1ed760; }
   .app[data-app="netflix"] .app-label { color: #e50914; }
-  .steam-app-icon { display:grid;place-items:center;background:linear-gradient(145deg,#263b52,#101820);color:#c7d5e0;font-size:48px;font-weight:800; }
   .app[data-app="milkbox"] .app-label { color: #ffd75e; }
   .app[data-app="directory"] .app-label { color: var(--directory-accent); text-shadow: 0 0 10px rgba(217,154,180,.28); }
   .app[data-app="moon"] .app-label { color: #f0b9d5; text-shadow: 0 0 12px rgba(240,185,213,.3); }
@@ -284,8 +291,8 @@
     top: 14px;
     right: 14px;
     z-index: 300;
-    width: 28px;
-    height: 28px;
+    width: 44px;
+    height: 44px;
     border: 0;
     border-radius: 50%;
     background: rgba(255,255,255,0.08);
@@ -313,8 +320,8 @@
     transform: scale(0.92) rotate(0deg);
   }
   .close-x svg {
-    width: 12px;
-    height: 12px;
+    width: 16px;
+    height: 16px;
     stroke: rgba(255,255,255,0.7);
     stroke-width: 2.2;
     stroke-linecap: round;
@@ -937,20 +944,20 @@
     <div class="apps">
       <div class="app" data-app="netflix" role="button" tabindex="0" aria-label="Open Netflix">
         <div class="app-icon">
-          <img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/apps/netflix-cover.jpg" alt="Netflix" draggable="false" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/apps/netflix-cover.jpg'">
+          <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/netflix.svg" alt="Netflix logo" draggable="false">
         </div>
         <span class="app-label">Netflix</span>
       </div>
       <div class="app" data-app="spotify" role="button" tabindex="0" aria-label="Open Spotify">
-        <div class="app-icon"><img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/apps/spotify-icon.jpg" alt="Spotify" draggable="false"></div>
+        <div class="app-icon brand-icon spotify-brand"><img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/spotify.svg" alt="Spotify logo" draggable="false"></div>
         <span class="app-label">Spotify</span>
       </div>
       <div class="app" data-app="steam" role="button" tabindex="0" aria-label="Open Steam">
-        <div class="app-icon steam-app-icon" aria-hidden="true"><span>◉</span></div>
+        <div class="app-icon brand-icon steam-brand"><img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/steam.svg" alt="Steam logo" draggable="false"></div>
         <span class="app-label">Steam</span>
       </div>
       <div class="app" data-app="milkbox" role="button" tabindex="0" aria-label="Open MilkBox">
-        <div class="app-icon"><img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/apps/milkbox-icon.png" alt="MilkBox" draggable="false"></div>
+        <div class="app-icon brand-icon milkbox-brand"><img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/apps/milkbox-icon.png" alt="MilkBox logo" draggable="false"></div>
         <span class="app-label">MilkBox</span>
       </div>
       <div class="app" data-app="directory" role="button" tabindex="0" aria-label="Open Directory">
@@ -1060,7 +1067,7 @@
   </div>
 
 
-  <button class="close-x" id="btnClose" type="button" title="Back to desktop" aria-label="Close">
+  <button class="close-x" id="btnClose" type="button" title="Close app and return to desktop" aria-label="Close app and return to desktop">
     <svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10"/></svg>
   </button>
 
