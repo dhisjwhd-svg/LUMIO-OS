@@ -41,7 +41,7 @@ html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#050505}
       statusText.textContent='LUMIO-OS could not load. Check your connection and retry.';
       retry.hidden=false;
     };
-    frame.src=sources[index]+'?v='+Date.now();
+    frame.src=sources[0]+'?v='+Date.now();
   }
   retry.addEventListener('click',loadDesktop);
   loadDesktop();
