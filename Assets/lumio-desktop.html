@@ -150,6 +150,8 @@
   }
   .app-icon.brand-icon { display:grid; place-items:center; padding:12px; }
   .app-icon.brand-icon img { width:100%; height:100%; object-fit:contain; }
+  .netflix-brand { background:#151515; }
+  .netflix-brand img { filter:brightness(0) saturate(100%) invert(13%) sepia(97%) saturate(6560%) hue-rotate(354deg) brightness(96%) contrast(113%); }
   .spotify-brand { background:#101010; }
   .spotify-brand img { filter: invert(72%) sepia(73%) saturate(531%) hue-rotate(78deg) brightness(96%) contrast(92%); }
   .steam-brand { background:linear-gradient(145deg,#25384b,#101820); }
@@ -943,7 +945,7 @@
 
     <div class="apps">
       <div class="app" data-app="netflix" role="button" tabindex="0" aria-label="Open Netflix">
-        <div class="app-icon">
+        <div class="app-icon brand-icon netflix-brand">
           <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/netflix.svg" alt="Netflix logo" draggable="false">
         </div>
         <span class="app-label">Netflix</span>
