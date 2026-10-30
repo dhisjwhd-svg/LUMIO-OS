@@ -28,18 +28,16 @@ html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#050505}
   const statusText=document.getElementById('statusText');
   const retry=document.getElementById('retry');
   const sources=[
-    'https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html',
-    'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/LUMIO-OS@main/Assets/lumio-desktop.html'
+    'https://raw.githubusercontent.com/dhisjwhd-svg/LUMIO-OS/main/Assets/lumio-desktop.html'
   ];
   let attempt=0;
   function loadDesktop(){
-    const index=attempt++%sources.length;
+    attempt++;
     status.hidden=false;
     statusText.textContent='Starting LUMIO-OS…';
     retry.hidden=true;
     frame.onload=()=>{status.hidden=true;};
     frame.onerror=()=>{
-      if(index===0){frame.src=sources[1]+'?v='+Date.now();return;}
       statusText.textContent='LUMIO-OS could not load. Check your connection and retry.';
       retry.hidden=false;
     };
