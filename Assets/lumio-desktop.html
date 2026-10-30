@@ -176,6 +176,10 @@
   .app:nth-child(1) .app-label { color: #ff555f; }
   .app:nth-child(2) .app-label { color: #1ed760; }
   .app:nth-child(3) .app-label { color: #79c8ff; }
+  .app[data-app="steam"] .app-label { color: #c7d5e0; }
+  .app[data-app="spotify"] .app-label { color: #1ed760; }
+  .app[data-app="netflix"] .app-label { color: #e50914; }
+  .steam-app-icon { display:grid;place-items:center;background:linear-gradient(145deg,#263b52,#101820);color:#c7d5e0;font-size:48px;font-weight:800; }
   .app[data-app="milkbox"] .app-label { color: #ffd75e; }
   .app[data-app="directory"] .app-label { color: var(--directory-accent); text-shadow: 0 0 10px rgba(217,154,180,.28); }
   .app[data-app="moon"] .app-label { color: #f0b9d5; text-shadow: 0 0 12px rgba(240,185,213,.3); }
@@ -937,6 +941,26 @@
           <img src="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/apps/netflix-cover.jpg" alt="Netflix" draggable="false" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/apps/netflix-cover.jpg'">
         </div>
         <span class="app-label">Netflix</span>
+      </div>
+      <div class="app" data-app="spotify" role="button" tabindex="0" aria-label="Open Spotify">
+        <div class="app-icon"><img src="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/apps/spotify-icon.jpg" alt="Spotify" draggable="false"></div>
+        <span class="app-label">Spotify</span>
+      </div>
+      <div class="app" data-app="steam" role="button" tabindex="0" aria-label="Open Steam">
+        <div class="app-icon steam-app-icon" aria-hidden="true"><span>◉</span></div>
+        <span class="app-label">Steam</span>
+      </div>
+      <div class="app" data-app="milkbox" role="button" tabindex="0" aria-label="Open MilkBox">
+        <div class="app-icon"><img src="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/apps/milkbox-icon.png" alt="MilkBox" draggable="false"></div>
+        <span class="app-label">MilkBox</span>
+      </div>
+      <div class="app" data-app="directory" role="button" tabindex="0" aria-label="Open Directory">
+        <div class="app-icon"><img src="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/apps/directory-icon.jpeg" alt="Directory" draggable="false"></div>
+        <span class="app-label">Directory</span>
+      </div>
+      <div class="app" data-app="moon" role="button" tabindex="0" aria-label="Open The Forged Flowers profiles">
+        <div class="app-icon"><img src="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/profiles/kirby-dvd.jpg" alt="The Forged Flowers" draggable="false"></div>
+        <span class="app-label">The Forged Flowers</span>
       </div>
 
       
