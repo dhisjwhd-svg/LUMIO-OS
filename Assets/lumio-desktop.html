@@ -939,6 +939,13 @@
         <span class="app-label">Netflix</span>
       </div>
 
+      <div class="app" data-app="yuki" role="button" tabindex="0" aria-label="Open Yuki and Kayo through Netflix Modules">
+        <div class="app-icon" style="display:grid;place-items:center;background:linear-gradient(145deg,#27101d,#151b32);border:1px solid rgba(225,29,72,.45);">
+          <span style="font-size:25px;font-weight:950;letter-spacing:-.08em;background:linear-gradient(120deg,#fb7185,#f8fafc 52%,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent;">YK</span>
+        </div>
+        <span class="app-label">Yuki + Kayo</span>
+      </div>
+
       <div class="app" data-app="spotify" role="button" tabindex="0" aria-label="Open Spotify">
         <div class="app-icon">
           <img src="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/apps/spotify-icon.jpg" alt="Spotify" draggable="false">
@@ -1126,6 +1133,8 @@
   // App entry points; MilkBox uses its original host.
   const sources = {
     netflix: 'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/assets/apps/Netflix.html',
+    // Opens the Netflix module importer with the trusted Yuki catalog preselected.
+    yuki: 'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/assets/apps/Netflix.html?module=https%3A%2F%2Fraw.githubusercontent.com%2Fdhisjwhd-svg%2Fdriven%2Fmain%2Fyuki.html',
     spotify: 'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/assets/apps/Spotify.html',
     steam:   'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/apps/Steam.html?steam_fix=20261029-4',
     milkbox: 'https://milkbox.b-cdn.net/',
