@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lumio OS</title>
-<link rel="icon" href="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/branding/kon-favicon.jpg">
+<link rel="icon" href="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/branding/kon-favicon.jpg">
 <style>
   :root {
     --bg: #050505;
@@ -183,7 +183,6 @@
   .app[data-app="milkbox"] .app-label { color: #ffd75e; }
   .app[data-app="directory"] .app-label { color: var(--directory-accent); text-shadow: 0 0 10px rgba(217,154,180,.28); }
   .app[data-app="moon"] .app-label { color: #f0b9d5; text-shadow: 0 0 12px rgba(240,185,213,.3); }
-  .app[data-app="moon"] .app-icon { border-color: rgba(240,185,213,.22); }
   .app:hover .app-label {
     transform: translateY(-1px);
     text-shadow: 0 2px 10px rgba(0,0,0,0.95), 0 0 16px currentColor;
@@ -938,12 +937,12 @@
     <div class="apps">
       <div class="app" data-app="netflix" role="button" tabindex="0" aria-label="Open Netflix">
         <div class="app-icon">
-          <img src="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/apps/netflix-cover.jpg" alt="Netflix" draggable="false" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/apps/netflix-cover.jpg'">
+          <img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/apps/netflix-cover.jpg" alt="Netflix" draggable="false" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/apps/netflix-cover.jpg'">
         </div>
         <span class="app-label">Netflix</span>
       </div>
       <div class="app" data-app="spotify" role="button" tabindex="0" aria-label="Open Spotify">
-        <div class="app-icon"><img src="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/apps/spotify-icon.jpg" alt="Spotify" draggable="false"></div>
+        <div class="app-icon"><img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/apps/spotify-icon.jpg" alt="Spotify" draggable="false"></div>
         <span class="app-label">Spotify</span>
       </div>
       <div class="app" data-app="steam" role="button" tabindex="0" aria-label="Open Steam">
@@ -951,18 +950,13 @@
         <span class="app-label">Steam</span>
       </div>
       <div class="app" data-app="milkbox" role="button" tabindex="0" aria-label="Open MilkBox">
-        <div class="app-icon"><img src="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/apps/milkbox-icon.png" alt="MilkBox" draggable="false"></div>
+        <div class="app-icon"><img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/apps/milkbox-icon.png" alt="MilkBox" draggable="false"></div>
         <span class="app-label">MilkBox</span>
       </div>
       <div class="app" data-app="directory" role="button" tabindex="0" aria-label="Open Directory">
-        <div class="app-icon"><img src="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/apps/directory-icon.jpeg" alt="Directory" draggable="false"></div>
+        <div class="app-icon"><img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/apps/directory-icon.jpeg" alt="Directory" draggable="false"></div>
         <span class="app-label">Directory</span>
       </div>
-      <div class="app" data-app="moon" role="button" tabindex="0" aria-label="Open The Forged Flowers profiles">
-        <div class="app-icon"><img src="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/profiles/kirby-dvd.jpg" alt="The Forged Flowers" draggable="false"></div>
-        <span class="app-label">The Forged Flowers</span>
-      </div>
-
       
   </div>
 
@@ -972,7 +966,7 @@
   <div class="start-wrap" id="startWrap">
     <div class="start-menu" id="startMenu">
       <button type="button" class="start-profile-button" id="moonWidget" aria-label="Open Moon profile">
-        <span class="start-profile-avatar"><img src="https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/images/profiles/kirby-dvd.jpg" alt=""></span>
+        <span class="start-profile-avatar"><img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/profiles/kirby-dvd.jpg" alt=""></span>
         <span class="start-profile-copy"><strong>moon.d.flower</strong><span>Open profile</span></span>
         <span class="start-profile-arrow" aria-hidden="true">↗</span>
       </button>
@@ -1122,12 +1116,11 @@
 
   // App entry points; MilkBox uses its original host.
   const sources = {
-    netflix: 'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/assets/apps/Netflix.html',
-    spotify: 'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/assets/apps/Spotify.html',
-    steam:   'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/apps/Steam.html?steam_fix=20261029-4',
+    netflix: 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/apps/Netflix.html',
+    spotify: 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/apps/Spotify.html',
+    steam:   'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/apps/Steam.html',
     milkbox: 'https://milkbox.b-cdn.net/',
-    directory: 'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/assets/apps/directory/Directory.html',
-    moon: 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/apps/TFF.html?tff_profile_revision=20261028-9'
+    directory: 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/assets/apps/directory/Directory.html'
   };
 
   // ----- Login -----
@@ -1379,7 +1372,7 @@
   }
 
   // ----- Settings + wallpapers -----
-  const WP_BASE = 'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/pc-wallpaper-assets-@main/wallpapers/';
+  const WP_BASE = 'https://raw.githubusercontent.com/dhisjwhd-svg/pc-wallpaper-assets-/main/wallpapers/';
   const WALLPAPERS = [
     { id: 'wp1', file: 'static/wallpaper-01.jpg' },
     { id: 'wp2', file: 'static/wallpaper-02.jpg' }, 
@@ -1584,27 +1577,8 @@ if (settingAutoPassword) {
   });
 })();
 
-  // Keep remote image assets resilient when either CDN or raw GitHub is blocked.
-  // One fallback attempt per image prevents an endless error loop.
-  document.querySelectorAll('img').forEach(function (img) {
-    img.onerror = null;
-    img.addEventListener('error', function () {
-      if (img.dataset.lumioFallbackTried === 'true') return;
-      const current = img.currentSrc || img.src;
-      let fallback = '';
-      const cdnPrefix = 'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/lumio-assets@main/';
-      const rawPrefix = 'https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/';
-      if (current.indexOf(cdnPrefix) === 0) fallback = rawPrefix + current.slice(cdnPrefix.length);
-      else if (current.indexOf(rawPrefix) === 0) fallback = cdnPrefix + current.slice(rawPrefix.length);
-      const wallpaperCdn = 'https://cdn.jsdelivr.net/gh/dhisjwhd-svg/pc-wallpaper-assets-@main/';
-      const wallpaperRaw = 'https://raw.githubusercontent.com/dhisjwhd-svg/pc-wallpaper-assets-/main/';
-      if (!fallback && current.indexOf(wallpaperCdn) === 0) fallback = wallpaperRaw + current.slice(wallpaperCdn.length);
-      else if (!fallback && current.indexOf(wallpaperRaw) === 0) fallback = wallpaperCdn + current.slice(wallpaperRaw.length);
-      if (!fallback || fallback === current) return;
-      img.dataset.lumioFallbackTried = 'true';
-      img.src = fallback;
-    });
-  });
+  // All LUMIO artwork is loaded directly from the lumio-assets raw GitHub repository.
+  // Keep browser-native loading so relative asset URLs in each raw HTML app resolve normally.
 
 </script>
 
