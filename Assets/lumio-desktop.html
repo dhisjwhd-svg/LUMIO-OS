@@ -150,12 +150,7 @@
   }
   .app-icon.brand-icon { display:grid; place-items:center; padding:12px; }
   .app-icon.brand-icon img { width:100%; height:100%; object-fit:contain; }
-  .netflix-brand { background:#151515; }
-  .netflix-brand img { filter:brightness(0) saturate(100%) invert(13%) sepia(97%) saturate(6560%) hue-rotate(354deg) brightness(96%) contrast(113%); }
-  .spotify-brand { background:#101010; }
-  .spotify-brand img { filter: invert(72%) sepia(73%) saturate(531%) hue-rotate(78deg) brightness(96%) contrast(92%); }
-  .steam-brand { background:linear-gradient(145deg,#25384b,#101820); }
-  .steam-brand img { filter:brightness(0) invert(1); }
+  .steam-brand { background:linear-gradient(145deg,#25384b,#101820); padding:18px; }
   .milkbox-brand { background:#171717; }
   .milkbox-brand img { padding:2px; }
   .app-icon.circle img {
@@ -945,17 +940,21 @@
 
     <div class="apps">
       <div class="app" data-app="netflix" role="button" tabindex="0" aria-label="Open Netflix">
-        <div class="app-icon brand-icon netflix-brand">
-          <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/netflix.svg" alt="Netflix logo" draggable="false">
+        <div class="app-icon">
+          <img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/apps/netflix-cover.jpg" alt="Netflix app artwork" draggable="false">
         </div>
         <span class="app-label">Netflix</span>
       </div>
       <div class="app" data-app="spotify" role="button" tabindex="0" aria-label="Open Spotify">
-        <div class="app-icon brand-icon spotify-brand"><img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/spotify.svg" alt="Spotify logo" draggable="false"></div>
+        <div class="app-icon">
+          <img src="https://raw.githubusercontent.com/dhisjwhd-svg/lumio-assets/main/images/apps/spotify-icon.jpg" alt="Spotify app artwork" draggable="false">
+        </div>
         <span class="app-label">Spotify</span>
       </div>
       <div class="app" data-app="steam" role="button" tabindex="0" aria-label="Open Steam">
-        <div class="app-icon brand-icon steam-brand"><img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/steam.svg" alt="Steam logo" draggable="false"></div>
+        <div class="app-icon brand-icon steam-brand" aria-label="Steam logo">
+          <svg viewBox="0 0 24 24" role="img" aria-label="Steam" width="100%" height="100%" fill="#c7d5e0"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.158 0 1.879-1.518 3.404-3.39 3.404-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.962 20.307 6.504 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.606 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.16-9.025c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.289-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z"/></svg>
+        </div>
         <span class="app-label">Steam</span>
       </div>
       <div class="app" data-app="milkbox" role="button" tabindex="0" aria-label="Open MilkBox">
