@@ -1313,6 +1313,21 @@
         if (!response.ok) throw new Error('Asset request failed: ' + response.status);
         return response.text();
       }).then(function (html) {
+        // iframe.srcdoc changes the shell's URL to about:srcdoc, losing the
+        // module query string. Inject the trusted Yuki URL before its importer runs.
+        if (key === 'yuki') {
+          try {
+            const moduleUrl = new URL(sourceUrl).searchParams.get('module') || '';
+            if (moduleUrl) {
+              const lookup = "moduleUrl = new URL(window.location.href).searchParams.get('module') || '';";
+              const injectedLookup = "moduleUrl = " + JSON.stringify(moduleUrl) + " || new URL(window.location.href).searchParams.get('module') || '';";
+              if (html.includes(lookup)) html = html.replace(lookup, injectedLookup);
+              else console.warn('LUMIO Yuki auto-import hook was not found in the Netflix shell.');
+            }
+          } catch (moduleError) {
+            console.warn('LUMIO could not prepare the Yuki module URL:', moduleError);
+          }
+        }
         if (key === 'directory' && (!/<html[\s>]/i.test(html) || !/<body[\s>]/i.test(html) || html.length < 5000)) {
           throw new Error('Directory HTML response was incomplete.');
         }
