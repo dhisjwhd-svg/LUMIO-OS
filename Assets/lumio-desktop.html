@@ -1037,8 +1037,8 @@
   <div class="app-layer" id="appLayer">
 
     <iframe id="appFrame" data-player="general" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-downloads" allowfullscreen></iframe>
-    <iframe id="spotifyFrame" data-player="spotify" title="Spotify app" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads" allowfullscreen hidden></iframe>
-    <iframe id="netflixFrame" data-player="netflix" title="Netflix app" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads" allowfullscreen hidden></iframe>
+    <iframe id="spotifyFrame" data-player="spotify" title="Spotify app" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-downloads" allowfullscreen hidden></iframe>
+    <iframe id="netflixFrame" data-player="netflix" title="Netflix app" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-downloads" allowfullscreen hidden></iframe>
   </div>
 
 
@@ -1218,12 +1218,14 @@
   let closeTimer = null;
 
   function openApp(key) {
-    const url = sources[key];
-    if (!url) return;
+    const source = sources[key];
+    if (!source) return;
 
     const requestId = ++appRequestId;
     activeAppKey = key;
     const targetFrame = persistentFrames[key] || frame;
+    if (!targetFrame) return;
+
     [frame, spotifyFrame, netflixFrame].forEach(function (item) {
       if (item) item.hidden = item !== targetFrame;
     });
@@ -1231,6 +1233,7 @@
       clearTimeout(closeTimer);
       closeTimer = null;
     }
+
     document.body.classList.add('app-open');
     if (layer) {
       layer.classList.add('open');
@@ -1238,100 +1241,37 @@
     }
     if (startMenu) startMenu.classList.remove('open');
 
-    // Reopen an existing media document without reloading it or resetting playback.
+    // Media apps stay mounted so closing their window does not stop playback.
     if (persistentFrames[key] && targetFrame.dataset.loaded === 'true') return;
 
-    if (targetFrame) {
-      targetFrame.style.display = 'block';
-      targetFrame.src = 'about:blank';
-      targetFrame.removeAttribute('srcdoc');
-    }
+    targetFrame.hidden = false;
+    targetFrame.style.display = 'block';
+    targetFrame.removeAttribute('srcdoc');
+    targetFrame.setAttribute('title', key.charAt(0).toUpperCase() + key.slice(1) + ' app');
+    targetFrame.setAttribute('loading', 'eager');
+    targetFrame.setAttribute('allow', 'fullscreen; autoplay; encrypted-media; picture-in-picture; clipboard-read; clipboard-write');
+    targetFrame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
 
-    if (key === 'milkbox') {
-      if (targetFrame) {
-        targetFrame.style.display = 'block';
-        targetFrame.hidden = false;
-        targetFrame.removeAttribute('srcdoc');
-        targetFrame.setAttribute('title', 'MilkBox app');
-        targetFrame.setAttribute('loading', 'eager');
-        targetFrame.setAttribute('allow', 'fullscreen; autoplay; encrypted-media; picture-in-picture; clipboard-read; clipboard-write');
-        targetFrame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
-        // Keep MilkBox confined to the LUMIO app window: scripts/forms work,
-        // but the embedded site cannot open pop-up tabs or navigate the top-level page.
-        targetFrame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-modals allow-downloads');
-        targetFrame.src = url;
-      }
-      return;
-    }
+    // Load each app as a real document. Fetching HTML and assigning srcdoc
+    // breaks document-relative scripts, styles, images, modules and game assets.
+    targetFrame.setAttribute('sandbox',
+      'allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-downloads');
 
-    // Always request the current main-branch app instead of a browser/CDN-cached copy.
-    // This refreshes app HTML whenever an app is opened, while persistent media frames
-    // remain mounted so Spotify/Netflix playback is not interrupted when their window closes.
-    function sourceUrlWithFreshVersion(sourceUrl) {
-      return sourceUrl + (sourceUrl.includes('?') ? '&' : '?') + '_lumio_refresh=' + Date.now();
-    }
+    const requestUrl = key === 'milkbox'
+      ? source
+      : source + (source.indexOf('?') === -1 ? '?' : '&') + '_lumio_refresh=' + Date.now();
 
-    function fetchApp(sourceUrl) {
-      const requestUrl = sourceUrlWithFreshVersion(sourceUrl);
-      return fetch(requestUrl, { cache: 'no-store' }).then(function (response) {
-        if (!response.ok) throw new Error('Asset request failed: ' + response.status);
-        return response.text();
-      }).then(function (html) {
-        if (key === 'directory' && (!/<html[\s>]/i.test(html) || !/<body[\s>]/i.test(html) || html.length < 5000)) {
-          throw new Error('Directory HTML response was incomplete.');
-        }
-        return html;
-      });
-    }
-    function fallbackAppUrl(sourceUrl) {
-      const raw = sourceUrl.match(/^https:\/\/raw\.githubusercontent\.com\/([^/]+)\/([^/]+)\/([^/]+)\/(.+)$/);
-      if (raw) return 'https://cdn.jsdelivr.net/gh/' + raw[1] + '/' + raw[2] + '@' + raw[3] + '/' + raw[4];
-      const cdn = sourceUrl.match(/^https:\/\/cdn\.jsdelivr\.net\/gh\/([^/]+)\/([^/]+)@([^/]+)\/(.+)$/);
-      if (cdn) return 'https://raw.githubusercontent.com/' + cdn[1] + '/' + cdn[2] + '/' + cdn[3] + '/' + cdn[4];
-      return sourceUrl;
-    }
-    fetchApp(url).catch(function () {
-      if (requestId !== appRequestId) throw new Error('App request superseded');
-      const fallbackUrl = fallbackAppUrl(url);
-      if (fallbackUrl === url) throw new Error('No fallback URL available');
-      return fetchApp(fallbackUrl);
-    })
-      .then(function (appHtml) {
-        if (requestId !== appRequestId || (layer && (!layer.classList.contains('open') || layer.dataset.active !== key))) return;
-        /* Directory now lives in lumio-assets. Keep its document-relative resources rooted at the moved folder. */
-        if (key !== 'directory') {
-          if (appHtml.toLowerCase().indexOf('<base ') === -1) {
-            var headIndex = appHtml.toLowerCase().indexOf('<head');
-            if (headIndex !== -1) {
-              var headEnd = appHtml.indexOf('>', headIndex);
-              if (headEnd !== -1) {
-                appHtml = appHtml.slice(0, headEnd + 1) +
-                  '<base href="' + url.substring(0, url.lastIndexOf('/') + 1).replace('https://raw.githubusercontent.com/', 'https://cdn.jsdelivr.net/gh/').replace('/main/', '@main/') + '">' +
-                  appHtml.slice(headEnd + 1);
-              }
-            }
-          }
-          appHtml = injectCursorIntoHTML(appHtml);
-        }
-        /* All bundled apps use the same desktop iframe; avoid Spotify's separate blank-window path. */
-        if (targetFrame) {
-          targetFrame.style.display = 'block';
-          targetFrame.removeAttribute('src');
-          targetFrame.srcdoc = appHtml;
-          if (persistentFrames[key]) targetFrame.dataset.loaded = 'true';
-          targetFrame.setAttribute('title', key.charAt(0).toUpperCase() + key.slice(1) + ' app');
-        }
-      })
-      .catch(function (error) {
-        if (requestId !== appRequestId || (layer && (!layer.classList.contains('open') || layer.dataset.active !== key))) return;
-        if (!targetFrame) return;
-        targetFrame.setAttribute('title', key.charAt(0).toUpperCase() + key.slice(1) + ' app');
-        targetFrame.removeAttribute('src');
-        if (persistentFrames[key]) delete targetFrame.dataset.loaded;
-        const safeKey = JSON.stringify(key);
-        targetFrame.srcdoc = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>App unavailable</title><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#111116;color:#f5f2f5;font:15px system-ui,-apple-system,sans-serif;text-align:center;padding:24px}.panel{width:min(460px,100%);border:1px solid #39343e;background:#1b1920;padding:30px;border-radius:18px;box-shadow:0 18px 60px #0006}h2{margin:0 0 10px;font-size:22px}p{color:#b9b3c0;line-height:1.6;margin:0 0 22px}button{padding:11px 18px;border-radius:10px;border:1px solid #e0a4c0;background:#e0a4c0;color:#24151e;font-weight:750;cursor:pointer}button:focus-visible{outline:3px solid #fff;outline-offset:3px}</style></head><body><main class="panel"><h2>' + key.charAt(0).toUpperCase() + key.slice(1) + ' couldn\'t load</h2><p>Check your connection, then try loading this app again.</p><button type="button" id="retry">Retry</button></main><script>document.getElementById("retry").addEventListener("click",function(){parent.postMessage({type:"lumio-retry-app",app:" + safeKey + "}, "*");});<\/script></body></html>';
-        console.error('LUMIO app failed to load:', key, error);
-      });
+    targetFrame.onload = function () {
+      if (requestId !== appRequestId || activeAppKey !== key) return;
+      if (persistentFrames[key]) targetFrame.dataset.loaded = 'true';
+    };
+    targetFrame.onerror = function () {
+      if (requestId !== appRequestId || activeAppKey !== key) return;
+      if (persistentFrames[key]) delete targetFrame.dataset.loaded;
+      console.error('LUMIO app document failed to load:', key, requestUrl);
+    };
+    if (persistentFrames[key]) targetFrame.dataset.loaded = 'loading';
+    targetFrame.src = requestUrl;
   }
 
   // Retry controls in the app-load fallback ask the desktop to fetch the app again.
