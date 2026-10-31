@@ -7,7 +7,7 @@
 <p align="center">
   A browser-based desktop for entertainment, games, music, and everyday shortcuts.
   <br>
-  <a href="https://github.com/dhisjwhd-svg/LUMIO-OS/blob/main/main.html"><strong>Launch LUMIO-OS</strong></a>
+  <a href="https://dhisjwhd-svg.github.io/LUMIO-OS/"><strong>Launch LUMIO-OS</strong></a>
   ·
   <a href="https://github.com/dhisjwhd-svg/LUMIO-OS/tree/main">Browse the source</a>
   ·
@@ -183,7 +183,7 @@ Specific behavior may vary by build; the README describes controls present in th
 
 ## Get started
 
-1. Open [main.html](https://github.com/dhisjwhd-svg/LUMIO-OS/blob/main/main.html) to launch the current entry page.
+1. Open [main.html](https://dhisjwhd-svg.github.io/LUMIO-OS/) to launch the current entry page.
 2. The main desktop implementation is [Assets/lumio-desktop.html](https://github.com/dhisjwhd-svg/LUMIO-OS/blob/main/Assets/lumio-desktop.html).
 3. To work locally, clone or download this repository and open the entry page in a modern browser.
 4. If local-file restrictions affect app loading, serve the files through a local web server and keep an internet connection available for externally hosted apps and assets.
@@ -221,7 +221,7 @@ Shared apps, app artwork, and supporting pages are maintained in [lumio-assets](
 
 ## Project links
 
-- [Launch LUMIO-OS](https://github.com/dhisjwhd-svg/LUMIO-OS/blob/main/main.html)
+- [Launch LUMIO-OS](https://dhisjwhd-svg.github.io/LUMIO-OS/)
 - [Desktop implementation](https://github.com/dhisjwhd-svg/LUMIO-OS/blob/main/Assets/lumio-desktop.html)
 - [Shared apps and assets](https://github.com/dhisjwhd-svg/lumio-assets)
 - [TikTok · @moon.d.flower](https://www.tiktok.com/@moon.d.flower)
