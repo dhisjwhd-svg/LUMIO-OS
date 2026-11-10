@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#08080b">
+  <title>LUMIO 2.0</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="desktop" id="desktop">
+    <header class="topbar">
+      <a class="wordmark" href="#" aria-label="LUMIO home">LUMIO<span>.</span></a>
+      <div class="system-status"><span id="clock">--:--</span><span id="date">---</span></div>
+    </header>
+    <section class="app-grid" id="appGrid" aria-label="Applications"></section>
+  </main>
+  <nav class="dock" id="dock" aria-label="Taskbar">
+    <button class="dock-start" id="startButton" aria-label="Open application menu"><span></span><span></span><span></span><span></span></button>
+    <div class="dock-items" id="dockItems"></div>
+  </nav>
+  <section class="window-layer" id="windowLayer" aria-live="polite"></section>
+  <aside class="start-menu" id="startMenu" aria-label="Application menu" hidden>
+    <input id="appSearch" type="search" placeholder="Search apps" autocomplete="off">
+    <div id="startAppList"></div>
+  </aside>
+  <script type="module" src="./src/boot.js"></script>
+</body>
+</html>
